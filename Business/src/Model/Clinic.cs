@@ -12,6 +12,7 @@ class Clinic
     public string OwnerEmail { get; private set; }
     public string OwnerPhone { get; private set; }
     public DateTime RegistrationDate { get; private set; }
+    List<Appointment> appointments { get; }
 
     private Clinic(Guid Id, string Name, string Address, int Capacity, string OwnerName, string OwnerEmail, string OwnerPhone, DateTime RegistrationDate)
     {
