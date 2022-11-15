@@ -17,7 +17,7 @@ public class Cage {
         Result<Size> sizeResult = SizeExtensions.FromString(size);
         
         if( sizeResult.IsFailure ) {
-            return sizeResult.Into<Cage>();
+            return Result<Cage>.Failure($"Failed to create Cage with size '{size}'. {sizeResult.Error}");
         }
 
         return Result<Cage>.Success(new Cage(sizeResult.Entity));

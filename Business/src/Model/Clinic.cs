@@ -13,7 +13,6 @@ class Clinic
     public string OwnerPhone { get; private set; }
     public DateTime RegistrationDate { get; private set; }
     List<Appointment> Appointments { get; }
-    CageSchedule CageSchedule { get; }
 
     private Clinic(Guid Id, string Name, string Address, int Capacity, string OwnerName, string OwnerEmail, string OwnerPhone, DateTime RegistrationDate)
     {
@@ -26,7 +25,6 @@ class Clinic
         this.OwnerPhone = OwnerPhone;
         this.RegistrationDate = RegistrationDate;
         this.Appointments = new List<Appointment>();
-        this.CageSchedule = new CageSchedule();
     }
 
     public static Result<Clinic> Create(string name, string address, int capacity, string ownerName, string ownerEmail, string ownerPhone)

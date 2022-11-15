@@ -10,7 +10,6 @@ public class SizeTests
     [Fact]
     public void When_GivenCorrectString_ShouldSucceedCreating()
     {
-
         string small = "Small";
         string medium = "Medium";
         string big = "Big";
