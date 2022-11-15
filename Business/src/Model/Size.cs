@@ -20,8 +20,10 @@ public static class SizeExtensions
         if (!parsedSuccefully)
         {
             // Error case:
-            Array possibleSizeValues = Enum.GetValues(typeof(Size));
-            string errorMessage = $"Failed to parse '{size}' as Size. Possible values for Size are: {possibleSizeValues}";
+            string[] possibleSizeNames = Enum.GetNames(typeof(Size));
+
+            string errorMessage = 
+                $"Failed to parse '{size}' as Size. Possible values for Size are: {$"[{string.Join(',' , possibleSizeNames)}]"}";
             return Result<Size>.Failure(errorMessage);
         }
 
