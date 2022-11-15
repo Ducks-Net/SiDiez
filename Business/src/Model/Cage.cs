@@ -1,22 +1,30 @@
 namespace VetAppointment.Model;
 using VetAppointment.Util;
 
-class Cage {
-    public Guid ID { get; }
-    public Size Size { get; }
+public class Cage {
+    public Guid ID { get; private set; }
+    public Size Size { get; private set; }
 
-    private Cage(Guid id, Size size) {
-        this.ID = id;
+    public Guid clinicId { get; private set; }
+
+    private Cage(Size size) {
+        this.ID = new Guid();
         this.Size = size;
     }
 
     public static Result<Cage> Create(string size)
     {
-        Size s;
-        if(!Size.TryParse(size, out s)) {
-            return Result<Cage>.Failure(s + " is not a valid size.");
-        }
+        Result<Size> sizeResult = SizeExtensions.FromString(size);
         
-        return Result<Cage>.Success(new Cage(Guid.NewGuid(), s));
+        if( sizeResult.IsFailure ) {
+            return sizeResult.Into<Cage>();
+        }
+
+        return Result<Cage>.Success(new Cage(sizeResult.Entity));
+    }
+
+    public void AssignToClinic(Guid locationId)
+    {
+        this.clinicId = locationId;
     }
 }
