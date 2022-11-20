@@ -1,4 +1,4 @@
-using DucksNet.SharedKernel.Utils;
+﻿using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Infrastructure.Prelude;
 

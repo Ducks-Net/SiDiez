@@ -1,6 +1,4 @@
-using Xunit;
-using System;
-using FluentAssertions;
+﻿using System;
 
 using DucksNet.Domain.Model;
 

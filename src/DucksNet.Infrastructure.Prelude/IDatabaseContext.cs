@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using DucksNet.Domain.Model;
 
@@ -11,6 +11,10 @@ public interface IDatabaseContext
     DbSet<Appointment> Appointments { get; }
     DbSet<Pet> Pets { get; }
     DbSet<User> Users { get; }
+    DbSet<MedicalRecord> MedicalRecords { get; }
+    DbSet<Treatment> Treatments { get; }
+    DbSet<Medicine> Medicines { get; }
+    DbSet<Employee> Employees { get; }
 
     void SaveChanges();
 }
