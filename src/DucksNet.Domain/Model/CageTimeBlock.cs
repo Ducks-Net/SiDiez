@@ -2,7 +2,6 @@ using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Domain.Model;
 
-
 public class CageTimeBlock
 {
     public Guid Id { get; private set; }
