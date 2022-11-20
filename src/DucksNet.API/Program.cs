@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
 
 builder.Services.AddScoped<IRepository<MedicalRecord>, MedicalRecordRepository>();
+builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
 
 var app = builder.Build();
 

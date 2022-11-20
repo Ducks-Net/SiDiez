@@ -33,9 +33,9 @@ public class MedicalRecordsController : ControllerBase
         //    return Created(nameof(GetAll), medicalRecord);
         //}
         //return BadRequest(medicalRecord.Errors);
-        var medicalRepository = new MedicalRecord(dto.IdAppointment, dto.IdClient);
-        _medicalRecordRepository.Add(medicalRepository);
-        return Created(nameof(GetAll), medicalRepository);
+        var medicalRecord = new MedicalRecord(dto.IdAppointment, dto.IdClient);
+        _medicalRecordRepository.Add(medicalRecord);
+        return Created(nameof(GetAll), medicalRecord);
     }
 
 }
