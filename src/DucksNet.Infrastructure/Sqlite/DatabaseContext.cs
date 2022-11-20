@@ -9,7 +9,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
 {
     public DatabaseContext()
     {
-        //this.Database.EnsureCreated(); //just for integration tests
+        this.Database.EnsureCreated(); //just for integration tests
     }
     public DbSet<Cage> Cages => Set<Cage>();
 
