@@ -11,15 +11,13 @@ public class TreatmentTests
     [Fact]
     public void When_CreateTreatments_WithAtLeastOneMedicine_Should_Succeed()
     {
-        var listOfMedicine = new List<Medicine>();
         string name = "Name";
         string description = "Description";
         double price = 1;
-        DrugAdministration drugAdministration = new DrugAdministration(1,"Oral");
-        var medicine = new Medicine(name, description, price, drugAdministration);
-        listOfMedicine.Add(medicine);
-        var result = Treatment.CreateTreatment(listOfMedicine);
-
+        string drugAdministration = "Oral";
+        var medicine = Medicine.Create(name, description, price, drugAdministration);
+        var result = Treatment.CreateTreatment();
+        result.Value!.AddMedicineToTreatment(medicine.Value!);
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
     }
@@ -27,9 +25,7 @@ public class TreatmentTests
     [Fact]
     public void When_CreateTreatments_WithNoMedicine_Should_Fail()
     {
-        var listOfMedicine = new List<Medicine>();
-        var result = Treatment.CreateTreatment(listOfMedicine);
-
+        var result = Treatment.CreateTreatment();
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();

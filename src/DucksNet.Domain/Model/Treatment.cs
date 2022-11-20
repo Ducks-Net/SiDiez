@@ -8,16 +8,16 @@ using DucksNet.SharedKernel.Utils;
 namespace DucksNet.Domain.Model;
 public class Treatment
 {
-    public Guid ID { get; }
+    public Guid ID { get; private set; }
     public Guid? OwnerID { get; }
     public Guid? ClientID { get; }
     public Guid? ClinicID { get; }
     List<Medicine> MedicineList { get; set; }
 
-    private Treatment(List<Medicine> medicineList)
+    private Treatment()
     {
         ID = new Guid();
-        MedicineList = medicineList;
+        MedicineList = new List<Medicine>();
     }
 
     public void AddMedicineToTreatment(Medicine medicine)
@@ -27,10 +27,8 @@ public class Treatment
         MedicineList.Add(medicine);
     }
 
-    public static Result<Treatment> CreateTreatment(List<Medicine> medicineList)
+    public static Result<Treatment> CreateTreatment()
     {
-        if (medicineList.Count == 0)
-            return Result<Treatment>.Error("Cannot create treatment as the medicine list is empty.");
-        return Result<Treatment>.Ok(new Treatment(medicineList));
+        return Result<Treatment>.Ok(new Treatment());
     }
 }

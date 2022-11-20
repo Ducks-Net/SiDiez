@@ -22,21 +22,21 @@ public class MedicineController : ControllerBase
         return Ok(medicines);
     }
 
-    [HttpGet("{name}")]
+    [HttpGet("byName/{name}")]
     public IActionResult GetByName(string name)
     {
         var medicine = _medicineRepository.GetAll().Where(m => m.Name == name).ToList();
         return Ok(medicine);
     }
 
-    [HttpGet("{description}")]
+    [HttpGet("byDescription/{description}")]
     public IActionResult GetByDescription(string description)
     {
         var medicine = _medicineRepository.GetAll().Where(m => m.Description == description).ToList();
         return Ok(medicine);
     }
 
-    [HttpGet("{drugAdministration}")]
+    [HttpGet("byDrugAdministration/{drugAdministration}")]
     public IActionResult GetByClinicID(DrugAdministration drugAdministration)
     {
         var medicine = _medicineRepository.GetAll().Where(m => m.DrugAdministration == drugAdministration).ToList();

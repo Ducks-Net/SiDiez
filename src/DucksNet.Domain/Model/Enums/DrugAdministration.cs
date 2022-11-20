@@ -25,4 +25,11 @@ public class DrugAdministration : Enumeration
             return Result<DrugAdministration>.Error("Wrong type of drug administration");
         return Result<DrugAdministration>.Ok(administrationByString);
     }
+    public static Result<DrugAdministration> createMedicineByInt(int id)
+    {
+        var administrationByString = GetAll<DrugAdministration>().FirstOrDefault(x => x.Id == id);
+        if (administrationByString == null)
+            return Result<DrugAdministration>.Error("Wrong type of drug administration");
+        return Result<DrugAdministration>.Ok(administrationByString);
+    }
 }

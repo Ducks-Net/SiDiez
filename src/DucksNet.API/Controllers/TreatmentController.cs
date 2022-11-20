@@ -21,21 +21,21 @@ public class TreatmentController : ControllerBase
         return Ok(treatments);
     }
 
-    [HttpGet("{ownerId}")]
+    [HttpGet("byOwnerId/{ownerId}")]
     public IActionResult GetByOwnerID(Guid ownerId)
     {
         var treatment = _treatmentRepository.GetAll().Where(t => t.OwnerID == ownerId).ToList();
         return Ok(treatment);
     }
 
-    [HttpGet("{clientId}")]
+    [HttpGet("byClientId/{clientId}")]
     public IActionResult GetByClientID(Guid clientId)
     {
         var treatment = _treatmentRepository.GetAll().Where(t => t.ClientID == clientId).ToList();
         return Ok(treatment);
     }
 
-    [HttpGet("{clinicId}")]
+    [HttpGet("byClinicId/{clinicId}")]
     public IActionResult GetByClinicID(Guid clinicId)
     {
         var treatment = _treatmentRepository.GetAll().Where(t => t.ClinicID == clinicId).ToList();

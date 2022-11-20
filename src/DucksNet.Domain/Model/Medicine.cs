@@ -9,13 +9,16 @@ using DucksNet.Domain.Model.Enums;
 namespace DucksNet.Domain.Model;
 public class Medicine
 {
-    public Guid Id { get; }
-    public string? Name { get; private set; }
-    public string? Description { get; private set; }
-    public double? Price { get; private set; }
-    public DrugAdministration? DrugAdministration { get; private set; }
+    public Guid Id { get; private set; }
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public double Price { get; private set; }
+    public DrugAdministration DrugAdministration { get; private set; }
     
-    public Medicine(string name, string description, double price, DrugAdministration drugAdministration)
+    private Medicine(string name, string description, double price, int drugAdministrationId) 
+        :this(name, description, price, DrugAdministration.createMedicineByInt(drugAdministrationId).Value!)
+    { }
+    private Medicine(string name, string description, double price, DrugAdministration drugAdministration)
     {
         Id = Guid.NewGuid();
         Name = name;
