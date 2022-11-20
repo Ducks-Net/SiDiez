@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
-using SamuraiApp.Infrastructure.Sqlite;
+using DucksNet.Infrastructure.Sqlite;
 
 namespace DucksNet.API.Integration_Tests;
+
 public class BaseIntegrationTests<T> where T : class
 {
     protected HttpClient HttpClient { get; private set; }
