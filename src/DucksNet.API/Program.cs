@@ -15,6 +15,8 @@ builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
 builder.Services.AddScoped<IRepository<Cage>, CagesRepository>();
 builder.Services.AddScoped<IRepository<CageTimeBlock>, CageTimeBlocksRepository>();
 builder.Services.AddScoped<IRepository<Appointment>, AppointmentsRepository>();
+builder.Services.AddScoped<IRepository<Pet>, PetsRepository>();
+builder.Services.AddScoped<IRepository<User>, UsersRepository>();
 
 var app = builder.Build();
 

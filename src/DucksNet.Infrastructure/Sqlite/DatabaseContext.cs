@@ -11,6 +11,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
     DbSet<CageTimeBlock> IDatabaseContext.CageTimeBlocks => Set<CageTimeBlock>();
     DbSet<Appointment> IDatabaseContext.Appointments => Set<Appointment>();
     DbSet<Pet> IDatabaseContext.Pets => Set<Pet>();
+    DbSet<User> IDatabaseContext.Users => Set<User>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

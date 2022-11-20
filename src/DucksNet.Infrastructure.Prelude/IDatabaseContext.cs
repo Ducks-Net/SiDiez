@@ -10,6 +10,7 @@ public interface IDatabaseContext
     DbSet<CageTimeBlock> CageTimeBlocks { get; }
     DbSet<Appointment> Appointments { get; }
     DbSet<Pet> Pets { get; }
+    DbSet<User> Users { get; }
 
     void SaveChanges();
 }
