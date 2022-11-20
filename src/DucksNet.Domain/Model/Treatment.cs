@@ -29,7 +29,7 @@ public class Treatment
 
     public static Result<Treatment> CreateTreatment(List<Medicine> medicineList)
     {
-        if (medicineList == null)
+        if (medicineList.Count == 0)
             return Result<Treatment>.Error("Cannot create treatment as the medicine list is empty.");
         return Result<Treatment>.Ok(new Treatment(medicineList));
     }

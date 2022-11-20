@@ -25,5 +25,4 @@ public class DrugAdministration : Enumeration
             return Result<DrugAdministration>.Error("Wrong type of drug administration");
         return Result<DrugAdministration>.Ok(administrationByString);
     }
-  
 }
