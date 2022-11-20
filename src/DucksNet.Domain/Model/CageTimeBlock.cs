@@ -5,17 +5,17 @@ namespace DucksNet.Domain.Model;
 
 public class CageTimeBlock
 {
-    public Guid Id { get; }
+    public Guid Id { get; private set; }
     public Guid? CageId { get; private set; }
     public Guid? OccupantId { get; private set; }
-    public DateTime Start { get; }
-    public DateTime End { get; }
+    public DateTime StartTime { get; private set; }
+    public DateTime EndTime { get; private set; }
     
-    private CageTimeBlock(DateTime start, DateTime end)
+    private CageTimeBlock(DateTime startTime, DateTime endTime)
     {
         Id = new Guid();
-        Start = start;
-        End = end;
+        StartTime = startTime;
+        EndTime = endTime;
     }
 
     public static Result<CageTimeBlock> Create(DateTime start, DateTime end)

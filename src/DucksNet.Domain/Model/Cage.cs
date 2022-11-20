@@ -5,13 +5,20 @@ namespace DucksNet.Domain.Model;
 
 public class Cage
 {
-    public Guid Id { get; }
-    public Size Size { get; }
+    public Guid ID { get; private set; }
+    public Size Size { get; private set; }
     public Guid? LocationId { get; private set; }
+
+    private Cage(int sizeId) // NOTE (AL): We need a sizeID constructor because EFCore doesn't support our enums. yet :^)
+    {
+        ID = new Guid();
+        Size = Size.CreateFromInt(sizeId).Value!;
+        LocationId = null;
+    }
 
     private Cage(Size size)
     {
-        Id = new Guid();
+        ID = new Guid();
         Size = size;
         LocationId = null;
     }

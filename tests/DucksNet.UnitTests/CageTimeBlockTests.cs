@@ -16,8 +16,8 @@ public class CageTimeBlockTests
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
-        result.Value!.Start.Should().Be(start);
-        result.Value!.End.Should().Be(end);
+        result.Value!.StartTime.Should().Be(start);
+        result.Value!.EndTime.Should().Be(end);
     }
 
     [Fact]

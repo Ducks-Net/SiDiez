@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\DucksNet.SharedKernel\DucksNet.SharedKernel.csproj" />
     <ProjectReference Include="..\DucksNet.Domain\DucksNet.Domain.csproj" />
-    <ProjectReference Include="..\DucksNet.Infrastructure.Prelude\DucksNet.Infrastructure.Prelude.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -12,8 +12,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11" />
   </ItemGroup>
 
 </Project>

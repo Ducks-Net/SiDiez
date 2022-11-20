@@ -18,4 +18,13 @@ public class Size : Enumeration
 
         return Result<Size>.Ok(size);
     }
+
+    public static Result<Size> CreateFromInt(int id)
+    {
+        var size = GetAll<Size>().FirstOrDefault(x => x.Id == id);
+        if (size == null)
+            return Result<Size>.Error("Invalid size id. Valid values are: 1, 2, 3."); // TODO (AL) : Don't hardcode the valid values 
+
+        return Result<Size>.Ok(size);
+    }
 }
