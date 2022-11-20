@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace DucksNet.SharedKernel.Utils;
 
@@ -9,6 +9,9 @@ public abstract class Enumeration : IComparable
     public int Id { get; private set; }
 
     protected Enumeration(int id, string name) => (Id, Name) = (id, name);
+
+    protected Enumeration(string name) => (Name) = (name);
+   
 
     public override string ToString() => Name;
 

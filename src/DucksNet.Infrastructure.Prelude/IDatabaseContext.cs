@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using DucksNet.Domain.Model;
 
@@ -8,6 +8,10 @@ public interface IDatabaseContext
 {
     DbSet<Cage> Cages { get; }
     DbSet<CageTimeBlock> CageTimeBlocks { get; }
+
+    DbSet<Treatment> Treatments { get; }
+
+    DbSet<Medicine> Medicines { get; }
 
     void SaveChanges();
 }
