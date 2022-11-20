@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using DucksNet.Infrastructure.Prelude;
 using DucksNet.Domain.Model;
 
-namespace SamuraiApp.Infrastructure.Sqlite;
+namespace DucksNet.Infrastructure.Sqlite;
 
 public class DatabaseContext : DbContext, IDatabaseContext
 {
