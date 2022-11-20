@@ -1,6 +1,8 @@
 ﻿using System.Net.Http.Json;
+
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
+using static System.Guid;
 
 namespace DucksNet.API.Integration_Tests;
 public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecordsController>
@@ -13,8 +15,8 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         //should get the an appointment and client using get and their id
         MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO
         {
-            IdAppointment = Guid.NewGuid(),
-            IdClient = Guid.NewGuid()
+            IdAppointment = System.Guid.NewGuid(),
+            IdClient = System.Guid.NewGuid()
         };
 
         //Act

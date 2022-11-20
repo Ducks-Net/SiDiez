@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-
+﻿using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
-using DucksNet.Domain.Model;
 
+using Microsoft.EntityFrameworkCore;
 namespace DucksNet.Infrastructure.Sqlite;
 
 public class DatabaseContext : DbContext, IDatabaseContext
@@ -14,15 +13,15 @@ public class DatabaseContext : DbContext, IDatabaseContext
         this.Database.EnsureCreated(); 
     }
 
-    DbSet<Cage> IDatabaseContext.Cages => Set<Cage>();
-    DbSet<CageTimeBlock> IDatabaseContext.CageTimeBlocks => Set<CageTimeBlock>();
-    DbSet<Appointment> IDatabaseContext.Appointments => Set<Appointment>();
-    DbSet<Pet> IDatabaseContext.Pets => Set<Pet>();
-    DbSet<User> IDatabaseContext.Users => Set<User>();
-    DbSet<MedicalRecord> IDatabaseContext.MedicalRecords => Set<MedicalRecord>();
-    DbSet<Employee> IDatabaseContext.Employees => Set<Employee>();
-    DbSet<Treatment> IDatabaseContext.Treatments => Set<Treatment>();
-    DbSet<Medicine> IDatabaseContext.Medicines => Set<Medicine>();
+    public DbSet<Cage> Cages => Set<Cage>();
+    public DbSet<CageTimeBlock> CageTimeBlocks => Set<CageTimeBlock>();
+    public DbSet<Appointment> Appointments => Set<Appointment>();
+    public DbSet<Pet> Pets => Set<Pet>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<MedicalRecord> MedicalRecords => Set<MedicalRecord>();
+    public DbSet<Employee> Employees => Set<Employee>();
+    public DbSet<Treatment> Treatments => Set<Treatment>();
+    public DbSet<Medicine> Medicines => Set<Medicine>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
