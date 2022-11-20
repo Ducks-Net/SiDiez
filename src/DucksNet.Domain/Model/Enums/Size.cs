@@ -14,7 +14,7 @@ public class Size : Enumeration
     {
         var size = GetAll<Size>().FirstOrDefault(x => x.Name == str);
         if (size == null)
-            return Result<Size>.Error("Invalid size string. Valid values are: Small, Medium, Large"); // TODO (AL) : Don't hardcode the valid values 
+            return Result<Size>.Error("Invalid size string. Valid values are: Small, Medium, Large."); // TODO (AL) : Don't hardcode the valid values 
 
         return Result<Size>.Ok(size);
     }

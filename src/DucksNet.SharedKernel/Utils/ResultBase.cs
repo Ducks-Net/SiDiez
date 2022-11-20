@@ -7,29 +7,25 @@ public class Result
 
     public List<string> Errors { get; protected set; }
 
-    protected Result(bool isSuccess, string? error)
+    protected Result(bool isSuccess, List<string>? errors)
     {
-        if (isSuccess && error != null)
+        if (isSuccess && errors != null)
         {
             throw new InvalidOperationException();
         }
 
-        if (!isSuccess && error == null)
+        if (!isSuccess && errors == null)
         {
             throw new InvalidOperationException();
         }
 
         IsSuccess = isSuccess;
-        Errors = new List<string>();
-        if (error != null)
-        {
-            Errors.Add(error);
-        }
+        Errors = errors ?? new List<string>();
     }
 
     public static Result Ok() => new(true, null);
-    public static Result Error(string error) => new(false, error);
-    public static Result ErrorList(List<string> errors) => new(false, null) { Errors = errors };
+    public static Result Error(string error) => new(false, new List<string> { error });
+    public static Result ErrorList(List<string> errors) => new(false, errors);
     public void AddError(string error)
     {
         if( IsSuccess || Errors == null)

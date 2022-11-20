@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DucksNet.SharedKernel\DucksNet.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\src\DucksNet.Domain\DucksNet.Domain.csproj" />
   </ItemGroup>
 
 </Project>
