@@ -39,4 +39,14 @@ public class ResultTests
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().Be(value);
     }
+
+    [Fact]
+    public void Result_ShouldBeFailure_WhenConstructedByErrorWithValue()
+    {
+        string errrorMessage = "Error";
+        var result = Result<string>.Error(errrorMessage);
+        result.IsFailure.Should().BeTrue();
+        result.Errors.Should().Contain(errrorMessage);
+        result.Value.Should().BeNull();
+    }
 }
