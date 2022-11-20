@@ -32,7 +32,6 @@ public class MedicineController : ControllerBase
     [HttpGet("{description}")]
     public IActionResult GetByDescription(string description)
     {
-
         var medicine = _medicineRepository.GetAll().Where(m => m.Description == description).ToList();
         return Ok(medicine);
     }

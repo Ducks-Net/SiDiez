@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DucksNet.Domain.Model;
+using DucksNet.Domain.Model.Enums;
 using FluentAssertions;
 using Xunit;
 
@@ -14,18 +15,24 @@ public class MedicineTests
     [Fact]
     public void When_CreateMedicine_WithValidAdministration_Should_Succeed()
     {
-        string administration = "Intramuscular";
-        var result = Medicine.Create(administration);
+        string name = "Name";
+        string description = "Description";
+        double price = 1;
+        string drugAdministration = "Oral";
+        var result = Medicine.Create(name, description, price, drugAdministration);
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
-        result.Value!.DrugAdministration.Name.Should().Be(administration);
+        result.Value!.DrugAdministration.Name.Should().Be(drugAdministration);
     }
 
     [Fact]
     public void When_CreateMedicine_WitInvalidAdministration_Should_Fail()
     {
-        string administration = "Invalid";
-        var result = Medicine.Create(administration);
+        string name = "Name";
+        string description = "Description";
+        double price = 1;
+        string drugAdministration = "Invalid";
+        var result = Medicine.Create(name, description, price, drugAdministration);
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();

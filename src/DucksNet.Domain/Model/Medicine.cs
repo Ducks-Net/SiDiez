@@ -15,18 +15,22 @@ public class Medicine
     public double? Price { get; private set; }
     public DrugAdministration? DrugAdministration { get; private set; }
     
-    public Medicine(DrugAdministration drugAdministration)
+    public Medicine(string name, string description, double price, DrugAdministration drugAdministration)
     {
         Id = Guid.NewGuid();
+        Name = name;
+        Description = description;
+        Price = price;
         DrugAdministration = drugAdministration;
     }
 
-    public static Result<Medicine> Create(string administration)
+    public static Result<Medicine> Create(string name, string description, double price, string administration)
     {
-        DrugAdministration typeOfAdministration = new DrugAdministration(administration);
+        if (price <= 0)
+            return Result<Medicine>.Error("Invalid price");
         Result<DrugAdministration> typeOfDrugAdministration = DrugAdministration.createMedicineByString(administration);
         if (typeOfDrugAdministration.Value == null || typeOfDrugAdministration.IsFailure)
             return Result<Medicine>.FromError(typeOfDrugAdministration, "Failed to parse type of medicine administration.");
-        return Result<Medicine>.Ok(new Medicine(typeOfAdministration));
+        return Result<Medicine>.Ok(new Medicine(name, description, price, typeOfDrugAdministration.Value));
     }
 }

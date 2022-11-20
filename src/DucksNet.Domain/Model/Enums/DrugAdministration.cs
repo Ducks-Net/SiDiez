@@ -8,14 +8,14 @@ using DucksNet.SharedKernel.Utils;
 namespace DucksNet.Domain.Model.Enums;
 public class DrugAdministration : Enumeration
 {
-    public static readonly DrugAdministration Oral = new("Oral");
-    public static readonly DrugAdministration Inhalation = new("Inhalation");
-    public static readonly DrugAdministration Intradermal = new("Intradermal");
-    public static readonly DrugAdministration Subcutaneous = new("Subcutaneous");
-    public static readonly DrugAdministration Intramuscular = new("Intramuscular");
-    public static readonly DrugAdministration Ointment = new("Ointment");
+    public static readonly DrugAdministration Oral = new(1,"Oral");
+    public static readonly DrugAdministration Inhalation = new(2,"Inhalation");
+    public static readonly DrugAdministration Intradermal = new(3,"Intradermal");
+    public static readonly DrugAdministration Subcutaneous = new(4,"Subcutaneous");
+    public static readonly DrugAdministration Intramuscular = new(5,"Intramuscular");
+    public static readonly DrugAdministration Ointment = new(6,"Ointment");
 
-    public DrugAdministration(string name) : base(name)
+    public DrugAdministration(int id, string name) : base(id, name)
     {
     }
     public static Result<DrugAdministration> createMedicineByString(string str)

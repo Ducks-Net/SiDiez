@@ -10,9 +10,7 @@ public abstract class Enumeration : IComparable
 
     protected Enumeration(int id, string name) => (Id, Name) = (id, name);
 
-    protected Enumeration(string name) => (Name) = (name);
    
-
     public override string ToString() => Name;
 
     public static IEnumerable<T> GetAll<T>() where T : Enumeration =>
