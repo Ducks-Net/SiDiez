@@ -1,3 +1,4 @@
+using DucksNet.API.DTOs;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 
@@ -10,9 +11,15 @@ namespace DucksNet.API.Controllers;
 public class CagesController : ControllerBase
 {
     private readonly IRepository<Cage> _cagesRepository;
-    public CagesController(IRepository<Cage> repository)
+    private readonly IRepository<CageTimeBlock> _cageTimeBlocksRepository;
+    private readonly IRepository<Pet> _petsRepository;
+    private readonly CageScheduleService _cageScheduleService;
+    public CagesController(IRepository<Cage> cages, IRepository<CageTimeBlock> cageTimeBlocks, IRepository<Pet> pets)
     {
-        _cagesRepository = repository;
+        _cagesRepository = cages;
+        _cageTimeBlocksRepository = cageTimeBlocks;
+        _petsRepository = pets;
+        _cageScheduleService = new CageScheduleService(cages, cageTimeBlocks, pets);
     }
 
     [HttpGet]
@@ -27,5 +34,38 @@ public class CagesController : ControllerBase
     {
         var cage = _cagesRepository.GetAll().Where(c => c.LocationId == locationId).ToList();
         return Ok(cage);
+    }
+    
+    [HttpPost("schedule")]
+    public IActionResult ScheduleCage([FromBody] ScheduleCageDTO dto)
+    {
+        var result = _cageScheduleService.ScheduleCage(dto.PetId, dto.LocationId, dto.StartTime, dto.EndTime);
+        if(result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok(result.Value);
+    }
+
+    [HttpGet("schedule/{locationId}")]
+    public IActionResult GetCageSchedule(Guid locationId)
+    {
+        var result = _cageScheduleService.GetLocationSchedule(locationId);
+        if(result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok(result.Value);
+    }
+
+    [HttpGet("schedule/{petId}")]
+    public IActionResult GetPetSchedule(Guid petId)
+    {
+        var result = _cageScheduleService.GetPetSchedule(petId);
+        if(result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok(result.Value);
     }
 }

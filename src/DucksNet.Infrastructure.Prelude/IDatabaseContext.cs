@@ -8,6 +8,8 @@ public interface IDatabaseContext
 {
     DbSet<Cage> Cages { get; }
     DbSet<CageTimeBlock> CageTimeBlocks { get; }
+    DbSet<Appointment> Appointments { get; }
+    DbSet<Pet> Pets { get; }
 
     void SaveChanges();
 }

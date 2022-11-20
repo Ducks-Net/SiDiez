@@ -9,6 +9,8 @@ public class DatabaseContext : DbContext, IDatabaseContext
 {
     DbSet<Cage> IDatabaseContext.Cages => Set<Cage>();
     DbSet<CageTimeBlock> IDatabaseContext.CageTimeBlocks => Set<CageTimeBlock>();
+    DbSet<Appointment> IDatabaseContext.Appointments => Set<Appointment>();
+    DbSet<Pet> IDatabaseContext.Pets => Set<Pet>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

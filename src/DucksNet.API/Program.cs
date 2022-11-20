@@ -13,6 +13,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
 builder.Services.AddScoped<IRepository<Cage>, CagesRepository>();
+builder.Services.AddScoped<IRepository<CageTimeBlock>, CageTimeBlocksRepository>();
+builder.Services.AddScoped<IRepository<Appointment>, AppointmentsRepository>();
 
 var app = builder.Build();
 
