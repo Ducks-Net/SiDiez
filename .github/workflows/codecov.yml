@@ -20,7 +20,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Add altcov dep
-      run: dotnet add BusinessTests/BusinessTests.csproj package AltCover
+      run: dotnet add tests/DucksNet.UnitTests/ package AltCover
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
