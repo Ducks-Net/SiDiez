@@ -24,4 +24,19 @@ public class Result<T> : Result
     public static Result<T> Ok(T value) => new(value, true, null);
 
     public new static Result<T> Error(string error) => new(default(T), false, error);
+
+    public new static Result<T> ErrorList(List<string> errors) => new(default(T), false, null) { Errors = errors };
+
+    public static Result<T> FromError<U>(Result<U> result, string? extraError = null) {
+        if(result.IsSuccess || result.Errors == null) {
+            throw new InvalidOperationException();
+        }
+
+        Result<T> ret = Result<T>.ErrorList(result.Errors);
+        if(extraError != null) {
+            ret.Errors.Add(extraError);
+        }
+
+        return ret;
+    }
 }

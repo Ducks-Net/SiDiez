@@ -5,7 +5,7 @@ public class Result
     public bool IsSuccess { get; }
     public bool IsFailure => !IsSuccess;
 
-    public List<string> Errors { get; }
+    public List<string> Errors { get; protected set; }
 
     protected Result(bool isSuccess, string? error)
     {
@@ -29,6 +29,7 @@ public class Result
 
     public static Result Ok() => new(true, null);
     public static Result Error(string error) => new(false, error);
+    public static Result ErrorList(List<string> errors) => new(false, null) { Errors = errors };
     public void AddError(string error)
     {
         if( IsSuccess || Errors == null)
