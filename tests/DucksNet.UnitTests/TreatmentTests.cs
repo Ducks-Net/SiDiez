@@ -21,14 +21,4 @@ public class TreatmentTests
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
     }
-
-    [Fact]
-    public void When_CreateTreatments_WithNoMedicine_Should_Fail()
-    {
-        var result = Treatment.CreateTreatment();
-        result.IsFailure.Should().BeTrue();
-        result.Value.Should().BeNull();
-        result.Errors.Should().NotBeEmpty();
-        result.Errors.Should().Contain("Cannot create treatment as the medicine list is empty.");
-    }
 }
