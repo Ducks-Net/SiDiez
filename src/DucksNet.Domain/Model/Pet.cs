@@ -32,4 +32,16 @@ public class Pet
         OwnerId = ownerId;
     }
 
+    public void UpdateFields(string size, Guid? ownerId)
+    {
+        Result<Size> sizeResult = Size.CreateFromString(size);
+        if (sizeResult.IsSuccess && sizeResult.Value != null)
+        {
+            Size = sizeResult.Value;
+        }
+        if (ownerId != null)
+        {
+            OwnerId = ownerId.Value;
+        }
+    }
 }

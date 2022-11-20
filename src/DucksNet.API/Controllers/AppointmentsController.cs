@@ -22,30 +22,26 @@ public class AppointmentsController : ControllerBase
         return Ok(appointments);
     }
 
-    [HttpGet("{petId}")]
+    [HttpGet("byPet/{petId}")]
     public IActionResult GetByPetID(Guid petId)
     {
         var appointments = _appointmentsRepository.GetAll().Where(a => a.PetId == petId).ToList();
         return Ok(appointments);
     }
 
-    [HttpGet("{vetId}")]
+    [HttpGet("byEmployee/{employeeId}")]
     public IActionResult GetByVetID(Guid vetId)
     {
         var appointments = _appointmentsRepository.GetAll().Where(a => a.VetId == vetId).ToList();
         return Ok(appointments);
     }
 
-    [HttpGet("{locationId}")]
-    public IActionResult GetByLocationID(Guid locationId)
+    [HttpGet("byLocation/{locationId}")]
+    public IActionResult GetByLocationID(Guid? locationId)
     {
         var appointments = _appointmentsRepository.GetAll().Where(a => a.LocationId == locationId).ToList();
         return Ok(appointments);
     }
 
-    [HttpPost]
-    public IActionResult ScheduleAppointment(Guid petId, DateTime startTime, DateTime endTime, string type)
-    {
-        return Ok();
-    }
+    // TODO (AL): Schedule an appointment. Needs a service similar to CagesScheduleService.
 }
