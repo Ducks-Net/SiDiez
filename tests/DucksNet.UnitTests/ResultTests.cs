@@ -1,7 +1,4 @@
-using Xunit;
-using FluentAssertions;
-
-using DucksNet.SharedKernel.Utils;
+﻿using DucksNet.SharedKernel.Utils;
 
 public class ResultTests 
 {

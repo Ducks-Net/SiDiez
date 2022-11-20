@@ -1,7 +1,4 @@
-using Xunit;
-using FluentAssertions;
-
-using DucksNet.Domain.Model.Enums;
+﻿using DucksNet.Domain.Model.Enums;
 
 public class SizeTests
 {

@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using DucksNet.Infrastructure.Prelude;
 using DucksNet.Domain.Model;
@@ -7,8 +7,15 @@ namespace SamuraiApp.Infrastructure.Sqlite;
 
 public class DatabaseContext : DbContext, IDatabaseContext
 {
-    DbSet<Cage> IDatabaseContext.Cages => Set<Cage>();
-    DbSet<CageTimeBlock> IDatabaseContext.CageTimeBlocks => Set<CageTimeBlock>();
+    public DatabaseContext()
+    {
+        this.Database.EnsureCreated(); //just for integration tests
+    }
+    public DbSet<Cage> Cages => Set<Cage>();
+
+    public DbSet<CageTimeBlock> CageTimeBlocks => Set<CageTimeBlock>();
+    public DbSet<MedicalRecord> MedicalRecords => Set<MedicalRecord>();
+    public DbSet<Employee> Employees => Set<Employee>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
