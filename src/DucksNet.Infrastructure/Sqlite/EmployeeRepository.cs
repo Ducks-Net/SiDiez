@@ -1,7 +1,6 @@
 ﻿using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 using DucksNet.SharedKernel.Utils;
-using SamuraiApp.Infrastructure.Sqlite;
 
 namespace DucksNet.Infrastructure.Sqlite;
 public class EmployeeRepository : IRepository<Employee>

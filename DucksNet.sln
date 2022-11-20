@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DucksNet.Infrastructure.Pre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.API.Integration Tests", "DucksNet.API.Integration Tests\DucksNet.API.Integration Tests.csproj", "{B9FD1399-B6D5-482B-84CE-35C234BAB130}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.Infrastructure.Prelude", "src\DucksNet.Infrastructure.Prelude\DucksNet.Infrastructure.Prelude.csproj", "{83EEB8A1-A0B0-49FC-B564-C9AB2968D076}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -3,7 +3,7 @@
 using DucksNet.Infrastructure.Prelude;
 using DucksNet.Domain.Model;
 
-namespace SamuraiApp.Infrastructure.Sqlite;
+namespace DucksNet.Infrastructure.Sqlite;
 
 public class DatabaseContext : DbContext, IDatabaseContext
 {
@@ -17,6 +17,8 @@ public class DatabaseContext : DbContext, IDatabaseContext
     public DbSet<MedicalRecord> MedicalRecords => Set<MedicalRecord>();
     public DbSet<Employee> Employees => Set<Employee>();
 
+    DbSet<Treatment> IDatabaseContext.Treatments => Set<Treatment>();
+    DbSet<Medicine> IDatabaseContext.Medicines => Set<Medicine>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("Data Source = DucksNet.db");
