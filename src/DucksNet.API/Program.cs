@@ -15,6 +15,11 @@ builder.Services.AddScoped<IRepository<Medicine>, MedicinesRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
+
+builder.Services.AddScoped<IRepository<MedicalRecord>, MedicalRecordRepository>();
+builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

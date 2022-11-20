@@ -5,19 +5,23 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{268A6CE2-36D1-40E2-8617-5BE043037974}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.API", "src\DucksNet.API\DucksNet.API.csproj", "{3A932D83-E05B-4666-8D80-6BFB9FE66CA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DucksNet.API", "src\DucksNet.API\DucksNet.API.csproj", "{3A932D83-E05B-4666-8D80-6BFB9FE66CA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.Domain", "src\DucksNet.Domain\DucksNet.Domain.csproj", "{FA76000D-4AC3-4EFA-91FE-1BC3E3C6CB4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DucksNet.Domain", "src\DucksNet.Domain\DucksNet.Domain.csproj", "{FA76000D-4AC3-4EFA-91FE-1BC3E3C6CB4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.Infrastructure", "src\DucksNet.Infrastructure\DucksNet.Infrastructure.csproj", "{D464EE39-8CBD-4713-892E-517A78D78929}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DucksNet.Infrastructure", "src\DucksNet.Infrastructure\DucksNet.Infrastructure.csproj", "{D464EE39-8CBD-4713-892E-517A78D78929}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.SharedKernel", "src\DucksNet.SharedKernel\DucksNet.SharedKernel.csproj", "{1315325B-F982-4278-8EEA-802E583E04FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DucksNet.SharedKernel", "src\DucksNet.SharedKernel\DucksNet.SharedKernel.csproj", "{1315325B-F982-4278-8EEA-802E583E04FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.WebUI", "src\DucksNet.WebUI\DucksNet.WebUI.csproj", "{4F005D89-5A2E-4EE9-B008-1DDE3C588339}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DucksNet.WebUI", "src\DucksNet.WebUI\DucksNet.WebUI.csproj", "{4F005D89-5A2E-4EE9-B008-1DDE3C588339}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EDE5A549-1ABE-4DE4-A054-C3DCC097FD4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.UnitTests", "tests\DucksNet.UnitTests\DucksNet.UnitTests.csproj", "{CF772523-F42B-431D-B602-263B2DE93729}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DucksNet.UnitTests", "tests\DucksNet.UnitTests\DucksNet.UnitTests.csproj", "{CF772523-F42B-431D-B602-263B2DE93729}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DucksNet.Infrastructure.Prelude", "src\DucksNet.Infrastructure.Prelude\DucksNet.Infrastructure.Prelude.csproj", "{DF34C39C-EEE4-464C-91A1-FBE4C325690A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.API.Integration Tests", "DucksNet.API.Integration Tests\DucksNet.API.Integration Tests.csproj", "{B9FD1399-B6D5-482B-84CE-35C234BAB130}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.Infrastructure.Prelude", "src\DucksNet.Infrastructure.Prelude\DucksNet.Infrastructure.Prelude.csproj", "{83EEB8A1-A0B0-49FC-B564-C9AB2968D076}"
 EndProject
@@ -25,9 +29,6 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3A932D83-E05B-4666-8D80-6BFB9FE66CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -54,10 +55,17 @@ Global
 		{CF772523-F42B-431D-B602-263B2DE93729}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF772523-F42B-431D-B602-263B2DE93729}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF772523-F42B-431D-B602-263B2DE93729}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83EEB8A1-A0B0-49FC-B564-C9AB2968D076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83EEB8A1-A0B0-49FC-B564-C9AB2968D076}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83EEB8A1-A0B0-49FC-B564-C9AB2968D076}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83EEB8A1-A0B0-49FC-B564-C9AB2968D076}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF34C39C-EEE4-464C-91A1-FBE4C325690A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF34C39C-EEE4-464C-91A1-FBE4C325690A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF34C39C-EEE4-464C-91A1-FBE4C325690A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF34C39C-EEE4-464C-91A1-FBE4C325690A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9FD1399-B6D5-482B-84CE-35C234BAB130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9FD1399-B6D5-482B-84CE-35C234BAB130}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9FD1399-B6D5-482B-84CE-35C234BAB130}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9FD1399-B6D5-482B-84CE-35C234BAB130}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3A932D83-E05B-4666-8D80-6BFB9FE66CA3} = {268A6CE2-36D1-40E2-8617-5BE043037974}
@@ -66,6 +74,10 @@ Global
 		{1315325B-F982-4278-8EEA-802E583E04FE} = {268A6CE2-36D1-40E2-8617-5BE043037974}
 		{4F005D89-5A2E-4EE9-B008-1DDE3C588339} = {268A6CE2-36D1-40E2-8617-5BE043037974}
 		{CF772523-F42B-431D-B602-263B2DE93729} = {EDE5A549-1ABE-4DE4-A054-C3DCC097FD4D}
-		{83EEB8A1-A0B0-49FC-B564-C9AB2968D076} = {268A6CE2-36D1-40E2-8617-5BE043037974}
+		{DF34C39C-EEE4-464C-91A1-FBE4C325690A} = {268A6CE2-36D1-40E2-8617-5BE043037974}
+		{B9FD1399-B6D5-482B-84CE-35C234BAB130} = {EDE5A549-1ABE-4DE4-A054-C3DCC097FD4D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EF6E58AC-568F-4A06-962E-AB424F296AFD}
 	EndGlobalSection
 EndGlobal
