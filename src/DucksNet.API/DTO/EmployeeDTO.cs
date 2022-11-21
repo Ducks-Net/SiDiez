@@ -2,10 +2,10 @@
 
 public class EmployeeDTO
 {
-    public Guid IdSediu { get; set; }
-    public string Surname { get; set; }
-    public string FirstName { get; set; }
-    public string Address { get; set; }
-    public string OwnerPhone { get; set; }
-    public string OwnerEmail { get; set; }
+    public Guid IdSediu { get; set; } 
+    public string Surname { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
+    public string OwnerPhone { get; set; } = string.Empty;
+    public string OwnerEmail { get; set; } = string.Empty;
 }

@@ -8,14 +8,14 @@ namespace DucksNet.Domain.Model
     public class Business
     {
         public Guid ID { get; private set; }
-        public String BusinessName { get; private set; }
-        public String Surname {get; private set;}
-        public String FirstName {get; private set;}
-        public String Address {get; private set;}
-        public String OwnerPhone {get; private set;}
-        public String OwnerEmail {get; private set;}
+        public string BusinessName { get; private set; }
+        public string Surname {get; private set;}
+        public string FirstName {get; private set;}
+        public string Address {get; private set;}
+        public string OwnerPhone {get; private set;}
+        public string OwnerEmail {get; private set;}
 
-        private Business(String _BusinessName, String _Surname, String _FirstName, String _Address, String _OwnerPhone, String _OwnerEmail) 
+        public Business(string _BusinessName, string _Surname, string _FirstName, string _Address, string _OwnerPhone, string _OwnerEmail) 
         {
             ID = new Guid();
             BusinessName = _BusinessName;

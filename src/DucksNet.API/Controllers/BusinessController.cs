@@ -1,16 +1,56 @@
+using DucksNet.Domain.Model;
+using DucksNet.Infrastructure.Prelude;
 using Microsoft.AspNetCore.Mvc;
-
+using DucksNet.API.DTO;
 namespace DucksNet.API.Controllers;
 
+
 [ApiController]
-[Route("[controller]")]
+[Route("api/v1/[controller]")]
 public class BusinessController : ControllerBase
 {
+    private readonly IRepository<Business> repository;
 
-    private readonly ILogger<BusinessController> _logger;
-
-    public BusinessController(ILogger<BusinessController> logger)
+    public BusinessController(IRepository<Business> repository)
     {
-        _logger = logger;
+        this.repository = repository;
+    }
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        var businesses = repository.GetAll();
+        return Ok(businesses);
+    }
+    [HttpPost]
+    public IActionResult Create([FromBody] BusinessDTO dto)
+    {
+        var business = new Business(dto.BusinessName, dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
+        repository.Add(business);
+        return Created(nameof(GetAll), business);
+    }
+    [HttpGet("{id}")]
+    public IActionResult Get(Guid id)
+    {
+        var business = repository.Get(id);
+        if(business.IsFailure)
+        {
+            return NotFound(business.Errors);
+        }
+        return Ok(business.Value);
+    }
+    [HttpDelete("{id}")]
+    public IActionResult Delete(Guid id)
+    {
+        var business = repository.Get(id);
+        if(business.IsFailure)
+        {
+            return NotFound(business.Errors);
+        }
+        var result = repository.Delete(business.Value!);
+        if(result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok(business);
     }
 }

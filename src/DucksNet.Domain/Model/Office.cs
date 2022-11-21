@@ -9,10 +9,10 @@ namespace DucksNet.Domain.Model
     {
         public Guid ID { get; private set; }
         public Guid BusinessId { get; set; }
-        public String Address {get; private set;}
+        public string Address {get; private set;}
         public int AnimalCapacity {get; set;}
 
-        private Office(Guid _BusinessId, String _Address,  int _AnimalCapacity) 
+        public Office(Guid _BusinessId, string _Address,  int _AnimalCapacity) 
         {
             ID = new Guid();
             BusinessId = _BusinessId;
