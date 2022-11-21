@@ -4,9 +4,10 @@ using System.Net.Http.Json;
 
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
+using DucksNet.API.IntegrationTests;
 using static System.Guid;
 
-namespace DucksNet.API.Integration_Tests;
+namespace DucksNet.IntegrationTests;
 public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecordsController>
 {
     private const string ApiURL = "api/v1/medicalrecords";

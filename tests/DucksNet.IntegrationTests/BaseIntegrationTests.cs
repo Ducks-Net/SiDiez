@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net.Http;
 
-namespace DucksNet.API.Integration_Tests;
+namespace DucksNet.API.IntegrationTests;
 
 public class BaseIntegrationTests<T> where T : class
 {
@@ -27,7 +27,6 @@ public class BaseIntegrationTests<T> where T : class
         databaseContext.Appointments.RemoveRange(databaseContext.Appointments);
         databaseContext.Pets.RemoveRange(databaseContext.Pets);
         databaseContext.Users.RemoveRange(databaseContext.Users);
-        databaseContext.Database.EnsureCreated();
         databaseContext.SaveChanges();
     }
 }
