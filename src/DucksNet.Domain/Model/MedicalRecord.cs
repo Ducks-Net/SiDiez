@@ -4,7 +4,7 @@ namespace DucksNet.Domain.Model;
 public class MedicalRecord
 {
 
-    public MedicalRecord(Guid idAppointment, Guid idClient)
+    private MedicalRecord(Guid idAppointment, Guid idClient)
     {
         Id = Guid.NewGuid();
         IdAppointment = idAppointment;
@@ -15,20 +15,15 @@ public class MedicalRecord
     public Guid IdAppointment { get; private set; }
     public Guid IdClient { get; private set; }
 
-    //TODO: to add other values (in the future) (RO)
-    /*
+    //TODO (RO): to add other values (in the future) 
+    
     public static Result<MedicalRecord> Create(Guid idAppointment, Guid idClient)
     {
-        //TODO: to check if the id's exist in the database (RO)
-        var medicalRecors = new MedicalRecord
-        {
-            Id = Guid.NewGuid(),
-            IdAppointment = idAppointment,
-            IdClient = idClient
-        };
-        return Result<MedicalRecord>.Ok(medicalRecors);
+        //TODO (RO): to check if the id's exist in the database 
+        var medicalRecord = new MedicalRecord(idAppointment, idClient);
+        return Result<MedicalRecord>.Ok(medicalRecord);
     }
-    */
+    
     public void AssignToAppointment(Guid idAppointment)
     {
         IdAppointment = idAppointment;

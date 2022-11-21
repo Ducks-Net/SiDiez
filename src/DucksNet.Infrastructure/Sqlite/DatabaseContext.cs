@@ -8,7 +8,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
 {
     public DatabaseContext()
     {
-        // NOTE (dvx): just for integration tests
+        // NOTE (RO): just for integration tests
         // TODO (AL): make a special context and separate db for integration tests
         this.Database.EnsureCreated(); 
     }
