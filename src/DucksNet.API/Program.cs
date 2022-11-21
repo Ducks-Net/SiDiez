@@ -1,9 +1,24 @@
+using DucksNet.Domain.Model;
+using DucksNet.Infrastructure.Sqlite;
+using DucksNet.Infrastructure.Prelude;
+
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Add services to the container.
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
+builder.Services.AddScoped<IRepository<Cage>, CagesRepository>();
+builder.Services.AddScoped<IRepository<CageTimeBlock>, CageTimeBlocksRepository>();
+builder.Services.AddScoped<IRepository<Appointment>, AppointmentsRepository>();
+builder.Services.AddScoped<IRepository<Pet>, PetsRepository>();
+builder.Services.AddScoped<IRepository<User>, UsersRepository>();
+builder.Services.AddScoped<IRepository<Treatment>, TreatmentsRepository>();
+builder.Services.AddScoped<IRepository<Medicine>, MedicinesRepository>();
+builder.Services.AddScoped<IRepository<MedicalRecord>, MedicalRecordRepository>();
+builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

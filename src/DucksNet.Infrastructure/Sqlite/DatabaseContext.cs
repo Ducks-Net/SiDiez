@@ -1,16 +1,30 @@
-using Microsoft.EntityFrameworkCore;
-
+﻿using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
-using DucksNet.Domain.Model;
 
-namespace SamuraiApp.Infrastructure.Sqlite;
+using Microsoft.EntityFrameworkCore;
+namespace DucksNet.Infrastructure.Sqlite;
 
 public class DatabaseContext : DbContext, IDatabaseContext
 {
-    DbSet<Cage> IDatabaseContext.Cages => Set<Cage>();
-    DbSet<CageTimeBlock> IDatabaseContext.CageTimeBlocks => Set<CageTimeBlock>();
-    DbSet<Office> IDatabaseContext.Offices => Set<Office>();
-    DbSet<Business> IDatabaseContext.Businesses => Set<Business>();
+    public DatabaseContext()
+    {
+        // NOTE (dvx): just for integration tests
+        // TODO (AL): make a special context and separate db for integration tests
+        this.Database.EnsureCreated(); 
+    }
+
+    public DbSet<Cage> Cages => Set<Cage>();
+    public DbSet<CageTimeBlock> CageTimeBlocks => Set<CageTimeBlock>();
+    public DbSet<Appointment> Appointments => Set<Appointment>();
+    public DbSet<Pet> Pets => Set<Pet>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<MedicalRecord> MedicalRecords => Set<MedicalRecord>();
+    public DbSet<Employee> Employees => Set<Employee>();
+    public DbSet<Treatment> Treatments => Set<Treatment>();
+    public DbSet<Medicine> Medicines => Set<Medicine>();
+    public DbSet<Office> Offices => Set<Office>();
+    public DbSet<Business> Businesses => Set<Business>();
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("Data Source = DucksNet.db");

@@ -1,7 +1,4 @@
-using Xunit;
-using FluentAssertions;
-
-using DucksNet.Domain.Model;
+﻿using DucksNet.Domain.Model;
 using System;
 
 public class CageTests
