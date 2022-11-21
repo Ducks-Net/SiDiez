@@ -10,7 +10,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
     {
         // NOTE (RO): just for integration tests
         // TODO (AL): make a special context and separate db for integration tests
-        this.Database.EnsureCreated(); 
+        // this.Database.EnsureCreated();
     }
 
     public DbSet<Cage> Cages => Set<Cage>();

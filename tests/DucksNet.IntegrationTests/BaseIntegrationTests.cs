@@ -18,6 +18,7 @@ public class BaseIntegrationTests<T> where T : class
     private void CleanDatabases()
     {
         DatabaseContext databaseContext = new DatabaseContext();
+        databaseContext.Database.EnsureCreated();
         databaseContext.Cages.RemoveRange(databaseContext.Cages);
         databaseContext.CageTimeBlocks.RemoveRange(databaseContext.CageTimeBlocks);
         databaseContext.MedicalRecords.RemoveRange(databaseContext.MedicalRecords);
