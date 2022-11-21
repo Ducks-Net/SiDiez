@@ -11,27 +11,27 @@ public class Appointment
     public Guid? VetId { get; private set; }
     public DateTime StartTime { get; private set; }
     public DateTime EndTime { get; private set; }
-   // public AppointmentType Type { get; private set; }
+    public AppointmentType Type { get; private set; }
     public bool NeedsCage { get; private set; }
     public bool IsCancelled { get; private set; }
 
-    private Appointment(/*AppointmentType type,*/ DateTime startTime, DateTime endTime)
+    private Appointment(AppointmentType type, DateTime startTime, DateTime endTime)
     {
         ID = new Guid();
-        //Type = type;
+        Type = type;
         StartTime = startTime;
         EndTime = endTime;
     }
 
-   // private Appointment(int typeId, DateTime startTime, DateTime endTime)
-    //    : this(AppointmentType.CreateFromInt(typeId).Value!, startTime, endTime) { }
+    private Appointment(int typeId, DateTime startTime, DateTime endTime)
+        : this(AppointmentType.CreateFromInt(typeId).Value!, startTime, endTime) { }
 
     public static Result<Appointment> Create(AppointmentType type, DateTime startTime, DateTime endTime)
     {
         if (startTime > endTime)
             return Result<Appointment>.Error("Start time cannot be after end time.");
 
-        return Result<Appointment>.Ok(new Appointment(/*type,*/ startTime, endTime));
+        return Result<Appointment>.Ok(new Appointment(type, startTime, endTime));
     }
 
     public void AssignToLocation(Guid locationId)
