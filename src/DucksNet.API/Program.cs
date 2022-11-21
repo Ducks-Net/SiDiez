@@ -18,6 +18,8 @@ builder.Services.AddScoped<IRepository<Treatment>, TreatmentsRepository>();
 builder.Services.AddScoped<IRepository<Medicine>, MedicinesRepository>();
 builder.Services.AddScoped<IRepository<MedicalRecord>, MedicalRecordRepository>();
 builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
+builder.Services.AddScoped<IRepository<Business>, BusinessesRepository>();
+builder.Services.AddScoped<IRepository<Office>, OfficesRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

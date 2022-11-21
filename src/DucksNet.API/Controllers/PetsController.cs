@@ -1,4 +1,4 @@
-using DucksNet.API.DTOs;
+using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 

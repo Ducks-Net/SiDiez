@@ -1,4 +1,4 @@
-namespace DucksNet.API.DTOs;
+namespace DucksNet.API.DTO;
 
 public class UserDTO
 {
