@@ -22,6 +22,8 @@ public class DatabaseContext : DbContext, IDatabaseContext
     public DbSet<Employee> Employees => Set<Employee>();
     public DbSet<Treatment> Treatments => Set<Treatment>();
     public DbSet<Medicine> Medicines => Set<Medicine>();
+    public DbSet<Office> Offices => Set<Office>();
+    public DbSet<Business> Businesses => Set<Business>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
