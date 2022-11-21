@@ -6,13 +6,11 @@ using Microsoft.EntityFrameworkCore;
 namespace DucksNet.Infrastructure.Sqlite;
 
 public class DatabaseContext : DbContext, IDatabaseContext
+{
+    public DatabaseContext()
+    {
         this.Database.EnsureCreated();
     }
-    
-    
-        // this.Database.EnsureCreated();
-    }
-
     public DbSet<Cage> Cages => Set<Cage>();
     public DbSet<CageTimeBlock> CageTimeBlocks => Set<CageTimeBlock>();
     public DbSet<Appointment> Appointments => Set<Appointment>();

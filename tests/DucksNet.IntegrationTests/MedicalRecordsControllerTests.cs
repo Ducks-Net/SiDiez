@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http.Json;
 
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
-using DucksNet.API.IntegrationTests;
-using static System.Guid;
 
 namespace DucksNet.IntegrationTests;
 public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecordsController>

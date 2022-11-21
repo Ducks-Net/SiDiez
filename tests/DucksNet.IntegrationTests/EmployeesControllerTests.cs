@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net.Http.Json;
 using DucksNet.API.DTO;
 using DucksNet.API.Controllers;
-using DucksNet.API.IntegrationTests;
 
 namespace DucksNet.IntegrationTests;
 public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController>
