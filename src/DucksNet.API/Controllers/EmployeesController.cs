@@ -38,8 +38,5 @@ public class EmployeesController : ControllerBase
             return Created(nameof(GetAll), employee.Value);
         }
         return BadRequest();
-
-
     }
-
 }

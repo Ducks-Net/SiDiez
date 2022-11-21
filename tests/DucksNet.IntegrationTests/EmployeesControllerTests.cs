@@ -26,6 +26,5 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employees.Should().NotBeNull();
         if (employees is not null)
             employees.Count.Should().Be(1);
-
     }
 }
