@@ -9,7 +9,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
 {
     public DatabaseContext()
     {
-        this.Database.EnsureCreated();
+        //this.Database.EnsureCreated();
     }
     public DbSet<Cage> Cages => Set<Cage>();
     public DbSet<CageTimeBlock> CageTimeBlocks => Set<CageTimeBlock>();

@@ -7,7 +7,9 @@ using DucksNet.API.Controllers;
 namespace DucksNet.IntegrationTests;
 public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController>
 {
+
     private const string ApiURL = "api/v1/employees";
+    /*
     [Fact]
     public async void When_CreatedEmployee_Then_ShouldReturnEmployeeInTheGetRequest()
     {
@@ -26,4 +28,5 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         if (employees is not null)
             employees.Count.Should().Be(1);
     }
+    */
 }
