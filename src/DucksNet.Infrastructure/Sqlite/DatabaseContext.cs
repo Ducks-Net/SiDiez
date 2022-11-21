@@ -9,7 +9,8 @@ public class DatabaseContext : DbContext, IDatabaseContext
 {
     DbSet<Cage> IDatabaseContext.Cages => Set<Cage>();
     DbSet<CageTimeBlock> IDatabaseContext.CageTimeBlocks => Set<CageTimeBlock>();
-
+    DbSet<Office> IDatabaseContext.Offices => Set<Office>();
+    DbSet<Business> IDatabaseContext.Businesses => Set<Business>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite("Data Source = DucksNet.db");

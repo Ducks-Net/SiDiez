@@ -8,6 +8,7 @@ public interface IDatabaseContext
 {
     DbSet<Cage> Cages { get; }
     DbSet<CageTimeBlock> CageTimeBlocks { get; }
-
+    DbSet<Business> Businesses { get; }
+    DbSet<Office> Offices { get; }
     void SaveChanges();
 }
