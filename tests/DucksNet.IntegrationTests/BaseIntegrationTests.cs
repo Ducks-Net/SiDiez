@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net.Http;
 
-namespace DucksNet.API.Integration_Tests;
+namespace DucksNet.IntegrationTests;
 
 public class BaseIntegrationTests<T> where T : class
 {

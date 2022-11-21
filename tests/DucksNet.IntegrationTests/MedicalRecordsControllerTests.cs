@@ -6,7 +6,7 @@ using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using static System.Guid;
 
-namespace DucksNet.API.Integration_Tests;
+namespace DucksNet.IntegrationTests;
 public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecordsController>
 {
     private const string ApiURL = "api/v1/medicalrecords";

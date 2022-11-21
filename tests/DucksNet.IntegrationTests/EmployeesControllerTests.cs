@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net.Http.Json;
 using DucksNet.API.DTO;
-using DucksNet.API.Integration_Tests;
 using DucksNet.API.Controllers;
 
 namespace DucksNet.IntegrationTests;
