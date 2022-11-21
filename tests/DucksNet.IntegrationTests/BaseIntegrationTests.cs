@@ -27,6 +27,7 @@ public class BaseIntegrationTests<T> where T : class
         databaseContext.Appointments.RemoveRange(databaseContext.Appointments);
         databaseContext.Pets.RemoveRange(databaseContext.Pets);
         databaseContext.Users.RemoveRange(databaseContext.Users);
+        databaseContext.Database.EnsureCreated();
         databaseContext.SaveChanges();
     }
 }
