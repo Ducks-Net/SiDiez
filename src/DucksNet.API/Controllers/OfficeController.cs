@@ -23,9 +23,17 @@ public class OfficeController : ControllerBase
     [HttpPost]
     public IActionResult Create([FromBody] OfficeDTO dto)
     {
-        var office = new Office(dto.BusinessId, dto.Address, dto.AnimalCapacity);
-        repository.Add(office);
-        return Created(nameof(GetAll), office);
+        var office = DucksNet.Domain.Model.Office.Create(dto.BusinessId, dto.Address, dto.AnimalCapacity);
+        if(office.IsFailure)
+        {
+            return BadRequest(office.Errors);
+        }
+        var result = repository.Add(office.Value!);
+        if(result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok(office);
     }
     [HttpGet("{id}")]
     public IActionResult Get(Guid id)

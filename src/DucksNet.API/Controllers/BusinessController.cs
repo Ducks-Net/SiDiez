@@ -24,9 +24,17 @@ public class BusinessController : ControllerBase
     [HttpPost]
     public IActionResult Create([FromBody] BusinessDTO dto)
     {
-        var business = new Business(dto.BusinessName, dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
-        repository.Add(business);
-        return Created(nameof(GetAll), business);
+        var business = DucksNet.Domain.Model.Business.Create(dto.BusinessName, dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
+        if(business.IsFailure)
+        {
+            return BadRequest(business.Errors);
+        }
+        var result = repository.Add(business.Value!);
+        if(result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok(business);
     }
     [HttpGet("{id}")]
     public IActionResult Get(Guid id)
