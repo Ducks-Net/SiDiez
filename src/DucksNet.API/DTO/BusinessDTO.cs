@@ -2,7 +2,6 @@ namespace DucksNet.API.DTO;
 
 public class BusinessDTO
 {
-    public Guid ID { get; set; }
     public string BusinessName { get; set; } = string.Empty;
     public string Surname {get; set;} = string.Empty;
     public string FirstName {get; set;} = string.Empty;
