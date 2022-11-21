@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net.Http;
 
-namespace DucksNet.API.IntegrationTests;
+namespace DucksNet.IntegrationTests;
 
 public class BaseIntegrationTests<T> where T : class
 {
@@ -18,6 +18,7 @@ public class BaseIntegrationTests<T> where T : class
     private void CleanDatabases()
     {
         DatabaseContext databaseContext = new DatabaseContext();
+        databaseContext.Database.EnsureCreated();
         databaseContext.Cages.RemoveRange(databaseContext.Cages);
         databaseContext.CageTimeBlocks.RemoveRange(databaseContext.CageTimeBlocks);
         databaseContext.MedicalRecords.RemoveRange(databaseContext.MedicalRecords);
