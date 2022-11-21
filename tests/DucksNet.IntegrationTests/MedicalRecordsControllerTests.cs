@@ -36,6 +36,5 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         medicalRecords.Should().NotBeNull();
         if (medicalRecords is not null)
             medicalRecords.Count.Should().Be(1);
-
     }
 }

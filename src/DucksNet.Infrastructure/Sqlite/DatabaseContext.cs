@@ -1,4 +1,5 @@
-﻿using DucksNet.Domain.Model;
+﻿using System.Runtime.CompilerServices;
+using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 
 using Microsoft.EntityFrameworkCore;
