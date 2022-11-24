@@ -10,6 +10,7 @@ public class TestDbContext : DbContext, IDatabaseContext
     public TestDbContext(string testName)
     {
         this.TestName = testName;
+        //this.Database.EnsureDeleted();
         this.Database.EnsureCreated();
     }
 
@@ -27,7 +28,8 @@ public class TestDbContext : DbContext, IDatabaseContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite($"Data Source = DucksNetTesting{TestName}.db");
+        string connString = $"Data Source = {TestName}.db";
+        optionsBuilder.UseSqlite(connString);
     }
     void IDatabaseContext.SaveChanges()
     {
