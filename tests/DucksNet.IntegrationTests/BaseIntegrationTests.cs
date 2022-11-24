@@ -10,7 +10,8 @@ public class BaseIntegrationTests<T> where T : class
     protected HttpClient HttpClient { get; private set; }
     protected BaseIntegrationTests()
     {
-        var application = new WebApplicationFactory<T>().WithWebHostBuilder(builder => { });
+        var application = new WebApplicationFactory<T>().WithWebHostBuilder(builder => {
+         });
         HttpClient = application.CreateClient();
         CleanDatabases();
     }
