@@ -1,16 +1,16 @@
-﻿using DucksNet.Domain.Model;
+using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 
 using Microsoft.EntityFrameworkCore;
 namespace DucksNet.Infrastructure.Sqlite;
 
-public class DatabaseContext : DbContext, IDatabaseContext
+public class TestDbContext : DbContext, IDatabaseContext
 {
-    public DatabaseContext()
+    public string TestName { get; private set; }
+    public TestDbContext(string testName)
     {
-        // NOTE (dvx): just for integration tests
-        // TODO (AL): make a special context and separate db for integration tests
-        // this.Database.EnsureCreated(); 
+        this.TestName = testName;
+        this.Database.EnsureCreated();
     }
 
     public DbSet<Cage> Cages => Set<Cage>();
@@ -27,7 +27,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source = DucksNet.db");
+        optionsBuilder.UseSqlite($"Data Source = DucksNetTesting{TestName}.db");
     }
     void IDatabaseContext.SaveChanges()
     {
