@@ -35,14 +35,14 @@ public class DatabaseContext : DbContext, IDatabaseContext
         modelBuilder.Entity<Cage>()
             .Property(c => c.Size)
             .HasConversion(
-                v => v.ToString(),
-                v => Size.CreateFromString(v).Value!);
+                value => value.Id,
+                id => Size.CreateFromInt(id).Value!);
         
         modelBuilder.Entity<Pet>()
             .Property(p => p.Size)
             .HasConversion(
-                v => v.ToString(),
-                v => Size.CreateFromString(v).Value!);
+                value => value.Id,
+                id => Size.CreateFromInt(id).Value!);
     }
 
     void IDatabaseContext.SaveChanges()
