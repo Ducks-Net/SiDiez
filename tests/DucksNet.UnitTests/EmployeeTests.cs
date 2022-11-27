@@ -10,21 +10,18 @@ public class EmployeeTests
         //Arrange
         Tuple<Guid, string, string, string, string, string> sut = CreateSUT();
         var result = Employee.Create(sut.Item2, sut.Item3, sut.Item4, sut.Item5, sut.Item6);
-        result.Value!.AssignToSediu(sut.Item1);
+        result.Value!.AssignToOffice(sut.Item1);
         //Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
         var copy = result.Value;
-        if (copy is not null)
-        {
-            copy.IdSediu.Should().Be(sut.Item1);
-            copy.Surname.Should().Be(sut.Item2);
-            copy.FirstName.Should().Be(sut.Item3);
-            copy.Address.Should().Be(sut.Item4);
-            copy.OwnerPhone.Should().Be(sut.Item5);
-            copy.OwnerEmail.Should().Be(sut.Item6);
-            copy.Id.Should().NotBeEmpty();
-        }
+        copy.IdOffice.Should().Be(sut.Item1);
+        copy.Surname.Should().Be(sut.Item2);
+        copy.FirstName.Should().Be(sut.Item3);
+        copy.Address.Should().Be(sut.Item4);
+        copy.OwnerPhone.Should().Be(sut.Item5);
+        copy.OwnerEmail.Should().Be(sut.Item6);
+        copy.Id.Should().NotBeEmpty();
     }
     [Fact]
     public void When_CreateEmployeeWithEmptySurname_Then_ShouldFail()

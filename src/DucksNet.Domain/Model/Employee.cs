@@ -25,7 +25,7 @@ public class Employee
     }
 
     public Guid Id { get; private set; }
-    public Guid IdSediu { get; private set; }
+    public Guid IdOffice { get; private set; }
     public string Surname { get; private set; }
     public string FirstName { get; private set; }
     public string Address { get; private set; }
@@ -65,9 +65,9 @@ public class Employee
         var employee = new Employee(surname, firstName, address, ownerPhone, ownerEmail);
         return Result<Employee>.Ok(employee);
     }
-    public void AssignToSediu(Guid idSediu)
+    public void AssignToOffice(Guid idOffice)
     {
-        IdSediu = idSediu;
+        IdOffice = idOffice;
     }
     public void UpdateFields(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {

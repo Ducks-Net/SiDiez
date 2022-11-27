@@ -47,7 +47,7 @@ public class EmployeesController : ControllerBase
         {
             return BadRequest(employeePost.Errors);
         }
-        employeePost.Value!.AssignToSediu(office.Value!.ID);
+        employeePost.Value!.AssignToOffice(office.Value!.ID);
         var employees = _employeesRepository.GetAll();
         foreach (var employee in employees)
         {
@@ -98,8 +98,8 @@ public class EmployeesController : ControllerBase
         {
             return BadRequest(newOffice.Errors);
         }
-        if (oldEmployee.Value!.IdSediu != newOfficeId)
-            oldEmployee.Value.AssignToSediu(newOfficeId);
+        if (oldEmployee.Value!.IdOffice != newOfficeId)
+            oldEmployee.Value.AssignToOffice(newOfficeId);
         var result = _employeesRepository.Update(oldEmployee.Value);
         if (result.IsFailure)
         {

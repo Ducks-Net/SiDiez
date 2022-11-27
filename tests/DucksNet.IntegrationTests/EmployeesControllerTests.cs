@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
-using DucksNet.Infrastructure.Prelude;
-using DucksNet.Infrastructure.Sqlite;
 using DucksNet.IntegrationTests;
-using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.API.IntegrationTests;
 public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController>
 {
-    private const string ApiURL = "api/v1/employees";
+    private const string EmployeesUrl = "api/v1/employees";
+    private const string OfficeUrl = "api/v1/office";
 
     [Fact]
     public async void When_CreatedEmployee_Then_ShouldReturnEmployeeInTheGetRequest()
     {
+        //Arrange
         var sut = CreateSUT();
         var officeDTO = new OfficeDTO
         {
@@ -26,14 +24,33 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
             AnimalCapacity = 10
         };
 
-        var office = await TestingClient.PostAsJsonAsync("api/v1/office", officeDTO);
-        var officeResult = await office.Content.ReadFromJsonAsync<Office>();
-        var officeId = officeResult!.ID;
-        sut.IdOffice = officeId;
+        var officeResponse = await TestingClient.PostAsJsonAsync(OfficeUrl, officeDTO);
+        var officeResult = await TestingClient.GetAsync(OfficeUrl);
+        officeResponse.EnsureSuccessStatusCode();
+        var offices = await officeResult.Content.ReadFromJsonAsync<List<Office>>();
+        offices.Should().NotBeNull();
+        offices!.Count.Should().Be(1);
+        foreach(var office in offices!)
+            sut.IdOffice = office.ID;
+       //Act 
+        var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
+        var getEmployeeResult = await TestingClient.GetAsync(EmployeesUrl);
+        //Assert
+        employeeResponse.EnsureSuccessStatusCode();
 
-        var employeeResult = await TestingClient.PostAsJsonAsync(ApiURL, sut);
-        var employee = await employeeResult.Content.ReadFromJsonAsync<Employee>();
+        var employees = await getEmployeeResult.Content.ReadFromJsonAsync<List<Employee>>();
+        employees.Should().NotBeNull();
+        employees!.Count.Should().Be(1);
+        foreach (var employee in employees!)
+        {
+            employee.Surname.Should().Be(sut.Surname);
+            employee.FirstName.Should().Be(sut.FirstName);
+            employee.Address.Should().Be(sut.Address);
+            employee.OwnerEmail.Should().Be(sut.OwnerEmail);
+            employee.OwnerPhone.Should().Be(sut.OwnerPhone);
+        }
     }
+
     
     private static EmployeeDTO CreateSUT()
     {
