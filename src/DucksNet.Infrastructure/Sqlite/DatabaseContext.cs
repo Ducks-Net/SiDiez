@@ -43,6 +43,12 @@ public class DatabaseContext : DbContext, IDatabaseContext
             .HasConversion(
                 value => value.Id,
                 id => Size.CreateFromInt(id).Value!);
+
+        modelBuilder.Entity<Appointment>()
+            .Property(a => a.Type)
+            .HasConversion(
+                value => value.Id,
+                id => AppointmentType.CreateFromInt(id).Value!);
     }
 
     void IDatabaseContext.SaveChanges()

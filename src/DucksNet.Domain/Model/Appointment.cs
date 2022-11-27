@@ -22,9 +22,6 @@ public class Appointment
         EndTime = endTime;
     }
 
-    private Appointment(int typeId, DateTime startTime, DateTime endTime)
-        : this(AppointmentType.CreateFromInt(typeId).Value!, startTime, endTime) { }
-
     public static Result<Appointment> Create(string typeString, DateTime startTime, DateTime endTime)
     {
         var type = AppointmentType.CreateFromString(typeString);
@@ -60,7 +57,7 @@ public class Appointment
         VetId = vetId;
     }
 
-    public void DoesNeedsCage()
+    public void DoesNeedCage()
     {
         NeedsCage = true;
     }
