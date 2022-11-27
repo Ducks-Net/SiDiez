@@ -112,9 +112,7 @@ public class AppointmentTests
         Guid vetId = new Guid();
 
         var result = Appointment.Create(type, dateStart, dateEnd);
-        result.Value!.AssignToLocation(locationId);
-        result.Value.AssignToPet(petId);
-        result.Value.AssignToVet(vetId);
+        result.Value!.AssignAll(locationId, petId, vetId);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.LocationId.Should().Be(locationId);
