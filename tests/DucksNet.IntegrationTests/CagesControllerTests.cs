@@ -185,6 +185,72 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         cages.Should().Contain(c => c.ID == cageId2);
     }
 
+    [Fact]
+    public void When_GetAll_Should_ReturnEmptyList()
+    {
+        ClearDatabase();
+        //Arrange
+        
+        //Act
+        var cageResponse = TestingClient.GetAsync(CagesURI).Result;
+
+        //Assert
+        cageResponse.EnsureSuccessStatusCode();
+        var cages = cageResponse.Content.ReadFromJsonAsync<List<Cage>>().Result;
+        cages.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void When_Delete_WithValidId_ShouldDeleteCage()
+    {
+        ClearDatabase();
+        //Arrange
+        var officeId = SetupOffice();
+        var cageId = SetupCage(officeId, Size.Small.Name);
+        
+        //Act
+        var cageResponse = TestingClient.DeleteAsync($"{CagesURI}/{cageId}").Result;
+
+        //Assert
+        cageResponse.EnsureSuccessStatusCode();
+        var cages = TestingClient.GetAsync(CagesURI).Result.Content.ReadFromJsonAsync<List<Cage>>().Result;
+        cages.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void When_Delete_WithInvalidId_ShouldReturnNotFound()
+    {
+        //Arrange
+        ClearDatabase();
+        
+        //Act
+        var cageResponse = TestingClient.DeleteAsync($"{CagesURI}/{Guid.NewGuid()}").Result;
+
+        //Assert
+        cageResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public void When_Delete_ShouldOnlyDeleteSelected()
+    {
+        ClearDatabase();
+        //Arrange
+        var officeId = SetupOffice();
+        var cageId = SetupCage(officeId, Size.Small.Name);
+        var cageId2 = SetupCage(officeId, Size.Medium.Name);
+        
+        //Act
+        var cageResponse = TestingClient.DeleteAsync($"{CagesURI}/{cageId}").Result;
+
+        //Assert
+        cageResponse.EnsureSuccessStatusCode();
+        var cages = TestingClient.GetAsync(CagesURI).Result.Content.ReadFromJsonAsync<List<Cage>>().Result;
+        cages.Should().NotBeEmpty();
+        cages.Should().HaveCount(1);
+        cages.Should().Contain(c => c.ID == cageId2);
+        cages.Should().NotContain(c => c.ID == cageId);
+    }
+
     private Guid SetupCage(Guid officeId, string size)
     {        
         var sut = new CreateCageDTO {

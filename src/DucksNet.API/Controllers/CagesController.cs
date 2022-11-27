@@ -77,6 +77,22 @@ public class CagesController : ControllerBase
 
         return Created(nameof(GetAll),cage.Value!);
     }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(Guid id)
+    {
+        var cage = _cagesRepository.Get(id);
+        if(cage.IsFailure)
+        {
+            return NotFound(cage.Errors);
+        }
+        var result = _cagesRepository.Delete(cage.Value!);
+        if(result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok();
+    }
     
     [HttpPost("schedule")]
     public IActionResult ScheduleCage([FromBody] ScheduleCageDTO dto)
