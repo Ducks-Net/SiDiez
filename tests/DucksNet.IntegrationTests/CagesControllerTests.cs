@@ -284,6 +284,78 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         cageTimeBlock!.OccupantId.Should().Be(scheduleDTO.PetId);
     }
 
+    [Fact]
+    public void When_Schedule_WithBadPetId_ShouldFail()
+    {
+        ClearDatabase();
+        //Arrange
+        var officeId = SetupOffice();
+        var cageId = SetupCage(officeId, Size.Small.Name);
+        DateTime start = DateTime.Now.AddDays(1);
+        DateTime end = DateTime.Now.AddDays(1).AddHours(1);
+        var scheduleDTO = new ScheduleCageDTO
+        {
+            PetId = Guid.NewGuid(),
+            LocationId = officeId,
+            StartTime = start,
+            EndTime = end
+        };
+        
+        //Act
+        var cageTimeBlockResponse = TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDTO).Result;
+
+        //Assert
+        cageTimeBlockResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public void When_Schedule_WithBadLocationId_ShouldFail()
+    {
+        ClearDatabase();
+        //Arrange
+        var petId = SetupPet(Size.Small.Name);
+        DateTime start = DateTime.Now.AddDays(1);
+        DateTime end = DateTime.Now.AddDays(1).AddHours(1);
+        var scheduleDTO = new ScheduleCageDTO
+        {
+            PetId = petId,
+            LocationId = Guid.NewGuid(),
+            StartTime = start,
+            EndTime = end
+        };
+        
+        //Act
+        var cageTimeBlockResponse = TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDTO).Result;
+
+        //Assert
+        cageTimeBlockResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public void When_Schedule_WithBadTime_ShouldFail()
+    {
+        ClearDatabase();
+        //Arrange
+        var petId = SetupPet(Size.Small.Name);
+        var officeId = SetupOffice();
+        var cageId = SetupCage(officeId, Size.Small.Name);
+        DateTime start = DateTime.Now.AddDays(1);
+        DateTime end = DateTime.Now.AddDays(1).AddHours(-1);
+        var scheduleDTO = new ScheduleCageDTO
+        {
+            PetId = petId,
+            LocationId = officeId,
+            StartTime = start,
+            EndTime = end
+        };
+        
+        //Act
+        var cageTimeBlockResponse = TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDTO).Result;
+
+        //Assert
+        cageTimeBlockResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
     private Guid SetupPet(string petSizeString)
     { 
         var petDTO = new PetDTO
