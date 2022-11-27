@@ -17,7 +17,7 @@ public class EmployeeTests
         var ownerPhone = "0712123123";
         var ownerEmail = "uite@mail.com";
         //Act
-        var result = Employee.Create(idSediu, surname, firstName, address, ownerPhone, ownerEmail);
+        var result = Employee.Create(surname, firstName, address, ownerPhone, ownerEmail);
         //Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
