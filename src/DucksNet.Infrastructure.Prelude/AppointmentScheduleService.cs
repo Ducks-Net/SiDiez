@@ -24,7 +24,6 @@ public class AppointmentScheduleService
 
     public Result<Appointment> ScheduleAppointment(string typeString, Guid petID, Guid locationID, DateTime startTime, DateTime endTime)
     {
-
         var pet = _petsRepository.Get(petID);
         if (pet.IsFailure || pet.Value == null)
             return Result<Appointment>.FromError(pet, "Pet not found.");
@@ -50,5 +49,4 @@ public class AppointmentScheduleService
         _appointmentsRepository.Add(appointment.Value!);
         return Result<Appointment>.Ok(appointment.Value!);
     }
-
 }
