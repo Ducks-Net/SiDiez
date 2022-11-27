@@ -40,7 +40,7 @@ public class EmployeesController : ControllerBase
         var office = _officeRepository.Get(dto.IdOffice);
         if (office.IsFailure)
         {
-            return BadRequest(office.Errors);
+            return BadRequest("Office could not be found!");
         }
         var employeePost = Employee.Create(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
         if (employeePost.IsFailure)
