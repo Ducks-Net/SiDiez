@@ -5,7 +5,15 @@ using DucksNet.SharedKernel.Utils;
 namespace DucksNet.Domain.Model;
 public class Employee
 {
-
+    public Employee(Guid id, string surname, string firstName, string address, string ownerPhone, string ownerEmail) 
+    {
+        Id = id;
+        Surname = surname;
+        FirstName = firstName;
+        Address = address;
+        OwnerPhone = ownerPhone;
+        OwnerEmail = ownerEmail;
+    }
     private Employee(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
         Id = Guid.NewGuid();
