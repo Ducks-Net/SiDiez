@@ -24,7 +24,7 @@ public class  CageScheduleService
             return Result<List<CageTimeBlock>>.Error("Location not found.");
         }
 
-        var res = _cageTimeBlocksRepository.GetAll().Where(ctb => cages.Select(cage => cage.ID).Contains(ctb.Id)).ToList();
+        var res = _cageTimeBlocksRepository.GetAll().Join(cages, ct => ct.CageId, c => c.ID, (ct, c) => ct).ToList();
         return Result<List<CageTimeBlock>>.Ok(res);
     }
 

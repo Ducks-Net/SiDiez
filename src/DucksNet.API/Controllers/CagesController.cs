@@ -105,7 +105,7 @@ public class CagesController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpGet("schedule/{locationId}")]
+    [HttpGet("schedule/byLocation/{locationId}")]
     public IActionResult GetCageSchedule(Guid locationId)
     {
         var result = _cageScheduleService.GetLocationSchedule(locationId);
@@ -116,7 +116,7 @@ public class CagesController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpGet("schedule/{petId}")]
+    [HttpGet("schedule/byPet/{petId}")]
     public IActionResult GetPetSchedule(Guid petId)
     {
         var result = _cageScheduleService.GetPetSchedule(petId);

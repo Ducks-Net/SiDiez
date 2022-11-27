@@ -356,6 +356,64 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         cageTimeBlockResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
+    [Fact]
+    public void When_GetSheduleByLocation_WithValidId_ShouldReturnCageTimeBlock()
+    {
+        ClearDatabase();
+        //Arrange
+        var petId = SetupPet(Size.Small.Name);
+        var officeId = SetupOffice();
+        var cageId = SetupCage(officeId, Size.Small.Name);
+        DateTime start = DateTime.Now.AddDays(1);
+        DateTime end = DateTime.Now.AddDays(1).AddHours(1);
+        var cageTimeBlockId = SetupSchedule(petId, officeId, start, end);
+
+        //Act
+        var cageTimeBlockResponse = TestingClient.GetAsync($"{CagesUrl}/schedule/byLocation/{officeId}").Result;
+        cageTimeBlockResponse.EnsureSuccessStatusCode();
+        //Assert
+        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>().Result;
+        cageTimeBlock.Should().NotBeEmpty();
+        cageTimeBlock.Should().HaveCount(1);
+        cageTimeBlock.Should().Contain(c => c.Id == cageTimeBlockId);
+    }
+
+    [Fact]
+    public void When_GetScheduleByPet_WithValidId_ShouldReturnCageTimeBlock()
+    {
+        ClearDatabase();
+        //Arrange
+        var petId = SetupPet(Size.Small.Name);
+        var officeId = SetupOffice();
+        var cageId = SetupCage(officeId, Size.Small.Name);
+        DateTime start = DateTime.Now.AddDays(1);
+        DateTime end = DateTime.Now.AddDays(1).AddHours(1);
+        var cageTimeBlockId = SetupSchedule(petId, officeId, start, end);
+
+        //Act
+        var cageTimeBlockResponse = TestingClient.GetAsync($"{CagesUrl}/schedule/byPet/{petId}").Result;
+        cageTimeBlockResponse.EnsureSuccessStatusCode();
+        //Assert
+        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>().Result;
+        cageTimeBlock.Should().NotBeEmpty();
+        cageTimeBlock.Should().HaveCount(1);
+        cageTimeBlock.Should().Contain(c => c.Id == cageTimeBlockId);
+    }
+
+    private Guid SetupSchedule(Guid petId, Guid officeId, DateTime start, DateTime end)
+    {
+        var scheduleDTO = new ScheduleCageDTO
+        {
+            PetId = petId,
+            LocationId = officeId,
+            StartTime = start,
+            EndTime = end
+        };
+        var cageTimeBlockResponse = TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDTO).Result;
+        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<CageTimeBlock>().Result;
+        return cageTimeBlock!.Id;
+    }
+
     private Guid SetupPet(string petSizeString)
     { 
         var petDTO = new PetDTO
