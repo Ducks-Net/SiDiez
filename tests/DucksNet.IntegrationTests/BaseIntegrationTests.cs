@@ -26,10 +26,21 @@ public class BaseIntegrationTests<T> where T : class
         TestingClient = TestingFactory.CreateClient();
     }
     
-    private void ClearDatabase()
+    protected void ClearDatabase()
     {
         var context = new TestDbContext(typeof(T).FullName!);
-        context.Database.EnsureDeleted();
+        context.RemoveRange(context.Cages);
+        context.RemoveRange(context.CageTimeBlocks);
+        context.RemoveRange(context.Appointments);
+        context.RemoveRange(context.Pets);
+        context.RemoveRange(context.Users);
+        context.RemoveRange(context.MedicalRecords);
+        context.RemoveRange(context.Employees);
+        context.RemoveRange(context.Treatments);
+        context.RemoveRange(context.Medicines);
+        context.RemoveRange(context.Offices);
+        context.RemoveRange(context.Businesses);
+        context.SaveChanges();
         context.Dispose();
     }
 }

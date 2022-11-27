@@ -15,6 +15,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     [Fact]
     public void When_Post_WithValidData_ShouldReturnCage()
     {
+        ClearDatabase();
         //Arrange
         var officeDTO = new OfficeDTO
         {
