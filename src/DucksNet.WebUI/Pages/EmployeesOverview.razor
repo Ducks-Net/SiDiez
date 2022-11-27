@@ -1,0 +1,37 @@
+﻿@page "/employeesverview"
+@inject HttpClient Http
+<h3>EmployeesOverview</h3>
+
+@if (Employees == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-light">
+        <thead class="table-primary">
+        <th>Person ID</th>
+        <th>Person IdOffice</th>
+        <th>Person Surname</th>
+        <th>Person FirsName</th>
+        <th>Person Address</th>
+        <th>Person OwnerPhone</th>
+        <th>Person OwnerEmail</th>
+        </thead>
+        <tbody>
+            @foreach (var employee in Employees)
+            {
+                <tr>
+                    <td>@employee.Id</td>
+                    <td>@employee.IdOffice</td>
+                    <td>@employee.Surname</td>
+                    <td>@employee.FirstName</td>
+                    <td>@employee.Address</td>
+                    <td>@employee.OwnerPhone</td>
+                    <td>@employee.OwnerEmail</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

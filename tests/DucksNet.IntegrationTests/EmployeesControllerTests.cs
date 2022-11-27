@@ -150,7 +150,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         //Assert
         updatedEmployeeResponse.EnsureSuccessStatusCode();
 
-        updatedEmployee.Id.Should().Be(employee.Id);
+        updatedEmployee!.Id.Should().Be(employee.Id);
         updatedEmployee!.Surname.Should().Be(updatedEmployeeDTO.Surname);
         updatedEmployee.FirstName.Should().Be(updatedEmployeeDTO.FirstName);
         updatedEmployee.Address.Should().Be(updatedEmployeeDTO.Address);

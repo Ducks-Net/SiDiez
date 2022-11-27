@@ -3,9 +3,11 @@ using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 using DucksNet.Infrastructure.Sqlite;
 using DucksNet.SharedKernel;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DucksNet.API.Controllers;
+[EnableCors("VetPolicyCors")]
 [Route("api/v1/[controller]")]
 [ApiController]
 public class EmployeesController : ControllerBase
