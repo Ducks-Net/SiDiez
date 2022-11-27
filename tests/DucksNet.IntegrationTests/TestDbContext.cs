@@ -1,4 +1,5 @@
 using DucksNet.Domain.Model;
+using DucksNet.Domain.Model.Enums;
 using DucksNet.Infrastructure.Prelude;
 
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,28 @@ public class TestDbContext : DbContext, IDatabaseContext
         string connString = $"Data Source = {TestName}.db";
         optionsBuilder.UseSqlite(connString);
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Cage>()
+            .Property(c => c.Size)
+            .HasConversion(
+                value => value.Id,
+                id => Size.CreateFromInt(id).Value!);
+        
+        modelBuilder.Entity<Pet>()
+            .Property(p => p.Size)
+            .HasConversion(
+                value => value.Id,
+                id => Size.CreateFromInt(id).Value!);
+                
+        modelBuilder.Entity<Appointment>()
+            .Property(a => a.Type)
+            .HasConversion(
+                value => value.Id,
+                id => AppointmentType.CreateFromInt(id).Value!);
+    }
+    
     void IDatabaseContext.SaveChanges()
     {
         SaveChanges();

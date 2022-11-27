@@ -17,7 +17,7 @@ public class BaseIntegrationTests<T> where T : class
     {
         var application = new WebApplicationFactory<T>().WithWebHostBuilder(builder => {
             builder.ConfigureTestServices(services => {
-                services.AddScoped<IDatabaseContext>(provider => new TestDbContext(typeof(T).FullName));
+                services.AddScoped<IDatabaseContext>(provider => new TestDbContext(typeof(T).FullName!));
             });
          });
         TestingClient = application.CreateClient();

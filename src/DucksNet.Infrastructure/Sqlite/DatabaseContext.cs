@@ -1,5 +1,5 @@
-﻿using System.Runtime.CompilerServices;
-using DucksNet.Domain.Model;
+﻿using DucksNet.Domain.Model;
+using DucksNet.Domain.Model.Enums;
 using DucksNet.Infrastructure.Prelude;
 
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,8 @@ public class DatabaseContext : DbContext, IDatabaseContext
 {
     public DatabaseContext()
     {
-        //this.Database.EnsureCreated();
+        // NOTE (Al): Make sure the database is created. 
+        this.Database.EnsureCreated(); 
     }
     public DbSet<Cage> Cages => Set<Cage>();
     public DbSet<CageTimeBlock> CageTimeBlocks => Set<CageTimeBlock>();
@@ -27,6 +28,28 @@ public class DatabaseContext : DbContext, IDatabaseContext
     {
         optionsBuilder.UseSqlite("Data Source = DucksNet.db");
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Cage>()
+            .Property(c => c.Size)
+            .HasConversion(
+                value => value.Id,
+                id => Size.CreateFromInt(id).Value!);
+        
+        modelBuilder.Entity<Pet>()
+            .Property(p => p.Size)
+            .HasConversion(
+                value => value.Id,
+                id => Size.CreateFromInt(id).Value!);
+
+        modelBuilder.Entity<Appointment>()
+            .Property(a => a.Type)
+            .HasConversion(
+                value => value.Id,
+                id => AppointmentType.CreateFromInt(id).Value!);
+    }
+
     void IDatabaseContext.SaveChanges()
     {
         SaveChanges();

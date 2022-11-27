@@ -13,7 +13,6 @@ public class Appointment
     public DateTime EndTime { get; private set; }
     public AppointmentType Type { get; private set; }
     public bool NeedsCage { get; private set; }
-    public bool IsCancelled { get; private set; }
 
     private Appointment(AppointmentType type, DateTime startTime, DateTime endTime)
     {
@@ -23,15 +22,17 @@ public class Appointment
         EndTime = endTime;
     }
 
-    private Appointment(int typeId, DateTime startTime, DateTime endTime)
-        : this(AppointmentType.CreateFromInt(typeId).Value!, startTime, endTime) { }
-
-    public static Result<Appointment> Create(AppointmentType type, DateTime startTime, DateTime endTime)
+    public static Result<Appointment> Create(string typeString, DateTime startTime, DateTime endTime)
     {
+        var type = AppointmentType.CreateFromString(typeString);
+        if (type.IsFailure || type.Value == null)
+            return Result<Appointment>.FromError(type, "Invalid appointment type.");
+        if(startTime < DateTime.Now)
+            return Result<Appointment>.Error("Start time cannot be in the past.");
         if (startTime > endTime)
             return Result<Appointment>.Error("Start time cannot be after end time.");
 
-        return Result<Appointment>.Ok(new Appointment(type, startTime, endTime));
+        return Result<Appointment>.Ok(new Appointment(type.Value, startTime, endTime));
     }
 
     public void AssignToLocation(Guid locationId)
@@ -56,7 +57,7 @@ public class Appointment
         VetId = vetId;
     }
 
-    public void DoesNeedsCage()
+    public void DoesNeedCage()
     {
         NeedsCage = true;
     }
@@ -64,10 +65,5 @@ public class Appointment
     public void DoesNotNeedCage()
     {
         NeedsCage = false;
-    }
-
-    public void Cancel()
-    {
-        IsCancelled = true;
     }
 }
