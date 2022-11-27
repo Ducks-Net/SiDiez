@@ -38,11 +38,13 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         //Assert
         employeeResponse.EnsureSuccessStatusCode();
 
-        var employees = await getEmployeeResult.Content.ReadFromJsonAsync<List<Employee>>();
+        var employees = await getEmployeeResult.Content.ReadFromJsonAsync<List<EmployeeDTO>>();
         employees.Should().NotBeNull();
         employees!.Count.Should().Be(1);
         foreach (var employee in employees!)
         {
+            foreach (var office in offices!)
+                employee.IdOffice.Should().Be(office.ID);
             employee.Surname.Should().Be(sut.Surname);
             employee.FirstName.Should().Be(sut.FirstName);
             employee.Address.Should().Be(sut.Address);
