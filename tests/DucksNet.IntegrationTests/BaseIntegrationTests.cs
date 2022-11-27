@@ -18,7 +18,7 @@ public class BaseIntegrationTests<T> where T : class
     protected BaseIntegrationTests()
     {
         ClearDatabase();
-        var TestingFactory = new WebApplicationFactory<T>().WithWebHostBuilder(builder => {
+        TestingFactory = new WebApplicationFactory<T>().WithWebHostBuilder(builder => {
             builder.ConfigureTestServices(services => {
                 services.AddScoped<IDatabaseContext>(provider => new TestDbContext(typeof(T).FullName!));
             });
