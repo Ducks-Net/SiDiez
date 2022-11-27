@@ -11,8 +11,9 @@ public class AppointmentType : Enumeration
     public static Result<AppointmentType> CreateFromString(string str)
     {
         var at = GetAll<AppointmentType>().FirstOrDefault(x => x.Name == str);
+        var validAppoitnmentTypes = string.Join(", ", GetAll<AppointmentType>().Select(x => x.Name));
         if (at == null)
-            return Result<AppointmentType>.Error("Invalid AppointmentType string. Valid values are: Consultation."); // TODO (AL) : Don't hardcode the valid values 
+            return Result<AppointmentType>.Error($"Invalid AppointmentType string. Valid values are: {validAppoitnmentTypes}."); 
 
         return Result<AppointmentType>.Ok(at);
     }
@@ -20,8 +21,9 @@ public class AppointmentType : Enumeration
     public static Result<AppointmentType> CreateFromInt(int id)
     {
         var at = GetAll<AppointmentType>().FirstOrDefault(x => x.Id == id);
+        var validAppoitnmentTypes = string.Join(", ", GetAll<AppointmentType>().Select(x => x.Id));
         if (at == null)
-            return Result<AppointmentType>.Error("Invalid AppointmentType id. Valid values are: 1."); // TODO (AL) : Don't hardcode the valid values 
+            return Result<AppointmentType>.Error($"Invalid AppointmentType id. Valid values are: {validAppoitnmentTypes}."); 
 
         return Result<AppointmentType>.Ok(at);
     }
