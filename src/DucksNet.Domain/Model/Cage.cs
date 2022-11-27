@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using DucksNet.Domain.Model.Enums;
 using DucksNet.SharedKernel.Utils;
 
