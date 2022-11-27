@@ -19,7 +19,6 @@ public class MedicalRecord
     
     public static Result<MedicalRecord> Create(Guid idAppointment, Guid idClient)
     {
-        //TODO (RO): to check if the id's exist in the database 
         var medicalRecord = new MedicalRecord(idAppointment, idClient);
         return Result<MedicalRecord>.Ok(medicalRecord);
     }

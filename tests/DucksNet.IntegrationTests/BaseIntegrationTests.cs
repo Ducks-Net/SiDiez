@@ -13,11 +13,14 @@ namespace DucksNet.IntegrationTests;
 public class BaseIntegrationTests<T> where T : class
 {
     protected HttpClient TestingClient { get; private set; }
+    protected TestDbContext TestingDb { get; private set; }
     protected BaseIntegrationTests()
     {
+        TestingDb = new TestDbContext(typeof(T).FullName!);
         var application = new WebApplicationFactory<T>().WithWebHostBuilder(builder => {
             builder.ConfigureTestServices(services => {
-                services.AddScoped<IDatabaseContext>(provider => new TestDbContext(typeof(T).FullName));
+
+                services.AddScoped<IDatabaseContext>(provider => TestingDb);
             });
          });
         TestingClient = application.CreateClient();

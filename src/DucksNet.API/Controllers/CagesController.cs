@@ -35,6 +35,26 @@ public class CagesController : ControllerBase
         var cage = _cagesRepository.GetAll().Where(c => c.LocationId == locationId).ToList();
         return Ok(cage);
     }
+
+    [HttpPost]
+    public IActionResult Create([FromBody] CreateCageDTO dto)
+    {
+        var cage = DucksNet.Domain.Model.Cage.Create(dto.SizeString);
+        if(cage.IsFailure || cage.Value == null)
+        {
+            return BadRequest(cage.Errors);
+        }
+
+        cage.Value!.AssignToLocation(dto.LocationId);
+
+        var result = _cagesRepository.Add(cage.Value!);
+        if(result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        return Ok(cage);
+    }
     
     [HttpPost("schedule")]
     public IActionResult ScheduleCage([FromBody] ScheduleCageDTO dto)

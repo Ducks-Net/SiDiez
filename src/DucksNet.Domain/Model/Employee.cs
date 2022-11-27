@@ -1,12 +1,13 @@
-﻿using DucksNet.SharedKernel.Utils;
+﻿using System.Net.Sockets;
+using System.Security.AccessControl;
+using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Domain.Model;
 public class Employee
 {
-    private Employee(Guid idSediu, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
+    private Employee(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
         Id = Guid.NewGuid();
-        IdSediu = idSediu;
         Surname = surname;
         FirstName = firstName;
         Address = address;
@@ -22,14 +23,64 @@ public class Employee
     public string OwnerPhone { get; private set; }
     public string OwnerEmail { get; private set; }
 
-    public static Result<Employee> Create(Guid idSediu, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
+    public static Result<Employee> Create(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
-        //TODO (RO): to check if the employee is valid
-        var employee = new Employee(idSediu, surname, firstName, address, ownerPhone, ownerEmail);
+        if (firstName == null || firstName!.Length == 0)
+        {
+            return Result<Employee>.Error("First name can not be empty");
+        }
+        if (surname == null || surname!.Length == 0)
+        {
+            return Result<Employee>.Error("Surname can not be empty");
+        }
+        if (address == null || address!.Length == 0)
+        {
+            return Result<Employee>.Error("Address can not be empty");
+        }
+        if (ownerEmail == null || ownerEmail!.Length == 0)
+        {
+            return Result<Employee>.Error("Email can not be empty");
+        }
+        if (ownerPhone == null || ownerPhone!.Length == 0)
+        {
+            return Result<Employee>.Error("Telephone can not be empty");
+        }
+        if (!Validation.IsTelephoneNumberValid(ownerPhone))
+        {
+            return Result<Employee>.Error("The telephone number is not valid");
+        }
+        if (!Validation.IsEmailValid(ownerEmail))
+        {
+            return Result<Employee>.Error("The email is not valid");
+        }
+        var employee = new Employee(surname, firstName, address, ownerPhone, ownerEmail);
         return Result<Employee>.Ok(employee);
     }
     public void AssignToSediu(Guid idSediu)
     {
         IdSediu = idSediu;
+    }
+    public void UpdateFields(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
+    {
+        if (surname != null)
+        {
+            Surname = surname;
+        }
+        if (firstName != null)
+        {
+            FirstName = firstName;
+        }
+        if (address != null)
+        {
+            Address = address;
+        }
+        if (ownerPhone != null)
+        {
+            OwnerPhone = ownerPhone;
+        }
+        if (OwnerEmail != null)
+        {
+            OwnerEmail = ownerEmail;
+        }
     }
 }
