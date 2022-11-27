@@ -9,6 +9,13 @@ public class Cage
     public Size Size { get; private set; }
     public Guid? LocationId { get; private set; }
 
+    public Cage(Guid ID, Size size, Guid? locationId)
+    {
+        this.ID = ID;
+        Size = size;
+        LocationId = locationId;
+    }
+
     private Cage(Size size)
     {
         ID = new Guid();

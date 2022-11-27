@@ -29,7 +29,7 @@ public class CagesController : ControllerBase
         return Ok(cages);
     }
 
-    [HttpGet("{locationId}")]
+    [HttpGet("byLocation/{locationId}")]
     public IActionResult GetByLocationID(Guid locationId)
     {
         var cage = _cagesRepository.GetAll().Where(c => c.LocationId == locationId).ToList();
@@ -53,7 +53,7 @@ public class CagesController : ControllerBase
             return BadRequest(result.Errors);
         }
 
-        return Ok(cage);
+        return Created(nameof(GetAll),cage.Value!);
     }
     
     [HttpPost("schedule")]

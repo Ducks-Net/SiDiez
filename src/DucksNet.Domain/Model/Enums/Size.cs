@@ -8,7 +8,7 @@ public class Size : Enumeration
     public static readonly Size Medium = new(2, "Medium");
     public static readonly Size Large = new(3, "Large");
 
-    private Size(int id, string name) : base(id, name) { }
+    public Size(int id, string name) : base(id, name) { } // TODO (Al): Make this private. Public as a workaround for json serialization/deserialization.
 
     public static Result<Size> CreateFromString(string str)
     {
