@@ -71,6 +71,7 @@ public class EmployeesController : ControllerBase
     public IActionResult UpdatePersonalInformationEmployee(Guid token, [FromBody] EmployeeDTO dto)
     {
         // TODO (RO): token must be based from the authentification token, not from employee id
+        // TODO (RO): check the updated information
         var oldEmployee = _employeesRepository.Get(token);
         if (oldEmployee.IsFailure)
         {
@@ -88,6 +89,7 @@ public class EmployeesController : ControllerBase
     public IActionResult UpdateOfficeEmployee(Guid token, Guid newOfficeId)
     {
         //TODO(RO): token must be based from the authentification token, not from employee id
+        // TODO (RO): check the updated information
         var oldEmployee = _employeesRepository.Get(token);
         if (oldEmployee.IsFailure)
         {
