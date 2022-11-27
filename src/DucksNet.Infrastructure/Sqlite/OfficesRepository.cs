@@ -16,7 +16,7 @@ public class OfficesRepository : IRepository<Office>
     Result<Office> IRepository<Office>.Get(Guid id)
     {
         var office = _databaseContext.Offices.Find(id);
-        return office is null ? Result<Office>.Error("Office not found") : Result<Office>.Ok(office);
+        return office is null ? Result<Office>.Error("Office not found.") : Result<Office>.Ok(office);
     }
 
     IEnumerable<Office> IRepository<Office>.GetAll()

@@ -13,13 +13,15 @@ public class CagesController : ControllerBase
     private readonly IRepository<Cage> _cagesRepository;
     private readonly IRepository<CageTimeBlock> _cageTimeBlocksRepository;
     private readonly IRepository<Pet> _petsRepository;
+    private readonly IRepository<Office> _officeRepository;
     private readonly CageScheduleService _cageScheduleService;
-    public CagesController(IRepository<Cage> cages, IRepository<CageTimeBlock> cageTimeBlocks, IRepository<Pet> pets)
+    public CagesController(IRepository<Cage> cages, IRepository<CageTimeBlock> cageTimeBlocks, IRepository<Pet> pets, IRepository<Office> officeRepository)
     {
         _cagesRepository = cages;
         _cageTimeBlocksRepository = cageTimeBlocks;
         _petsRepository = pets;
-        _cageScheduleService = new CageScheduleService(cages, cageTimeBlocks, pets);
+        _officeRepository = officeRepository;
+        _cageScheduleService = new CageScheduleService(_cagesRepository, _cageTimeBlocksRepository, _petsRepository);
     }
 
     [HttpGet]
@@ -45,6 +47,11 @@ public class CagesController : ControllerBase
             return BadRequest(cage.Errors);
         }
 
+        var location = _officeRepository.Get(dto.LocationId);
+        if(location.IsFailure)
+        {
+            return BadRequest(location.Errors);
+        }
         cage.Value!.AssignToLocation(dto.LocationId);
 
         var result = _cagesRepository.Add(cage.Value!);
