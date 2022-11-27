@@ -1,4 +1,5 @@
 ﻿
+using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 using DucksNet.Infrastructure.Sqlite;
 
@@ -13,16 +14,22 @@ namespace DucksNet.IntegrationTests;
 public class BaseIntegrationTests<T> where T : class
 {
     protected HttpClient TestingClient { get; private set; }
-    protected TestDbContext TestingDb { get; private set; }
+    protected WebApplicationFactory<T> TestingFactory { get; private set; }
     protected BaseIntegrationTests()
     {
-        TestingDb = new TestDbContext(typeof(T).FullName!);
-        var application = new WebApplicationFactory<T>().WithWebHostBuilder(builder => {
+        ClearDatabase();
+        var TestingFactory = new WebApplicationFactory<T>().WithWebHostBuilder(builder => {
             builder.ConfigureTestServices(services => {
-
-                services.AddScoped<IDatabaseContext>(provider => TestingDb);
+                services.AddScoped<IDatabaseContext>(provider => new TestDbContext(typeof(T).FullName!));
             });
          });
-        TestingClient = application.CreateClient();
+        TestingClient = TestingFactory.CreateClient();
+    }
+    
+    private void ClearDatabase()
+    {
+        var context = new TestDbContext(typeof(T).FullName!);
+        context.Database.EnsureDeleted();
+        context.Dispose();
     }
 }

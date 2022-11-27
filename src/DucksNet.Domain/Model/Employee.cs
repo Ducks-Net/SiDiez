@@ -5,6 +5,7 @@ using DucksNet.SharedKernel.Utils;
 namespace DucksNet.Domain.Model;
 public class Employee
 {
+
     private Employee(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
         Id = Guid.NewGuid();

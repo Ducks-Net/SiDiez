@@ -11,7 +11,6 @@ public class TestDbContext : DbContext, IDatabaseContext
     public TestDbContext(string testName)
     {
         this.TestName = testName;
-        //this.Database.EnsureDeleted();
         this.Database.EnsureCreated();
     }
 

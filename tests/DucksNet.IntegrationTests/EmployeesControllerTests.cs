@@ -8,6 +8,7 @@ using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 using DucksNet.Infrastructure.Sqlite;
 using DucksNet.IntegrationTests;
+using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.API.IntegrationTests;
 public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController>
@@ -17,32 +18,25 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
     [Fact]
     public async void When_CreatedEmployee_Then_ShouldReturnEmployeeInTheGetRequest()
     {
-        //Arrange
-        IRepository<Office> repository = new OfficesRepository(TestingDb);
-      
-        var office = Office.Create(Guid.NewGuid(), "Bld. Smecher", 10);
-       
-        office.IsSuccess.Should().BeTrue();
-        office.Value.Should().NotBeNull();
-        repository.Add(office.Value!);
-        EmployeeDTO sut = CreateSUT();
-        sut.IdOffice = office.Value!.ID;
-        //Act
-        var createEmployeeResponse = await TestingClient.PostAsJsonAsync(ApiURL, sut);
-        
-        var getEmployeeResult = await TestingClient.GetAsync(ApiURL);
-        Console.WriteLine(await getEmployeeResult.Content.ReadAsStringAsync());
-        //Assert
-        createEmployeeResponse.EnsureSuccessStatusCode();
-        createEmployeeResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-        getEmployeeResult.EnsureSuccessStatusCode();
-        var employees = await getEmployeeResult.Content.ReadFromJsonAsync<List<EmployeeDTO>>();
-        employees.Should().NotBeNull();
-        employees.Count.Should().Be(1);
-        employees.Should().NotBeEmpty();
+        var sut = CreateSUT();
+        var officeDTO = new OfficeDTO
+        {
+            BusinessId = Guid.NewGuid(),
+            Address = "123 Main St",
+            AnimalCapacity = 10
+        };
+
+        var office = await TestingClient.PostAsJsonAsync("api/v1/office", officeDTO);
+        var officeResult = await office.Content.ReadFromJsonAsync<Office>();
+        var officeId = officeResult!.ID;
+        sut.IdOffice = officeId;
+
+        var employeeResult = await TestingClient.PostAsJsonAsync(ApiURL, sut);
+        var employee = await employeeResult.Content.ReadFromJsonAsync<Employee>();
     }
+    
     private static EmployeeDTO CreateSUT()
     {
-        return new EmployeeDTO(Guid.NewGuid(), "Mike", "Oxlong", "Blvd. Independentei", "071", "uite@mail.com");
+        return new EmployeeDTO(Guid.NewGuid(), "Mike", "Oxlong", "Blvd. Independentei", "0712123123", "ceva@mail.com");
     }
 }

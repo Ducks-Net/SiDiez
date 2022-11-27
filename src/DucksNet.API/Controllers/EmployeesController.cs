@@ -47,6 +47,7 @@ public class EmployeesController : ControllerBase
         {
             return BadRequest(employeePost.Errors);
         }
+        employeePost.Value!.AssignToSediu(office.Value!.ID);
         var employees = _employeesRepository.GetAll();
         foreach (var employee in employees)
         {
@@ -69,7 +70,7 @@ public class EmployeesController : ControllerBase
     [HttpPut("{token:guid}")]
     public IActionResult UpdatePersonalInformationEmployee(Guid token, [FromBody] EmployeeDTO dto)
     {
-        //TODO(RO): token must be based from the authentification token, not from employee id
+        // TODO (RO): token must be based from the authentification token, not from employee id
         var oldEmployee = _employeesRepository.Get(token);
         if (oldEmployee.IsFailure)
         {
