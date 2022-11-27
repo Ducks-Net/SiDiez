@@ -49,6 +49,18 @@ public class EnumerationTests
     }
 
     [Fact]
+    public void ToString_ShouldReturnName()
+    {
+        var one = TestEnumeration.One.ToString();
+        var two = TestEnumeration.Two.ToString();
+        var three = TestEnumeration.Three.ToString();
+
+        one.Should().Be(TestEnumeration.One.Name);
+        two.Should().Be(TestEnumeration.Two.Name);
+        three.Should().Be(TestEnumeration.Three.Name);
+    }
+
+    [Fact]
     public void When_Equals_WithItself_ShouldReturnTrue()
     {
         var one = TestEnumeration.One;
@@ -137,5 +149,41 @@ public class EnumerationTests
         one.GetHashCode().Should().NotBe(two.GetHashCode());
         one.GetHashCode().Should().NotBe(three.GetHashCode());
         two.GetHashCode().Should().NotBe(three.GetHashCode());
+    }
+
+    [Fact]
+    public void When_Compared_WithItself_ShouldReturnZero()
+    {
+        var one = TestEnumeration.One;
+        var two = TestEnumeration.Two;
+        var three = TestEnumeration.Three;
+
+        one.CompareTo(one).Should().Be(0);
+        two.CompareTo(two).Should().Be(0);
+        three.CompareTo(three).Should().Be(0);
+    }
+
+    [Fact]
+    public void When_Compared_WithOther_ShouldReturnCorrectValue()
+    {
+        var one = TestEnumeration.One;
+        var two = TestEnumeration.Two;
+        var three = TestEnumeration.Three;
+
+        one.CompareTo(two).Should().Be(-1);
+        one.CompareTo(three).Should().Be(-1);
+        two.CompareTo(three).Should().Be(-1);
+
+        two.CompareTo(one).Should().Be(1);
+        three.CompareTo(one).Should().Be(1);
+        three.CompareTo(two).Should().Be(1);
+    }
+
+    [Fact]
+    public void When_Compared_WithNull_ShouldReturnOne()
+    {
+        var one = TestEnumeration.One;
+
+        one.CompareTo(null).Should().Be(1);
     }
 }

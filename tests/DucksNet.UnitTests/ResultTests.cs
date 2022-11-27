@@ -21,6 +21,15 @@ public class ResultTests
     }
 
     [Fact]
+    public void Result_ShouldBeFailure_WhenConstructedByErrorList()
+    {
+        string[] errrorMessages = {"Error", "Another error"};
+        var result = Result.ErrorList(errrorMessages.ToList());
+        result.IsFailure.Should().BeTrue();
+        result.Errors.Should().Contain(errrorMessages);
+    }
+
+    [Fact]
     public void Result_ShouldContainAllErrors_When_MultipleErrorsAdded()
     {
         string[] errrorMessages = new string[] { "Error1", "Error2" };
@@ -28,6 +37,14 @@ public class ResultTests
         result.AddError(errrorMessages[1]);
         result.IsFailure.Should().BeTrue();
         result.Errors.Should().Contain(errrorMessages);
+    }
+
+    [Fact]
+    public void AddResult_ShouldThrowException_When_AddingErrorToSuccessResult()
+    {
+        var result = Result.Ok();
+        Action action = () => result.AddError("Error");
+        action.Should().Throw<InvalidOperationException>();
     }
 
     [Fact]
