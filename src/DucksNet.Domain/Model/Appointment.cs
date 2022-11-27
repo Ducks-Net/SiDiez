@@ -23,8 +23,8 @@ public class Appointment
         EndTime = endTime;
     }
 
-   // private Appointment(int typeId, DateTime startTime, DateTime endTime)
-    //    : this(AppointmentType.CreateFromInt(typeId).Value!, startTime, endTime) { }
+    private Appointment(int typeId, DateTime startTime, DateTime endTime)
+        : this(AppointmentType.CreateFromInt(typeId).Value!, startTime, endTime) { }
 
     public static Result<Appointment> Create(AppointmentType type, DateTime startTime, DateTime endTime)
     {
