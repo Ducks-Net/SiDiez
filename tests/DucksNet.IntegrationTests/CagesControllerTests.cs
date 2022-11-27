@@ -400,6 +400,32 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         cageTimeBlock.Should().Contain(c => c.Id == cageTimeBlockId);
     }
 
+    [Fact]
+    public void When_GetScheduleByLocation_WithInvalidId_ShouldReturnZeroCageTimeBlocks()
+    {
+        //Arrange
+        ClearDatabase();
+        //Act
+        var cageTimeBlockResponse = TestingClient.GetAsync($"{CagesUrl}/schedule/byLocation/{Guid.NewGuid()}").Result;
+        //Assert
+        cageTimeBlockResponse.EnsureSuccessStatusCode();
+        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>().Result;
+        cageTimeBlock.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void When_GetScheduleByPet_WithInvalidId_ShouldReturnZeroCageTimeBlocks()
+    {
+        //Arrange
+        ClearDatabase();
+        //Act
+        var cageTimeBlockResponse = TestingClient.GetAsync($"{CagesUrl}/schedule/byPet/{Guid.NewGuid()}").Result;
+        //Assert
+        cageTimeBlockResponse.EnsureSuccessStatusCode();
+        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>().Result;
+        cageTimeBlock.Should().BeEmpty();
+    }
+
     private Guid SetupSchedule(Guid petId, Guid officeId, DateTime start, DateTime end)
     {
         var scheduleDTO = new ScheduleCageDTO

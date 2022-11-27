@@ -109,21 +109,15 @@ public class CagesController : ControllerBase
     public IActionResult GetCageSchedule(Guid locationId)
     {
         var result = _cageScheduleService.GetLocationSchedule(locationId);
-        if(result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
-        return Ok(result.Value);
+        
+        return Ok(result);
     }
 
     [HttpGet("schedule/byPet/{petId}")]
     public IActionResult GetPetSchedule(Guid petId)
     {
         var result = _cageScheduleService.GetPetSchedule(petId);
-        if(result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
-        return Ok(result.Value);
+        
+        return Ok(result);
     }
 }

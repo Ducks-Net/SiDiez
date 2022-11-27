@@ -16,27 +16,20 @@ public class  CageScheduleService
         _petsRepository = pets;
     }
 
-    public Result<List<CageTimeBlock>> GetLocationSchedule(Guid locationId)
+    public List<CageTimeBlock> GetLocationSchedule(Guid locationId)
     {
         var cages = _cagesRepository.GetAll().Where(c => c.LocationId == locationId);
-        if (cages is null)
-        {
-            return Result<List<CageTimeBlock>>.Error("Location not found.");
-        }
-
         var res = _cageTimeBlocksRepository.GetAll().Join(cages, ct => ct.CageId, c => c.ID, (ct, c) => ct).ToList();
-        return Result<List<CageTimeBlock>>.Ok(res);
+
+        return res;
     }
 
-    public Result<List<CageTimeBlock>> GetPetSchedule(Guid petId)
+    public List<CageTimeBlock> GetPetSchedule(Guid petId)
     {
         var pet = _petsRepository.Get(petId);
-        if (pet.IsFailure)
-        {
-            return Result<List<CageTimeBlock>>.Error("Pet not found in repository.");
-        }
         var res = _cageTimeBlocksRepository.GetAll().Where(ctb => ctb.OccupantId == petId).ToList();
-        return Result<List<CageTimeBlock>>.Ok(res);
+
+        return res;
     }
 
     public Result<CageTimeBlock> ScheduleCage(Guid petId, Guid locationId, DateTime startTime, DateTime endTime)
