@@ -2,8 +2,9 @@
 
 public class EmployeeDTO
 {
-    public EmployeeDTO(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
+    public EmployeeDTO(Guid idOffice, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
+        IdOffice = idOffice;    
         Surname = surname;
         FirstName = firstName;
         Address = address;

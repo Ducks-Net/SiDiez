@@ -34,10 +34,10 @@ public class EmployeesController : ControllerBase
         }
         return Ok(employee.Value);
     }
-    [HttpPost("{officeId:guid}")]
-    public IActionResult Create(Guid officeId, [FromBody] EmployeeDTO dto)
+    [HttpPost]
+    public IActionResult Create([FromBody] EmployeeDTO dto)
     {
-        var office = _officeRepository.Get(officeId);
+        var office = _officeRepository.Get(dto.IdOffice);
         if (office.IsFailure)
         {
             return BadRequest(office.Errors);
@@ -59,7 +59,6 @@ public class EmployeesController : ControllerBase
                 return BadRequest("The telephone number already exists");
             }
         }
-        employeePost.Value!.AssignToSediu(officeId);
         var result = _employeesRepository.Add(employeePost.Value);
         if (result.IsFailure)
         {
