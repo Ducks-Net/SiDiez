@@ -10,9 +10,16 @@ namespace DucksNet.API.Controllers;
 public class AppointmentsController : ControllerBase
 {
     private readonly IRepository<Appointment> _appointmentsRepository;
-    public AppointmentsController(IRepository<Appointment> repository)
+    private readonly AppointmentScheduleService _appointmentScheduleService;
+    private readonly IRepository<Office> _officeRepository;
+    private readonly IRepository<Pet> _animalRepository;
+
+    public AppointmentsController(IRepository<Appointment> repository, IRepository<Office> officeRepository, IRepository<Pet> animalRepository)
     {
         _appointmentsRepository = repository;
+        _officeRepository = officeRepository;
+        _animalRepository = animalRepository;
+        _appointmentScheduleService = new AppointmentScheduleService(repository, officeRepository, animalRepository);
     }
 
     [HttpGet]
@@ -43,5 +50,12 @@ public class AppointmentsController : ControllerBase
         return Ok(appointments);
     }
 
-    // TODO (AL): Schedule an appointment. Needs a service similar to CagesScheduleService.
+    [HttpPost]
+    public IActionResult ScheduleAppointment([FromBody] ScheduleAppointmentDTO appointment)
+    {
+        var res = _appointmentScheduleService.ScheduleAppointment(appointment.TypeString, appointment.PetID, appointment.LocationID, appointment.StartTime, appointment.EndTime);
+        if (res.IsFailure)
+            return BadRequest(res.Errors);
+        return Created(nameof(GetAll), res.Value);
+    }
 }
