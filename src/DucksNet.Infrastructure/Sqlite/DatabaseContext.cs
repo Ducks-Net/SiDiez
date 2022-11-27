@@ -12,7 +12,6 @@ public class DatabaseContext : DbContext, IDatabaseContext
         // NOTE (Al): Make sure the database is created. 
         this.Database.EnsureCreated(); 
     }
-
     public DbSet<Cage> Cages => Set<Cage>();
     public DbSet<CageTimeBlock> CageTimeBlocks => Set<CageTimeBlock>();
     public DbSet<Appointment> Appointments => Set<Appointment>();

@@ -33,7 +33,7 @@ public class OfficeController : ControllerBase
         {
             return BadRequest(result.Errors);
         }
-        return Ok(office);
+        return Ok(office.Value!);
     }
     [HttpGet("{id}")]
     public IActionResult Get(Guid id)

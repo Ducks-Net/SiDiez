@@ -1,10 +1,22 @@
-﻿namespace DucksNet.Domain.Model;
+﻿using System.Net.Sockets;
+using System.Security.AccessControl;
+using DucksNet.SharedKernel.Utils;
+
+namespace DucksNet.Domain.Model;
 public class Employee
 {
-    public Employee(Guid idSediu, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
+    public Employee(Guid id, string surname, string firstName, string address, string ownerPhone, string ownerEmail) 
+    {
+        Id = id;
+        Surname = surname;
+        FirstName = firstName;
+        Address = address;
+        OwnerPhone = ownerPhone;
+        OwnerEmail = ownerEmail;
+    }
+    private Employee(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
         Id = Guid.NewGuid();
-        IdSediu = idSediu;
         Surname = surname;
         FirstName = firstName;
         Address = address;
@@ -13,15 +25,71 @@ public class Employee
     }
 
     public Guid Id { get; private set; }
-    public Guid IdSediu { get; private set; }
+    public Guid IdOffice { get; private set; }
     public string Surname { get; private set; }
     public string FirstName { get; private set; }
     public string Address { get; private set; }
     public string OwnerPhone { get; private set; }
     public string OwnerEmail { get; private set; }
 
-    public void AssignToSediu(Guid idSediu)
+    public static Result<Employee> Create(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
-        IdSediu = idSediu;
+        if (firstName == null || firstName!.Length == 0)
+        {
+            return Result<Employee>.Error("First name can not be empty");
+        }
+        if (surname == null || surname!.Length == 0)
+        {
+            return Result<Employee>.Error("Surname can not be empty");
+        }
+        if (address == null || address!.Length == 0)
+        {
+            return Result<Employee>.Error("Address can not be empty");
+        }
+        if (ownerEmail == null || ownerEmail!.Length == 0)
+        {
+            return Result<Employee>.Error("Email can not be empty");
+        }
+        if (ownerPhone == null || ownerPhone!.Length == 0)
+        {
+            return Result<Employee>.Error("Telephone can not be empty");
+        }
+        if (!Validation.IsTelephoneNumberValid(ownerPhone))
+        {
+            return Result<Employee>.Error("The telephone number is not valid");
+        }
+        if (!Validation.IsEmailValid(ownerEmail))
+        {
+            return Result<Employee>.Error("The email is not valid");
+        }
+        var employee = new Employee(surname, firstName, address, ownerPhone, ownerEmail);
+        return Result<Employee>.Ok(employee);
+    }
+    public void AssignToOffice(Guid idOffice)
+    {
+        IdOffice = idOffice;
+    }
+    public void UpdateFields(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
+    {
+        if (surname != null)
+        {
+            Surname = surname;
+        }
+        if (firstName != null)
+        {
+            FirstName = firstName;
+        }
+        if (address != null)
+        {
+            Address = address;
+        }
+        if (ownerPhone != null)
+        {
+            OwnerPhone = ownerPhone;
+        }
+        if (OwnerEmail != null)
+        {
+            OwnerEmail = ownerEmail;
+        }
     }
 }

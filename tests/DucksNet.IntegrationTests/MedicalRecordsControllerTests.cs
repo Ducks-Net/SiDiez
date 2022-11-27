@@ -2,11 +2,12 @@
 using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
+using DucksNet.IntegrationTests;
 
 namespace DucksNet.API.Integration_Tests;
 public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecordsController>
 {
-    private const string ApiURL = "api/medicalrecords";
+    private const string ApiURL = "api/v1/medicalrecords";
     [Fact]
     public async Task When_CreatedMedicalRecord_Then_ShouldReturnMedicalRecordInTheGetRequest()
     {

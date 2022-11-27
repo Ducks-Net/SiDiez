@@ -9,6 +9,14 @@ public class Office
     public string Address {get; private set;}
     public int AnimalCapacity {get; set;}
     
+    public Office(Guid ID, Guid businessId, string address, int animalCapacity)
+    {
+        this.ID = ID;
+        BusinessId = businessId;
+        Address = address;
+        AnimalCapacity = animalCapacity;
+    }
+
     private Office(Guid businessId, string address, int animalCapacity) 
     {
         ID = new Guid();
