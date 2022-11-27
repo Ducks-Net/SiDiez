@@ -11,8 +11,9 @@ namespace  DucksNet.IntegrationTests;
 
 public class CagesControllerTests : BaseIntegrationTests<CagesController>
 {
-    private const string CagesURI = "api/v1/cages";
+    private const string CagesUrl = "api/v1/cages";
     private const string OfficesUrl = "api/v1/office";
+    private const string PetsUrl = "api/v1/pets";
 
     [Fact]
     public void When_Post_WithValidData_ShouldReturnCage()
@@ -27,7 +28,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
 
         //Act
-        var cageResponse = TestingClient.PostAsJsonAsync(CagesURI, sut).Result;
+        var cageResponse = TestingClient.PostAsJsonAsync(CagesUrl, sut).Result;
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
@@ -48,7 +49,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
 
         //Act
-        var cageResponse = TestingClient.PostAsJsonAsync(CagesURI, sut).Result;
+        var cageResponse = TestingClient.PostAsJsonAsync(CagesUrl, sut).Result;
 
         //Assert
         cageResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -70,7 +71,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
 
         //Act
-        var cageResponse = TestingClient.PostAsJsonAsync(CagesURI, sut).Result;
+        var cageResponse = TestingClient.PostAsJsonAsync(CagesUrl, sut).Result;
 
         //Assert
         cageResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -88,7 +89,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         var cageId = SetupCage(officeId, Size.Small.Name);
         
         //Act
-        var cageResponse = TestingClient.GetAsync($"{CagesURI}/{cageId}").Result;
+        var cageResponse = TestingClient.GetAsync($"{CagesUrl}/{cageId}").Result;
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
@@ -106,7 +107,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         ClearDatabase();
         
         //Act
-        var cageResponse = TestingClient.GetAsync($"{CagesURI}/{Guid.NewGuid()}").Result;
+        var cageResponse = TestingClient.GetAsync($"{CagesUrl}/{Guid.NewGuid()}").Result;
 
         //Assert
         cageResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -121,7 +122,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         var cageId = SetupCage(officeId, Size.Small.Name);
         
         //Act
-        var cageResponse = TestingClient.GetAsync($"{CagesURI}/byLocation/{officeId}").Result;
+        var cageResponse = TestingClient.GetAsync($"{CagesUrl}/byLocation/{officeId}").Result;
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
@@ -141,7 +142,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         var cageId2 = SetupCage(officeId2, Size.Small.Name);
         
         //Act
-        var cageResponse = TestingClient.GetAsync($"{CagesURI}/byLocation/{officeId}").Result;
+        var cageResponse = TestingClient.GetAsync($"{CagesUrl}/byLocation/{officeId}").Result;
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
@@ -158,7 +159,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         ClearDatabase();
         
         //Act
-        var cageResponse = TestingClient.GetAsync($"{CagesURI}/byLocation/{Guid.NewGuid()}").Result;
+        var cageResponse = TestingClient.GetAsync($"{CagesUrl}/byLocation/{Guid.NewGuid()}").Result;
 
         //Assert
         cageResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -174,7 +175,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         var cageId2 = SetupCage(officeId, Size.Medium.Name);
         
         //Act
-        var cageResponse = TestingClient.GetAsync(CagesURI).Result;
+        var cageResponse = TestingClient.GetAsync(CagesUrl).Result;
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
@@ -192,7 +193,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         //Arrange
         
         //Act
-        var cageResponse = TestingClient.GetAsync(CagesURI).Result;
+        var cageResponse = TestingClient.GetAsync(CagesUrl).Result;
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
@@ -209,11 +210,11 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         var cageId = SetupCage(officeId, Size.Small.Name);
         
         //Act
-        var cageResponse = TestingClient.DeleteAsync($"{CagesURI}/{cageId}").Result;
+        var cageResponse = TestingClient.DeleteAsync($"{CagesUrl}/{cageId}").Result;
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cages = TestingClient.GetAsync(CagesURI).Result.Content.ReadFromJsonAsync<List<Cage>>().Result;
+        var cages = TestingClient.GetAsync(CagesUrl).Result.Content.ReadFromJsonAsync<List<Cage>>().Result;
         cages.Should().BeEmpty();
     }
 
@@ -224,7 +225,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         ClearDatabase();
         
         //Act
-        var cageResponse = TestingClient.DeleteAsync($"{CagesURI}/{Guid.NewGuid()}").Result;
+        var cageResponse = TestingClient.DeleteAsync($"{CagesUrl}/{Guid.NewGuid()}").Result;
 
         //Assert
         cageResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -240,15 +241,61 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         var cageId2 = SetupCage(officeId, Size.Medium.Name);
         
         //Act
-        var cageResponse = TestingClient.DeleteAsync($"{CagesURI}/{cageId}").Result;
+        var cageResponse = TestingClient.DeleteAsync($"{CagesUrl}/{cageId}").Result;
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cages = TestingClient.GetAsync(CagesURI).Result.Content.ReadFromJsonAsync<List<Cage>>().Result;
+        var cages = TestingClient.GetAsync(CagesUrl).Result.Content.ReadFromJsonAsync<List<Cage>>().Result;
         cages.Should().NotBeEmpty();
         cages.Should().HaveCount(1);
         cages.Should().Contain(c => c.ID == cageId2);
         cages.Should().NotContain(c => c.ID == cageId);
+    }
+
+    [Fact]
+    public void When_Schedule_WithValidValues_ShouldReturnCageTimeBlock()
+    {
+        ClearDatabase();
+        //Arrange
+        var petId = SetupPet(Size.Small.Name);
+        var officeId = SetupOffice();
+        var cageId = SetupCage(officeId, Size.Small.Name);
+        DateTime start = DateTime.Now.AddDays(1);
+        DateTime end = DateTime.Now.AddDays(1).AddHours(1);
+        var scheduleDTO = new ScheduleCageDTO
+        {
+            PetId = petId,
+            LocationId = officeId,
+            StartTime = start,
+            EndTime = end
+        };
+        
+        //Act
+        var cageTimeBlockResponse = TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDTO).Result;
+
+        var error = cageTimeBlockResponse.Content.ReadAsStringAsync().Result;
+        //Assert
+        cageTimeBlockResponse.EnsureSuccessStatusCode();
+        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<CageTimeBlock>().Result;
+        cageTimeBlock.Should().NotBeNull();
+        cageTimeBlock!.CageId.Should().Be(cageId);
+        cageTimeBlock!.StartTime.Should().Be(start);
+        cageTimeBlock!.EndTime.Should().Be(end);
+        cageTimeBlock!.OccupantId.Should().Be(scheduleDTO.PetId);
+    }
+
+    private Guid SetupPet(string petSizeString)
+    { 
+        var petDTO = new PetDTO
+        {
+            OwnerId = Guid.NewGuid(),
+            Size = petSizeString
+        };
+
+        var petResponse = TestingClient.PostAsJsonAsync(PetsUrl, petDTO).Result;
+        petResponse.EnsureSuccessStatusCode();
+        var pet = petResponse.Content.ReadFromJsonAsync<Pet>().Result;
+        return pet!.ID;
     }
 
     private Guid SetupCage(Guid officeId, string size)
@@ -259,7 +306,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
 
         //Act
-        var cageResponse = TestingClient.PostAsJsonAsync(CagesURI, sut).Result;
+        var cageResponse = TestingClient.PostAsJsonAsync(CagesUrl, sut).Result;
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();

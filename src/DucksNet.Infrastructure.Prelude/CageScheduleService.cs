@@ -33,7 +33,7 @@ public class  CageScheduleService
         var pet = _petsRepository.Get(petId);
         if (pet.IsFailure)
         {
-            return Result<List<CageTimeBlock>>.Error("Pet not found.");
+            return Result<List<CageTimeBlock>>.Error("Pet not found in repository.");
         }
         var res = _cageTimeBlocksRepository.GetAll().Where(ctb => ctb.OccupantId == petId).ToList();
         return Result<List<CageTimeBlock>>.Ok(res);
@@ -46,7 +46,7 @@ public class  CageScheduleService
         // check if pet exists
         if (pet.IsFailure)
         {
-            return Result<CageTimeBlock>.FromError(pet, "Pet not found");
+            return Result<CageTimeBlock>.FromError(pet, "Pet not found in repository.");
         }
 
         List<Cage> locationCages = _cagesRepository.GetAll().Where(c => c.LocationId == locationId).ToList();

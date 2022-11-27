@@ -10,6 +10,15 @@ public class CageTimeBlock
     public DateTime StartTime { get; private set; }
     public DateTime EndTime { get; private set; }
     
+    public CageTimeBlock(Guid id, Guid? cageId, Guid? occupantId, DateTime startTime, DateTime endTime) // TODO (Al): just for json parsing. to remove
+    {
+        Id = id;
+        CageId = cageId;
+        OccupantId = occupantId;
+        StartTime = startTime;
+        EndTime = endTime;
+    }
+
     private CageTimeBlock(DateTime startTime, DateTime endTime)
     {
         Id = new Guid();
