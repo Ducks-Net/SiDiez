@@ -31,11 +31,26 @@ public class CagesController : ControllerBase
         return Ok(cages);
     }
 
+    [HttpGet("{id}")]
+    public IActionResult Get(Guid id)
+    {
+        var cage = _cagesRepository.Get(id);
+        if (cage.IsFailure)
+        {
+            return NotFound(cage.Errors);
+        }
+        return Ok(cage.Value);
+    }
+
     [HttpGet("byLocation/{locationId}")]
     public IActionResult GetByLocationID(Guid locationId)
     {
-        var cage = _cagesRepository.GetAll().Where(c => c.LocationId == locationId).ToList();
-        return Ok(cage);
+        var cages = _cagesRepository.GetAll().Where(c => c.LocationId == locationId).ToList();
+        if (cages is null || cages.Count == 0)
+        {
+            return NotFound();
+        }
+        return Ok(cages);
     }
 
     [HttpPost]
