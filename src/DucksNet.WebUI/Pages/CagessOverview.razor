@@ -1,0 +1,27 @@
+﻿@page "/CagesOverview"
+@inject HttpClient Http
+<h3>CagesOverview</h3>
+
+@if (Cages == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-light">
+        <thead class="table-primary">
+        <th>Cage ID</th>
+        <th>Cage Size</th>
+        </thead>
+        <tbody>
+            @foreach (var cage in Cages)
+            {
+                <tr>
+                    <td>@cage.ID</td>
+                    <td>@cage.Size</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
