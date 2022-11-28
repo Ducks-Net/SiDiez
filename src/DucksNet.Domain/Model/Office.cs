@@ -26,13 +26,12 @@ public class Office
     }
     public static Result<Office> Create(Guid businessId, string address, int animalCapacity)
     {
-        if(businessId == null || businessId == Guid.Empty)
+        if(businessId == null)
             return Result<Office>.Error("Business ID is required");
         if(address == null || address == string.Empty)
             return Result<Office>.Error("Address is required");
-        if(animalCapacity == -1)
+        if(animalCapacity <= 0)
             return Result<Office>.Error("Animal capacity is required");
         return Result<Office>.Ok(new Office(businessId, address, animalCapacity));
     }
 }
-
