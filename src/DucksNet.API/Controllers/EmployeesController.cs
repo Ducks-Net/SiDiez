@@ -1,8 +1,6 @@
 ﻿using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
-using DucksNet.Infrastructure.Sqlite;
-using DucksNet.SharedKernel;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
