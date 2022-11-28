@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DucksNet.Domain.Model;
-using DucksNet.Domain.Model.Enums;
-using FluentAssertions;
-using Xunit;
+﻿using DucksNet.Domain.Model;
 
 namespace DucksNet.UnitTests;
 
