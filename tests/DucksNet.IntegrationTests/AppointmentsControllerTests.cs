@@ -59,86 +59,8 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-    [Fact]
-    public void When_GetAll_Should_ReturnAllAppointments()
-    {
-        var officeId = SetupOffice();
-        var petId = SetupPet(Size.Medium.Name);
-
-        var appointment = new ScheduleAppointmentDTO
-        {
-            TypeString = AppointmentType.Consultation.Name,
-            PetID = petId,
-            LocationID = officeId,
-            StartTime = DateTime.Now.AddDays(1),
-            EndTime = DateTime.Now.AddDays(1).AddHours(1)
-        };
-
-        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
-        response.EnsureSuccessStatusCode();
-
-        var result = TestingClient.GetAsync(AppointmentsUrl).Result;
-        result.EnsureSuccessStatusCode();
-
-        var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
-        Assert.NotNull(appointments);
-        appointments!.Count.Should().Be(1);
-    }
-
-    [Fact]
-    public void When_GetByOffice_Should_ReturnAppointments()
-    {
-        var officeId = SetupOffice();
-        var petId = SetupPet(Size.Medium.Name);
-
-        var appointment = new ScheduleAppointmentDTO
-        {
-            TypeString = AppointmentType.Consultation.Name,
-            PetID = petId,
-            LocationID = officeId,
-            StartTime = DateTime.Now.AddDays(1),
-            EndTime = DateTime.Now.AddDays(1).AddHours(1)
-        };
-
-        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
-        response.EnsureSuccessStatusCode();
-
-        var result = TestingClient.GetAsync($"{AppointmentsUrl}/byOffice/{officeId}").Result;
-        result.EnsureSuccessStatusCode();
-
-        var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
-        Assert.NotNull(appointments);
-        appointments!.Count.Should().Be(1);
-    }
-
-    [Fact]
-    public void When_Get_ByPet_Should_ReturnAppointments()
-    {
-        var officeId = SetupOffice();
-        var petId = SetupPet(Size.Medium.Name);
-
-        var appointment = new ScheduleAppointmentDTO
-        {
-            TypeString = AppointmentType.Consultation.Name,
-            PetID = petId,
-            LocationID = officeId,
-            StartTime = DateTime.Now.AddDays(1),
-            EndTime = DateTime.Now.AddDays(1).AddHours(1)
-        };
-
-        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
-        response.EnsureSuccessStatusCode();
-
-        var result = TestingClient.GetAsync($"{AppointmentsUrl}/byPet/{petId}").Result;
-        result.EnsureSuccessStatusCode();
-
-        var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
-        Assert.NotNull(appointments);
-        appointments!.Count.Should().Be(1);
-    }
-
     // [Fact]
-    // public void When_GetByPet_Should_ReturnAppointmentsForPet()
+    // public void When_GetAll_Should_ReturnAllAppointments()
     // {
     //     var officeId = SetupOffice();
     //     var petId = SetupPet(Size.Medium.Name);
@@ -155,7 +77,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     //     var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
     //     response.EnsureSuccessStatusCode();
 
-    //     var result = TestingClient.GetAsync($"{AppointmentsUrl}/byPet/{petId}").Result;
+    //     var result = TestingClient.GetAsync(AppointmentsUrl).Result;
     //     result.EnsureSuccessStatusCode();
 
     //     var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
@@ -164,7 +86,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     // }
 
     // [Fact]
-    // public void When_GetByOffice_Should_ReturnAppointmentsForOffice()
+    // public void When_GetByOffice_Should_ReturnAppointments()
     // {
     //     var officeId = SetupOffice();
     //     var petId = SetupPet(Size.Medium.Name);
@@ -182,6 +104,32 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     //     response.EnsureSuccessStatusCode();
 
     //     var result = TestingClient.GetAsync($"{AppointmentsUrl}/byOffice/{officeId}").Result;
+    //     result.EnsureSuccessStatusCode();
+
+    //     var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
+    //     Assert.NotNull(appointments);
+    //     appointments!.Count.Should().Be(1);
+    // }
+
+    // [Fact]
+    // public void When_Get_ByPet_Should_ReturnAppointments()
+    // {
+    //     var officeId = SetupOffice();
+    //     var petId = SetupPet(Size.Medium.Name);
+
+    //     var appointment = new ScheduleAppointmentDTO
+    //     {
+    //         TypeString = AppointmentType.Consultation.Name,
+    //         PetID = petId,
+    //         LocationID = officeId,
+    //         StartTime = DateTime.Now.AddDays(1),
+    //         EndTime = DateTime.Now.AddDays(1).AddHours(1)
+    //     };
+
+    //     var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+    //     response.EnsureSuccessStatusCode();
+
+    //     var result = TestingClient.GetAsync($"{AppointmentsUrl}/byPet/{petId}").Result;
     //     result.EnsureSuccessStatusCode();
 
     //     var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
