@@ -16,125 +16,125 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     private const string PetsUrl = "api/v1/pets";
     private const string AppointmentsUrl = "api/v1/appointments";
 
-    // [Fact]
-    // public void When_Post_WithValidDta_Should_ReturnAppointment()
-    // {
-    //     var officeId = SetupOffice();
-    //     var petId = SetupPet(Size.Medium.Name);
+    [Fact]
+    public void When_Post_WithValidDta_Should_ReturnAppointment()
+    {
+        var officeId = SetupOffice();
+        var petId = SetupPet(Size.Medium.Name);
 
-    //     var appointment = new ScheduleAppointmentDTO
-    //     {
-    //         TypeString = AppointmentType.Consultation.Name,
-    //         PetID = petId,
-    //         LocationID = officeId,
-    //         StartTime = DateTime.Now.AddDays(1),
-    //         EndTime = DateTime.Now.AddDays(1).AddHours(1)
-    //     };
+        var appointment = new ScheduleAppointmentDTO
+        {
+            TypeString = AppointmentType.Consultation.Name,
+            PetID = petId,
+            LocationID = officeId,
+            StartTime = DateTime.Now.AddDays(1),
+            EndTime = DateTime.Now.AddDays(1).AddHours(1)
+        };
 
-    //     var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
-    //     response.EnsureSuccessStatusCode();
+        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+        response.EnsureSuccessStatusCode();
 
-    //     var result = response.Content.ReadFromJsonAsync<Appointment>().Result;
-    //     Assert.NotNull(result);
-    //     result!.LocationId.Should().Be(officeId);
-    //     result.PetId.Should().Be(petId);
-    //     result.StartTime.Should().Be(appointment.StartTime);
-    //     result.EndTime.Should().Be(appointment.EndTime);
-    // }
+        var result = response.Content.ReadFromJsonAsync<Appointment>().Result;
+        Assert.NotNull(result);
+        result!.LocationId.Should().Be(officeId);
+        result.PetId.Should().Be(petId);
+        result.StartTime.Should().Be(appointment.StartTime);
+        result.EndTime.Should().Be(appointment.EndTime);
+    }
 
-    // [Fact]
-    // public void When_Post_WithInvalidData_Should_ReturnBadRequest()
-    // {
-    //     var appointment = new ScheduleAppointmentDTO
-    //     {
-    //         TypeString = AppointmentType.Consultation.Name,
-    //         PetID = Guid.NewGuid(),
-    //         LocationID = Guid.NewGuid(),
-    //         StartTime = DateTime.Now.AddDays(1),
-    //         EndTime = DateTime.Now.AddDays(1).AddHours(1)
-    //     };
+    [Fact]
+    public void When_Post_WithInvalidData_Should_ReturnBadRequest()
+    {
+        var appointment = new ScheduleAppointmentDTO
+        {
+            TypeString = AppointmentType.Consultation.Name,
+            PetID = Guid.NewGuid(),
+            LocationID = Guid.NewGuid(),
+            StartTime = DateTime.Now.AddDays(1),
+            EndTime = DateTime.Now.AddDays(1).AddHours(1)
+        };
 
-    //     var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
-    //     response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-    // }
+        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
 
-    // [Fact]
-    // public void When_GetAll_Should_ReturnAllAppointments()
-    // {
-    //     var officeId = SetupOffice();
-    //     var petId = SetupPet(Size.Medium.Name);
+    [Fact]
+    public void When_GetAll_Should_ReturnAllAppointments()
+    {
+        var officeId = SetupOffice();
+        var petId = SetupPet(Size.Medium.Name);
 
-    //     var appointment = new ScheduleAppointmentDTO
-    //     {
-    //         TypeString = AppointmentType.Consultation.Name,
-    //         PetID = petId,
-    //         LocationID = officeId,
-    //         StartTime = DateTime.Now.AddDays(1),
-    //         EndTime = DateTime.Now.AddDays(1).AddHours(1)
-    //     };
+        var appointment = new ScheduleAppointmentDTO
+        {
+            TypeString = AppointmentType.Consultation.Name,
+            PetID = petId,
+            LocationID = officeId,
+            StartTime = DateTime.Now.AddDays(1),
+            EndTime = DateTime.Now.AddDays(1).AddHours(1)
+        };
 
-    //     var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
-    //     response.EnsureSuccessStatusCode();
+        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+        response.EnsureSuccessStatusCode();
 
-    //     var result = TestingClient.GetAsync(AppointmentsUrl).Result;
-    //     result.EnsureSuccessStatusCode();
+        var result = TestingClient.GetAsync(AppointmentsUrl).Result;
+        result.EnsureSuccessStatusCode();
 
-    //     var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
-    //     Assert.NotNull(appointments);
-    //     appointments!.Count.Should().Be(1);
-    // }
+        var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
+        Assert.NotNull(appointments);
+        appointments!.Count.Should().Be(1);
+    }
 
-    // [Fact]
-    // public void When_GetByOffice_Should_ReturnAppointments()
-    // {
-    //     var officeId = SetupOffice();
-    //     var petId = SetupPet(Size.Medium.Name);
+    [Fact]
+    public void When_GetByOffice_Should_ReturnAppointments()
+    {
+        var officeId = SetupOffice();
+        var petId = SetupPet(Size.Medium.Name);
 
-    //     var appointment = new ScheduleAppointmentDTO
-    //     {
-    //         TypeString = AppointmentType.Consultation.Name,
-    //         PetID = petId,
-    //         LocationID = officeId,
-    //         StartTime = DateTime.Now.AddDays(1),
-    //         EndTime = DateTime.Now.AddDays(1).AddHours(1)
-    //     };
+        var appointment = new ScheduleAppointmentDTO
+        {
+            TypeString = AppointmentType.Consultation.Name,
+            PetID = petId,
+            LocationID = officeId,
+            StartTime = DateTime.Now.AddDays(1),
+            EndTime = DateTime.Now.AddDays(1).AddHours(1)
+        };
 
-    //     var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
-    //     response.EnsureSuccessStatusCode();
+        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+        response.EnsureSuccessStatusCode();
 
-    //     var result = TestingClient.GetAsync($"{AppointmentsUrl}/byOffice/{officeId}").Result;
-    //     result.EnsureSuccessStatusCode();
+        var result = TestingClient.GetAsync($"{AppointmentsUrl}/byOffice/{officeId}").Result;
+        result.EnsureSuccessStatusCode();
 
-    //     var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
-    //     Assert.NotNull(appointments);
-    //     appointments!.Count.Should().Be(1);
-    // }
+        var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
+        Assert.NotNull(appointments);
+        appointments!.Count.Should().Be(1);
+    }
 
-    // [Fact]
-    // public void When_Get_ByPet_Should_ReturnAppointments()
-    // {
-    //     var officeId = SetupOffice();
-    //     var petId = SetupPet(Size.Medium.Name);
+    [Fact]
+    public void When_Get_ByPet_Should_ReturnAppointments()
+    {
+        var officeId = SetupOffice();
+        var petId = SetupPet(Size.Medium.Name);
 
-    //     var appointment = new ScheduleAppointmentDTO
-    //     {
-    //         TypeString = AppointmentType.Consultation.Name,
-    //         PetID = petId,
-    //         LocationID = officeId,
-    //         StartTime = DateTime.Now.AddDays(1),
-    //         EndTime = DateTime.Now.AddDays(1).AddHours(1)
-    //     };
+        var appointment = new ScheduleAppointmentDTO
+        {
+            TypeString = AppointmentType.Consultation.Name,
+            PetID = petId,
+            LocationID = officeId,
+            StartTime = DateTime.Now.AddDays(1),
+            EndTime = DateTime.Now.AddDays(1).AddHours(1)
+        };
 
-    //     var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
-    //     response.EnsureSuccessStatusCode();
+        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+        response.EnsureSuccessStatusCode();
 
-    //     var result = TestingClient.GetAsync($"{AppointmentsUrl}/byPet/{petId}").Result;
-    //     result.EnsureSuccessStatusCode();
+        var result = TestingClient.GetAsync($"{AppointmentsUrl}/byPet/{petId}").Result;
+        result.EnsureSuccessStatusCode();
 
-    //     var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
-    //     Assert.NotNull(appointments);
-    //     appointments!.Count.Should().Be(1);
-    // }
+        var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
+        Assert.NotNull(appointments);
+        appointments!.Count.Should().Be(1);
+    }
 
     private Guid SetupPet(string petSizeString)
     { 
