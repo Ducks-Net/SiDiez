@@ -45,4 +45,41 @@ public class BusinessTests
         result.Errors.Should().NotBeEmpty();
         result.Errors.Should().Contain("First name is required");
     }
+    [Fact]
+    public void When_CreateBusiness_WithInvalidAddress_ShouldFail()
+    {
+        var result = Business.Create("DucksNet", "Ion", "Ion1", null, "123456789", "ion@e.com");
+        result.IsFailure.Should().BeTrue();
+        result.Value.Should().BeNull();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("Address is required");
+    }
+    [Fact]
+    public void When_CreateBusiness_WithInvalidOwnerPhone_ShouldFail()
+    {
+        var result = Business.Create("DucksNet", "Ion", "Ion1", "Strada", null, "ion@e.coM");
+        result.IsFailure.Should().BeTrue();
+        result.Value.Should().BeNull();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("Owner phone is required");
+    }
+    [Fact] 
+    public void When_CreateBusiness_WithInvalidOwnerEmail_ShouldFail()
+    {
+        var result = Business.Create("DucksNet", "Ion", "Ion1", "Strada", "123456789", null);
+        result.IsFailure.Should().BeTrue();
+        result.Value.Should().BeNull();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("Owner email is required");
+    }
+    [Fact]
+    public void When_CreateBusiness_WithInvalidBusinessNameAndSurname_ShouldFail()
+    {
+        var result = Business.Create(null, null, "Ion1", "Strada", "123456789", "ion@e.com");
+        result.IsFailure.Should().BeTrue();
+        result.Value.Should().BeNull();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("Business name is required");
+        result.Errors.Should().Contain("Surname is required");
+    }
 }
