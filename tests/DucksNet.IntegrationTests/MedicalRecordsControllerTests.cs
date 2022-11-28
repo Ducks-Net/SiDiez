@@ -1,7 +1,11 @@
-﻿using System.Net.Http.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
+using DucksNet.Domain.Model;
 using DucksNet.IntegrationTests;
 
 namespace DucksNet.API.Integration_Tests;
@@ -12,19 +16,50 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
     public async Task When_CreatedMedicalRecord_Then_ShouldReturnMedicalRecordInTheGetRequest()
     {
         //Arrange
-        //should get the an appointment and client using get and their id
-        MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO
-        {
-            IdAppointment = System.Guid.NewGuid(),
-            IdClient = System.Guid.NewGuid()
-        };
+        var idAppointment = Guid.NewGuid();
+        var idClient = Guid.NewGuid();
 
+        MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, idClient);
         //Act
-        var createShelterResponse = await TestingClient.PostAsJsonAsync(ApiURL, medicalRecordDTO);
-        var getShelterResult = await TestingClient.GetAsync(ApiURL);
-
+        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(ApiURL, medicalRecordDTO);
+        var medicalRecordResult = await TestingClient.GetAsync(ApiURL);
         //Assert
-        createShelterResponse.EnsureSuccessStatusCode();
-        createShelterResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        medicalRecordResponse.EnsureSuccessStatusCode();
+        var medicalRecords = await medicalRecordResult.Content.ReadFromJsonAsync<List<MedicalRecordDTO>>();
+        medicalRecords.Should().NotBeNull();
+        medicalRecords!.Count.Should().Be(1);
+        foreach (var medicalRecord in medicalRecords!)
+        {
+            medicalRecord.IdAppointment.Should().Be(idAppointment);
+            medicalRecord.IdClient.Should().Be(idClient);
+        }
+    }
+    [Fact]
+    public async Task When_CreatedMedicalRecordWithEmptyIdAppointment_Then_ShouldReturnFail()
+    {
+        //Arrange
+        var idAppointment = Guid.Empty;
+        var idClient = Guid.NewGuid();
+
+        MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, idClient);
+        //Act
+        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(ApiURL, medicalRecordDTO);
+        var medicalRecordResult = await TestingClient.GetAsync(ApiURL);
+        //Assert
+        medicalRecordResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+    [Fact]
+    public async Task When_CreatedMedicalRecordWithEmptyIdClient_Then_ShouldReturnFail()
+    {
+        //Arrange
+        var idAppointment = Guid.NewGuid();
+        var idClient = Guid.Empty;
+
+        MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, idClient);
+        //Act
+        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(ApiURL, medicalRecordDTO);
+        var medicalRecordResult = await TestingClient.GetAsync(ApiURL);
+        //Assert
+        medicalRecordResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 }
