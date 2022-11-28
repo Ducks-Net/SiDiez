@@ -6,7 +6,7 @@ public class AppointmentType : Enumeration
 {
     public static readonly AppointmentType Consultation = new(1, "Consultation");
 
-    private AppointmentType(int id, string name) : base(id, name) { }
+    public AppointmentType(int id, string name) : base(id, name) { }
 
     public static Result<AppointmentType> CreateFromString(string str)
     {

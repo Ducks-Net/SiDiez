@@ -14,6 +14,18 @@ public class Appointment
     public AppointmentType Type { get; private set; }
     public bool NeedsCage { get; private set; }
 
+    public Appointment(Guid ID, Guid? locationId, Guid? petId, Guid? vetId, DateTime startTime, DateTime endTime, AppointmentType type, bool needsCage)
+    {
+        this.ID = ID;
+        LocationId = locationId;
+        PetId = petId;
+        VetId = vetId;
+        StartTime = startTime;
+        EndTime = endTime;
+        Type = type;
+        NeedsCage = needsCage;
+    }
+
     private Appointment(AppointmentType type, DateTime startTime, DateTime endTime)
     {
         ID = new Guid();
