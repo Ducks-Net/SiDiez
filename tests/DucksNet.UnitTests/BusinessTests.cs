@@ -19,7 +19,7 @@ public class BusinessTests
     [Fact]
     public void When_CreateBusiness_WithInvalidBusinessName_ShouldFail()
     {
-        var result = Business.Create(null, "Ion", "Ion1", "Strada", "123456789", "ion@e.com");
+        var result = Business.Create(string.Empty, "Ion", "Ion1", "Strada", "123456789", "ion@e.com");
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();
@@ -28,7 +28,7 @@ public class BusinessTests
     [Fact]
     public void When_CreateBusiness_WithInvalidSurname_ShouldFail()
     {
-        var result = Business.Create("DucksNet", null, "Ion1", "Strada", "123456789", "ion@e,com");
+        var result = Business.Create("DucksNet", string.Empty, "Ion1", "Strada", "123456789", "ion@e,com");
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();
@@ -37,7 +37,7 @@ public class BusinessTests
     [Fact]
     public void When_CreateBusiness_WithInvalidFirstName_ShouldFail()
     {
-        var result = Business.Create("DucksNet", "Ion", null, "Strada", "123456789", "ion@e.com");
+        var result = Business.Create("DucksNet", "Ion", string.Empty, "Strada", "123456789", "ion@e.com");
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();
@@ -46,7 +46,7 @@ public class BusinessTests
     [Fact]
     public void When_CreateBusiness_WithInvalidAddress_ShouldFail()
     {
-        var result = Business.Create("DucksNet", "Ion", "Ion1", null, "123456789", "ion@e.com");
+        var result = Business.Create("DucksNet", "Ion", "Ion1", string.Empty, "123456789", "ion@e.com");
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();
@@ -55,7 +55,7 @@ public class BusinessTests
     [Fact]
     public void When_CreateBusiness_WithInvalidOwnerPhone_ShouldFail()
     {
-        var result = Business.Create("DucksNet", "Ion", "Ion1", "Strada", null, "ion@e.coM");
+        var result = Business.Create("DucksNet", "Ion", "Ion1", "Strada", string.Empty, "ion@e.coM");
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();
@@ -64,7 +64,7 @@ public class BusinessTests
     [Fact]
     public void When_CreateBusiness_WithInvalidOwnerEmail_ShouldFail()
     {
-        var result = Business.Create("DucksNet", "Ion", "Ion1", "Strada", "123456789", null);
+        var result = Business.Create("DucksNet", "Ion", "Ion1", "Strada", "123456789", string.Empty);
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();

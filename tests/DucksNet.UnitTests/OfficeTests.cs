@@ -20,7 +20,8 @@ public class OfficeTests
     public void When_OfficeCreatedWithEmptyAddress_Should_Fail()
     {
         Guid dummyGUID = new Guid();
-        var result = Office.Create(dummyGUID, null, 10);
+        string adress = string.Empty;
+        var result = Office.Create(dummyGUID, adress, 10);
 
         result.IsFailure.Should().BeTrue();
         result.Errors.Should().NotBeEmpty();
