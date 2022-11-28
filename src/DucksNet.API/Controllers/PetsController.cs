@@ -54,7 +54,7 @@ public class PetsController : ControllerBase
         {
             return BadRequest(result.Errors);
         }
-        return Ok(pet);
+        return Ok(pet.Value);
     }
 
     [HttpPut("{id}")]

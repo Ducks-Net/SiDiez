@@ -9,6 +9,13 @@ public class Pet
     public Guid OwnerId { get; private set; }
     public Size Size { get; private set; }
 
+    public Pet(Guid ID, Guid ownerId, Size size) // TODO (Al): This constructor only exists to make it json parsable
+    {
+        this.ID = ID;
+        OwnerId = ownerId;
+        Size = size;
+    }
+
     private Pet(Size size)
     {
         ID = new Guid();

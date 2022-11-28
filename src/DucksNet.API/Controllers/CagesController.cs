@@ -13,13 +13,15 @@ public class CagesController : ControllerBase
     private readonly IRepository<Cage> _cagesRepository;
     private readonly IRepository<CageTimeBlock> _cageTimeBlocksRepository;
     private readonly IRepository<Pet> _petsRepository;
+    private readonly IRepository<Office> _officeRepository;
     private readonly CageScheduleService _cageScheduleService;
-    public CagesController(IRepository<Cage> cages, IRepository<CageTimeBlock> cageTimeBlocks, IRepository<Pet> pets)
+    public CagesController(IRepository<Cage> cages, IRepository<CageTimeBlock> cageTimeBlocks, IRepository<Pet> pets, IRepository<Office> officeRepository)
     {
         _cagesRepository = cages;
         _cageTimeBlocksRepository = cageTimeBlocks;
         _petsRepository = pets;
-        _cageScheduleService = new CageScheduleService(cages, cageTimeBlocks, pets);
+        _officeRepository = officeRepository;
+        _cageScheduleService = new CageScheduleService(_cagesRepository, _cageTimeBlocksRepository, _petsRepository);
     }
 
     [HttpGet]
@@ -29,11 +31,26 @@ public class CagesController : ControllerBase
         return Ok(cages);
     }
 
-    [HttpGet("{locationId}")]
+    [HttpGet("{id}")]
+    public IActionResult Get(Guid id)
+    {
+        var cage = _cagesRepository.Get(id);
+        if (cage.IsFailure)
+        {
+            return NotFound(cage.Errors);
+        }
+        return Ok(cage.Value);
+    }
+
+    [HttpGet("byLocation/{locationId}")]
     public IActionResult GetByLocationID(Guid locationId)
     {
-        var cage = _cagesRepository.GetAll().Where(c => c.LocationId == locationId).ToList();
-        return Ok(cage);
+        var cages = _cagesRepository.GetAll().Where(c => c.LocationId == locationId).ToList();
+        if (cages is null || cages.Count == 0)
+        {
+            return NotFound();
+        }
+        return Ok(cages);
     }
 
     [HttpPost]
@@ -45,6 +62,11 @@ public class CagesController : ControllerBase
             return BadRequest(cage.Errors);
         }
 
+        var location = _officeRepository.Get(dto.LocationId);
+        if(location.IsFailure)
+        {
+            return BadRequest(location.Errors);
+        }
         cage.Value!.AssignToLocation(dto.LocationId);
 
         var result = _cagesRepository.Add(cage.Value!);
@@ -53,7 +75,23 @@ public class CagesController : ControllerBase
             return BadRequest(result.Errors);
         }
 
-        return Ok(cage);
+        return Created(nameof(GetAll),cage.Value!);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(Guid id)
+    {
+        var cage = _cagesRepository.Get(id);
+        if(cage.IsFailure)
+        {
+            return NotFound(cage.Errors);
+        }
+        var result = _cagesRepository.Delete(cage.Value!);
+        if(result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok();
     }
     
     [HttpPost("schedule")]
@@ -67,25 +105,19 @@ public class CagesController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpGet("schedule/{locationId}")]
+    [HttpGet("schedule/byLocation/{locationId}")]
     public IActionResult GetCageSchedule(Guid locationId)
     {
         var result = _cageScheduleService.GetLocationSchedule(locationId);
-        if(result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
-        return Ok(result.Value);
+        
+        return Ok(result);
     }
 
-    [HttpGet("schedule/{petId}")]
+    [HttpGet("schedule/byPet/{petId}")]
     public IActionResult GetPetSchedule(Guid petId)
     {
         var result = _cageScheduleService.GetPetSchedule(petId);
-        if(result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
-        return Ok(result.Value);
+        
+        return Ok(result);
     }
 }

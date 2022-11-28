@@ -43,7 +43,7 @@ public class AppointmentsController : ControllerBase
         return Ok(appointments);
     }
 
-    [HttpGet("byLocation/{locationId}")]
+    [HttpGet("byOffice/{locationId}")]
     public IActionResult GetByLocationID(Guid? locationId)
     {
         var appointments = _appointmentsRepository.GetAll().Where(a => a.LocationId == locationId).ToList();
