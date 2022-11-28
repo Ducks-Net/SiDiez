@@ -18,5 +18,31 @@ public class BusinessTests
         result.Value!.OwnerPhone.Should().Be("123456789");
         result.Value!.OwnerEmail.Should().Be("ion@e.com");
     }
-
+    [Fact]
+    public void When_CreateBusiness_WithInvalidBusinessName_ShouldFail()
+    {
+        var result = Business.Create(null, "Ion", "Ion1", "Strada", "123456789", "ion@e.com");
+        result.IsFailure.Should().BeTrue();
+        result.Value.Should().BeNull();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("Business name is required");
+    }
+    [Fact]
+    public void When_CreateBusiness_WithInvalidSurname_ShouldFail()
+    {
+        var result = Business.Create("DucksNet", null, "Ion1", "Strada", "123456789", "ion@e,com");
+        result.IsFailure.Should().BeTrue();
+        result.Value.Should().BeNull();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("Surname is required");
+    }
+    [Fact]
+    public void When_CreateBusiness_WithInvalidFirstName_ShouldFail()
+    {
+        var result = Business.Create("DucksNet", "Ion", null, "Strada", "123456789", "ion@e.com");
+        result.IsFailure.Should().BeTrue();
+        result.Value.Should().BeNull();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("First name is required");
+    }
 }
