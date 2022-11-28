@@ -3,8 +3,6 @@ using DucksNet.Domain.Model;
 
 public class BusinessTests
 {
-    //string businessName, string surname, string firstName, string address, string ownerPhone, string ownerEmail
-    //test business creation
     [Fact]
     public void When_CreateBusiness_Should_Succeed()
     {
@@ -72,5 +70,4 @@ public class BusinessTests
         result.Errors.Should().NotBeEmpty();
         result.Errors.Should().Contain("Owner email is required");
     }
-
 }
