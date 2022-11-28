@@ -16,7 +16,6 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     private const string PetsUrl = "api/v1/pets";
     private const string AppointmentsUrl = "api/v1/appointments";
 
-
     // [Fact]
     // public void When_Post_WithValidDta_Should_ReturnAppointment()
     // {
