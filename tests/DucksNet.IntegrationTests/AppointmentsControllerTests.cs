@@ -137,57 +137,57 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         appointments!.Count.Should().Be(1);
     }
 
-    [Fact]
-    public void When_GetByPet_Should_ReturnAppointmentsForPet()
-    {
-        var officeId = SetupOffice();
-        var petId = SetupPet(Size.Medium.Name);
+    // [Fact]
+    // public void When_GetByPet_Should_ReturnAppointmentsForPet()
+    // {
+    //     var officeId = SetupOffice();
+    //     var petId = SetupPet(Size.Medium.Name);
 
-        var appointment = new ScheduleAppointmentDTO
-        {
-            TypeString = AppointmentType.Consultation.Name,
-            PetID = petId,
-            LocationID = officeId,
-            StartTime = DateTime.Now.AddDays(1),
-            EndTime = DateTime.Now.AddDays(1).AddHours(1)
-        };
+    //     var appointment = new ScheduleAppointmentDTO
+    //     {
+    //         TypeString = AppointmentType.Consultation.Name,
+    //         PetID = petId,
+    //         LocationID = officeId,
+    //         StartTime = DateTime.Now.AddDays(1),
+    //         EndTime = DateTime.Now.AddDays(1).AddHours(1)
+    //     };
 
-        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
-        response.EnsureSuccessStatusCode();
+    //     var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+    //     response.EnsureSuccessStatusCode();
 
-        var result = TestingClient.GetAsync($"{AppointmentsUrl}/byPet/{petId}").Result;
-        result.EnsureSuccessStatusCode();
+    //     var result = TestingClient.GetAsync($"{AppointmentsUrl}/byPet/{petId}").Result;
+    //     result.EnsureSuccessStatusCode();
 
-        var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
-        Assert.NotNull(appointments);
-        appointments!.Count.Should().Be(1);
-    }
+    //     var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
+    //     Assert.NotNull(appointments);
+    //     appointments!.Count.Should().Be(1);
+    // }
 
-    [Fact]
-    public void When_GetByOffice_Should_ReturnAppointmentsForOffice()
-    {
-        var officeId = SetupOffice();
-        var petId = SetupPet(Size.Medium.Name);
+    // [Fact]
+    // public void When_GetByOffice_Should_ReturnAppointmentsForOffice()
+    // {
+    //     var officeId = SetupOffice();
+    //     var petId = SetupPet(Size.Medium.Name);
 
-        var appointment = new ScheduleAppointmentDTO
-        {
-            TypeString = AppointmentType.Consultation.Name,
-            PetID = petId,
-            LocationID = officeId,
-            StartTime = DateTime.Now.AddDays(1),
-            EndTime = DateTime.Now.AddDays(1).AddHours(1)
-        };
+    //     var appointment = new ScheduleAppointmentDTO
+    //     {
+    //         TypeString = AppointmentType.Consultation.Name,
+    //         PetID = petId,
+    //         LocationID = officeId,
+    //         StartTime = DateTime.Now.AddDays(1),
+    //         EndTime = DateTime.Now.AddDays(1).AddHours(1)
+    //     };
 
-        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
-        response.EnsureSuccessStatusCode();
+    //     var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+    //     response.EnsureSuccessStatusCode();
 
-        var result = TestingClient.GetAsync($"{AppointmentsUrl}/byOffice/{officeId}").Result;
-        result.EnsureSuccessStatusCode();
+    //     var result = TestingClient.GetAsync($"{AppointmentsUrl}/byOffice/{officeId}").Result;
+    //     result.EnsureSuccessStatusCode();
 
-        var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
-        Assert.NotNull(appointments);
-        appointments!.Count.Should().Be(1);
-    }
+    //     var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
+    //     Assert.NotNull(appointments);
+    //     appointments!.Count.Should().Be(1);
+    // }
 
     private Guid SetupPet(string petSizeString)
     { 
