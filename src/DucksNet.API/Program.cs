@@ -1,4 +1,4 @@
-using DucksNet.Domain.Model;
+﻿using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Sqlite;
 using DucksNet.Infrastructure.Prelude;
 
@@ -21,8 +21,13 @@ builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
 builder.Services.AddScoped<IRepository<Business>, BusinessesRepository>();
 builder.Services.AddScoped<IRepository<Office>, OfficesRepository>();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("VetPolicyCors",policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -34,6 +39,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("VetPolicyCors");
 
 app.UseAuthorization();
 
