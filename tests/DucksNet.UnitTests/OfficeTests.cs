@@ -4,62 +4,59 @@ using DucksNet.Domain.Model;
 public class OfficeTests
 {
     [Fact]
-    public void When_CreateOffice_Should_Succeed()
+    public void When_OfficeCreated_Should_Succeed()
     {
-        var businessGuid = new Guid();
-        var address = "Strada";
-        var animalCapacity = 10;
-
-        var result = Office.Create(businessGuid, address, animalCapacity);
+        Guid dummyGUID = new Guid();
+        var result = Office.Create(dummyGUID, "Adresa", 10);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
-        result.Value!.BusinessId.Should().Be(businessGuid);
-        result.Value!.Address.Should().Be(address);
-        result.Value!.AnimalCapacity.Should().Be(animalCapacity);
+        result.Value!.BusinessId.Should().Be(dummyGUID);
+        result.Value!.Address.Should().Be("Adresa");
+        result.Value!.AnimalCapacity.Should().Be(10);
     }
-    [Fact]
-    public void When_CreateOffice_WithInvalidBusinessId_ShouldFail()
-    {
-        var businessGuid = new Guid();
-        var address = "Strada";
-        var animalCapacity = 10;
 
-        var result = Office.Create(businessGuid, address, animalCapacity);
+    [Fact]
+    public void When_OfficeCreatedWithEmptyAddress_Should_Fail()
+    {
+        Guid dummyGUID = new Guid();
+        var result = Office.Create(dummyGUID, null, 10);
 
         result.IsFailure.Should().BeTrue();
-        result.Value.Should().BeNull();
-        result.Errors.Should().NotBeEmpty();
-        result.Errors.Should().Contain("Business id is required");
-    }
-    [Fact]
-    public void When_CreateOffice_WithInvalidAddress_ShouldFail()
-    {
-        var businessGuid = new Guid();
-        var address = "Strada";
-        var animalCapacity = 10;
-
-        var result = Office.Create(businessGuid, address, animalCapacity);
-
-        result.IsFailure.Should().BeTrue();
-        result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();
         result.Errors.Should().Contain("Address is required");
     }
     [Fact]
-    public void When_CreateOffice_WithInvalidAnimalCapacity_ShouldFail()
+    public void When_OfficeCreatedWithNegativeAnimalCapacity_Should_Fail()
     {
-        var businessGuid = new Guid();
-        var address = "Strada";
-        var animalCapacity = 10;
-
-        var result = Office.Create(businessGuid, address, animalCapacity);
+        Guid dummyGUID = new Guid();
+        var result = Office.Create(dummyGUID, "Adresa", -1);
 
         result.IsFailure.Should().BeTrue();
-        result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();
         result.Errors.Should().Contain("Animal capacity is required");
     }
+    [Fact]
+    public void When_OfficeCreatedWithZeroAnimalCapacity_Should_Fail()
+    {
+        Guid dummyGUID = new Guid();
+        var result = Office.Create(dummyGUID, "Adresa", 0);
+
+        result.IsFailure.Should().BeTrue();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("Animal capacity is required");
+    }
+    [Fact]
+    public void When_OfficeCreatedWithEmptyBusinessId_Should_Fail()
+    {
+        Guid dummyGUID = new Guid();
+        var result = Office.Create(dummyGUID, "Adresa", 10);
+
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
+        result.Value!.BusinessId.Should().Be(dummyGUID);
+        result.Value!.Address.Should().Be("Adresa");
+        result.Value!.AnimalCapacity.Should().Be(10);
+    }
     
-        
 }
