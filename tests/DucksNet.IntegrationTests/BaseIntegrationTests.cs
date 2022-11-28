@@ -24,11 +24,6 @@ public class BaseIntegrationTests<T> where T : class
             builder.ConfigureTestServices(services => {
                 services.AddScoped<IDatabaseContext>(provider => new TestDbContext(typeof(T).FullName!));
             });
-
-            builder.ConfigureAppConfiguration((context, config) => {
-                config.SetBasePath(Directory.GetCurrentDirectory()) // NOTE (Al): Don't use fs watchers fore config file. Breaks tests on linux enviroments.
-                      .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
-            });
          });
         TestingClient = TestingFactory.CreateClient();
     }
