@@ -30,7 +30,7 @@ public class Office
             return Result<Office>.Error("Business ID is required");
         if(address == null || address == string.Empty)
             return Result<Office>.Error("Address is required");
-        if(animalCapacity <= 0 || animalCapacity == null)
+        if(animalCapacity <= 0)
             return Result<Office>.Error("Animal capacity is required");
         return Result<Office>.Ok(new Office(businessId, address, animalCapacity));
     }
