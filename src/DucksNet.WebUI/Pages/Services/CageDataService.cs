@@ -15,7 +15,8 @@ public class CageDataService : ICageDataService
 
     public Task<IEnumerable<Cage>> GetAllCages()
     {
-        return httpClient.GetAsync(ApiURL).Result.Content.ReadFromJsonAsync<IEnumerable<Cage>>()!;
+        var cages = httpClient.GetFromJsonAsync<IEnumerable<Cage>>(ApiURL);
+        return cages;
     }
 
     public Task<Cage> GetCageDetail(Guid cageId)
