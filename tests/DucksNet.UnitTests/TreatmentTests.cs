@@ -1,4 +1,10 @@
-﻿using DucksNet.Domain.Model;
+﻿using Xunit;
+using FluentAssertions;
+
+using DucksNet.Domain.Model;
+using System;
+using System.Collections.Generic;
+using DucksNet.Domain.Model.Enums;
 
 public class TreatmentTests
 {

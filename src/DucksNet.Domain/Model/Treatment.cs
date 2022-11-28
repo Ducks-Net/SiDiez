@@ -1,4 +1,9 @@
-﻿using DucksNet.SharedKernel.Utils;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Domain.Model;
 public class Treatment

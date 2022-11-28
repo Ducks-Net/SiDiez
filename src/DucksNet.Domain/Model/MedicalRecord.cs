@@ -4,12 +4,6 @@ namespace DucksNet.Domain.Model;
 public class MedicalRecord
 {
 
-    public MedicalRecord(Guid id, Guid idAppointment, Guid idClient)
-    {
-        Id = id;
-        IdAppointment = idAppointment;
-        IdClient = idClient;
-    }
     private MedicalRecord(Guid idAppointment, Guid idClient)
     {
         Id = Guid.NewGuid();
@@ -25,14 +19,6 @@ public class MedicalRecord
     
     public static Result<MedicalRecord> Create(Guid idAppointment, Guid idClient)
     {
-        if (idAppointment == Guid.Empty)
-        {
-            return Result<MedicalRecord>.Error("Id appointment can not be empty");
-        }
-        if (idClient == Guid.Empty)
-        {
-            return Result<MedicalRecord>.Error("Id client can not be empty");
-        }
         var medicalRecord = new MedicalRecord(idAppointment, idClient);
         return Result<MedicalRecord>.Ok(medicalRecord);
     }

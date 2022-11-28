@@ -1,4 +1,6 @@
-﻿using DucksNet.Infrastructure.Prelude;
+﻿
+using DucksNet.Domain.Model;
+using DucksNet.Infrastructure.Prelude;
 using DucksNet.Infrastructure.Sqlite;
 
 using Microsoft.AspNetCore.Mvc.Testing;

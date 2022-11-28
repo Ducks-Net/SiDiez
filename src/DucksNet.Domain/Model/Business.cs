@@ -1,4 +1,5 @@
-﻿using DucksNet.SharedKernel.Utils;
+using DucksNet.Domain.Model.Enums;
+using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Domain.Model;
 public class Business

@@ -1,10 +1,13 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http.Json;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
+using DucksNet.Domain.Model.Enums;
 
-namespace DucksNet.IntegrationTests;
+namespace  DucksNet.IntegrationTests;
 
 public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsController>
 {

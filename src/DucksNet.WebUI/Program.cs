@@ -11,10 +11,6 @@ builder.Services.AddHttpClient<IEmployeeDataService, EmployeeDataService>
     (
         client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
     );
-builder.Services.AddHttpClient<IMedicalRecordDataService, MedicalRecordDataService>
-    (
-        client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
-    );
 builder.Services.AddHttpClient<ICageDataService, CageDataService>
     (
         client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)

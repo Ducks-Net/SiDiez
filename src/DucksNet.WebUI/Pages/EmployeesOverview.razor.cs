@@ -1,4 +1,5 @@
-﻿using DucksNet.Domain.Model;
+﻿using System;
+using DucksNet.Domain.Model;
 using DucksNet.WebUI.Pages.Services;
 using Microsoft.AspNetCore.Components;
 
