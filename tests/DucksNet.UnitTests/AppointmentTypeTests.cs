@@ -24,7 +24,7 @@ public class AppointmentTypeTests
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();
-        result.Errors.Should().Contain("Invalid AppointmentType string. Valid values are: Consultation.");
+        result.Errors.Should().Contain("Invalid AppointmentType string. Valid values are: Consultation, Vaccination, Surgery.");
     }
 
     [Fact]
@@ -49,6 +49,6 @@ public class AppointmentTypeTests
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();
-        result.Errors.Should().Contain("Invalid AppointmentType id. Valid values are: 1.");
+        result.Errors.Should().Contain("Invalid AppointmentType id. Valid values are: 1, 2, 3.");
     }
 }
