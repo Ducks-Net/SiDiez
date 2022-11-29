@@ -5,6 +5,8 @@ namespace DucksNet.Domain.Model.Enums;
 public class AppointmentType : Enumeration
 {
     public static readonly AppointmentType Consultation = new(1, "Consultation");
+    public static readonly AppointmentType Vaccination = new(2, "Vaccination");
+    public static readonly AppointmentType Surgery = new(3, "Surgery");
 
     public AppointmentType(int id, string name) : base(id, name) { }
 
