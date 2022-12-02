@@ -7,22 +7,31 @@ public class Treatment
     public Guid? OwnerID { get; }
     public Guid? ClientID { get; }
     public Guid? ClinicID { get; }
-    List<Medicine> MedicineList { get; set; }
-
-    private Treatment()
+    List<Guid> MedicineIDList { get; set; }
+    public Treatment(Guid id, Guid? OwnerID, Guid? ClientID, Guid? ClinicID, List<Guid> MedicineIDList)
+    {
+        this.ID = ID;
+        this.OwnerID = OwnerID;
+        this.ClientID = ClientID; 
+        this.ClinicID = ClinicID;
+        this.MedicineIDList= MedicineIDList;
+    }
+    private Treatment(List<Guid> medicineIDList)
     {
         ID = new Guid();
-        MedicineList = new List<Medicine>();
+        MedicineIDList = medicineIDList;
     }
 
     public void AddMedicineToTreatment(Medicine medicine)
     {
-        if (!MedicineList.Contains(medicine))
-            MedicineList.Add(medicine);
+        if (!MedicineIDList.Contains(medicine.Id))
+            MedicineIDList.Add(medicine.Id);
     }
 
-    public static Result<Treatment> CreateTreatment()
+    public static Result<Treatment> CreateTreatment(List<Guid> medicineIDList)
     {
-        return Result<Treatment>.Ok(new Treatment());
+        if(medicineIDList.Count == 0)
+            return Result<Treatment>.Error("Can't create treatment with no medicine.");
+        return Result<Treatment>.Ok(new Treatment(medicineIDList));
     }
 }

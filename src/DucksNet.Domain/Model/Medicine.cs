@@ -13,9 +13,17 @@ public class Medicine
     private Medicine(string name, string description, double price, int drugAdministrationId)
         : this(name, description, price, DrugAdministration.createMedicineByInt(drugAdministrationId).Value!)
     { }
-    private Medicine(string name, string description, double price, string drugAdministrationString)
+    public Medicine(string name, string description, double price, string drugAdministrationString)
         : this(name, description, price, DrugAdministration.createMedicineByString(drugAdministrationString).Value!)
     { }
+    public Medicine(Guid id, string name, string description, double price, DrugAdministration drugAdministration)
+    {
+        Id = id;
+        Name = name;
+        Description = description;
+        Price = price;
+        DrugAdministration = drugAdministration;
+    }
     private Medicine(string name, string description, double price, DrugAdministration drugAdministration)
     {
         Id = Guid.NewGuid();

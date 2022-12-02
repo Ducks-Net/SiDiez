@@ -1,5 +1,7 @@
-﻿using DucksNet.Domain.Model;
+﻿using DucksNet.API.DTO;
+using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
+using DucksNet.Infrastructure.Sqlite;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DucksNet.API.Controllers;
@@ -9,9 +11,11 @@ namespace DucksNet.API.Controllers;
 public class TreatmentController : ControllerBase
 {
     private readonly IRepository<Treatment> _treatmentRepository;
-    public TreatmentController(IRepository<Treatment> repository)
+    private readonly IRepository<Medicine> _medicineRepository;
+    public TreatmentController(IRepository<Treatment> treatmentRepository, IRepository<Medicine> medicineRepository)
     {
-        _treatmentRepository = repository;
+        _treatmentRepository = treatmentRepository;
+        _medicineRepository = medicineRepository;
     }
 
     [HttpGet]
@@ -40,5 +44,22 @@ public class TreatmentController : ControllerBase
     {
         var treatment = _treatmentRepository.GetAll().Where(t => t.ClinicID == clinicId).ToList();
         return Ok(treatment);
+    }
+
+    [HttpPost]
+    public IActionResult Create([FromBody] TreatmentDTO dto)
+    {
+        var treatmentPost = Treatment.CreateTreatment(dto.MedicineIDList.ToList());
+        if (treatmentPost.IsFailure)
+        {
+            return BadRequest(treatmentPost.Errors);
+        }
+   
+        var result = _treatmentRepository.Add(treatmentPost.Value!);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok(treatmentPost.Value);
     }
 }
