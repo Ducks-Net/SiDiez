@@ -9,11 +9,11 @@ public class Cage
     public Size Size { get; private set; }
     public Guid? LocationId { get; private set; }
 
-    private Cage(int sizeId) // NOTE (AL): We need a sizeID constructor because EFCore doesn't support our enums. yet :^)
+    public Cage(Guid ID, Size size, Guid? locationId)
     {
-        ID = new Guid();
-        Size = Size.CreateFromInt(sizeId).Value!;
-        LocationId = null;
+        this.ID = ID;
+        Size = size;
+        LocationId = locationId;
     }
 
     private Cage(Size size)

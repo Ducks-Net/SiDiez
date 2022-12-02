@@ -2,7 +2,16 @@
 
 public class EmployeeDTO
 {
-    public Guid IdSediu { get; set; }
+    public EmployeeDTO(Guid idOffice, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
+    {
+        IdOffice = idOffice;    
+        Surname = surname;
+        FirstName = firstName;
+        Address = address;
+        OwnerPhone = ownerPhone;
+        OwnerEmail = ownerEmail;
+    }
+    public Guid IdOffice { get; set; }
     public string Surname { get; set; }
     public string FirstName { get; set; }
     public string Address { get; set; }

@@ -22,5 +22,7 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+    - name: Disable fs watchers
+      run: export DOTNET_USE_POLLING_FILE_WATCHER=true
     - name: Test
       run: dotnet test --no-build --verbosity normal

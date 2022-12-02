@@ -21,10 +21,14 @@ jobs:
         dotnet-version: 6.0.x
     - name: Add altcov dep
       run: dotnet add tests/DucksNet.UnitTests/ package AltCover
+    - name: Add altcov dep to integration tests
+      run: dotnet add tests/DucksNet.IntegrationTests/ package AltCover
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+    - name: Disable fs watchers
+      run: export DOTNET_USE_POLLING_FILE_WATCHER=true
     - name: Test
       run: dotnet test --no-build --verbosity normal -p:AltCover=true
     - name: Upload coverage to Codecov

@@ -8,6 +8,11 @@ public interface IDatabaseContext
 {
     DbSet<Cage> Cages { get; }
     DbSet<CageTimeBlock> CageTimeBlocks { get; }
+    DbSet<Business> Businesses { get; }
+    DbSet<Office> Offices { get; }
+    DbSet<Appointment> Appointments { get; }
+    DbSet<Pet> Pets { get; }
+    DbSet<User> Users { get; }
     DbSet<MedicalRecord> MedicalRecords { get; }
     DbSet<Treatment> Treatments { get; }
     DbSet<Medicine> Medicines { get; }

@@ -6,41 +6,41 @@ namespace DucksNet.Infrastructure.Sqlite;
 
 public class MedicalRecordRepository : IRepository<MedicalRecord>
 {
-    private readonly IDatabaseContext databaseContext;
+    private readonly IDatabaseContext _databaseContext;
 
     public MedicalRecordRepository(IDatabaseContext databaseContext)
     {
-        this.databaseContext = databaseContext;
+        this._databaseContext = databaseContext;
     }
     public Result Add(MedicalRecord entity)
     {
-        databaseContext.MedicalRecords.Add(entity);
-        databaseContext.SaveChanges();
+        _databaseContext.MedicalRecords.Add(entity);
+        _databaseContext.SaveChanges();
         return Result.Ok();
     }
 
     public Result Delete(MedicalRecord entity)
     {
-        databaseContext.MedicalRecords.Remove(entity);
-        databaseContext.SaveChanges();
+        _databaseContext.MedicalRecords.Remove(entity);
+        _databaseContext.SaveChanges();
         return Result.Ok();
     }
 
     public Result<MedicalRecord> Get(Guid id)
     {
-        var medicalRecord = databaseContext.MedicalRecords.Find(id);
+        var medicalRecord = _databaseContext.MedicalRecords.Find(id);
         return medicalRecord is null ? Result<MedicalRecord>.Error("Medical Record not found") : Result<MedicalRecord>.Ok(medicalRecord);
     }
 
     public IEnumerable<MedicalRecord> GetAll()
     {
-        return databaseContext.MedicalRecords;
+        return _databaseContext.MedicalRecords;
     }
 
     public Result Update(MedicalRecord entity)
     {
-        databaseContext.MedicalRecords.Update(entity);
-        databaseContext.SaveChanges();
+        _databaseContext.MedicalRecords.Update(entity);
+        _databaseContext.SaveChanges();
         return Result.Ok();
     }
 }

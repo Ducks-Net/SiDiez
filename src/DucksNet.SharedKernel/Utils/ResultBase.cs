@@ -9,16 +9,6 @@ public class Result
 
     protected Result(bool isSuccess, List<string>? errors)
     {
-        if (isSuccess && errors != null)
-        {
-            throw new InvalidOperationException();
-        }
-
-        if (!isSuccess && errors == null)
-        {
-            throw new InvalidOperationException();
-        }
-
         IsSuccess = isSuccess;
         Errors = errors ?? new List<string>();
     }
