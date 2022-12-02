@@ -1,10 +1,4 @@
-﻿using Xunit;
-using FluentAssertions;
-
-using DucksNet.Domain.Model;
-using System;
-using System.Collections.Generic;
-using DucksNet.Domain.Model.Enums;
+﻿using DucksNet.Domain.Model;
 
 public class TreatmentTests
 {
@@ -14,8 +8,8 @@ public class TreatmentTests
         string name = "Name";
         string description = "Description";
         double price = 1;
-        string drugAdministration = "Oral";
-        var medicine = Medicine.Create(name, description, price, drugAdministration);
+        string administration = "Oral";
+        var medicine = Medicine.Create(name, description, price, administration);
         var result = Treatment.CreateTreatment();
         result.Value!.AddMedicineToTreatment(medicine.Value!);
         result.IsSuccess.Should().BeTrue();

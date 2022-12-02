@@ -21,9 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DucksNet.UnitTests", "tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DucksNet.Infrastructure.Prelude", "src\DucksNet.Infrastructure.Prelude\DucksNet.Infrastructure.Prelude.csproj", "{DF34C39C-EEE4-464C-91A1-FBE4C325690A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.API.Integration Tests", "DucksNet.API.Integration Tests\DucksNet.API.Integration Tests.csproj", "{B9FD1399-B6D5-482B-84CE-35C234BAB130}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DucksNet.Infrastructure.Prelude", "src\DucksNet.Infrastructure.Prelude\DucksNet.Infrastructure.Prelude.csproj", "{83EEB8A1-A0B0-49FC-B564-C9AB2968D076}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DucksNet.API.Integration Tests", "DucksNet.API.Integration Tests\DucksNet.API.Integration Tests.csproj", "{B9FD1399-B6D5-482B-84CE-35C234BAB130}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

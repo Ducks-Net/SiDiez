@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DucksNet.Domain.Model;
-using DucksNet.Domain.Model.Enums;
-using FluentAssertions;
-using Xunit;
+﻿using DucksNet.Domain.Model;
 
 namespace DucksNet.UnitTests;
 
@@ -18,7 +10,7 @@ public class MedicineTests
         string name = "Name";
         string description = "Description";
         double price = 1;
-        string drugAdministration = "Oral";
+        string drugAdministration = "Inhalation";
         var result = Medicine.Create(name, description, price, drugAdministration);
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
@@ -36,8 +28,33 @@ public class MedicineTests
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();
         result.Errors.Should().NotBeEmpty();
-        result.Errors.Should().Contain("Failed to parse type of medicine administration.");
+        result.Errors.Should().Contain("Failed to parse type of medicine administration by string.");
+    }
+    
+    [Fact]
+    public void When_CreateMedicine_WitInvalidPrice_Should_Fail()
+    {
+        string name = "Name";
+        string description = "Description";
+        double price = -1; 
+        string drugAdministration = "Subcutaneous";
+        var result = Medicine.Create(name, description, price, drugAdministration);
+        result.IsFailure.Should().BeTrue();
+        result.Value.Should().BeNull();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("Invalid price");
     }
 
-
+    [Fact]
+    public void When_CreateMedicine_WithValidPrice_Should_Succeed()
+    {
+        string name = "Name";
+        string description = "Description";
+        double price = 5; 
+        string drugAdministration = "Subcutaneous";
+        var result = Medicine.Create(name, description, price, drugAdministration);
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
+        result.Errors.Should().BeEmpty();
+    }
 }

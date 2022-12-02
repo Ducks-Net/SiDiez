@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DucksNet.SharedKernel.Utils;
+﻿using DucksNet.SharedKernel.Utils;
 using DucksNet.Domain.Model.Enums;
 
 namespace DucksNet.Domain.Model;
@@ -14,9 +9,12 @@ public class Medicine
     public string Description { get; private set; }
     public double Price { get; private set; }
     public DrugAdministration DrugAdministration { get; private set; }
-    
-    private Medicine(string name, string description, double price, int drugAdministrationId) 
-        :this(name, description, price, DrugAdministration.createMedicineByInt(drugAdministrationId).Value!)
+
+    private Medicine(string name, string description, double price, int drugAdministrationId)
+        : this(name, description, price, DrugAdministration.createMedicineByInt(drugAdministrationId).Value!)
+    { }
+    private Medicine(string name, string description, double price, string drugAdministrationString)
+        : this(name, description, price, DrugAdministration.createMedicineByString(drugAdministrationString).Value!)
     { }
     private Medicine(string name, string description, double price, DrugAdministration drugAdministration)
     {
@@ -31,9 +29,9 @@ public class Medicine
     {
         if (price <= 0)
             return Result<Medicine>.Error("Invalid price");
-        Result<DrugAdministration> typeOfDrugAdministration = DrugAdministration.createMedicineByString(administration);
-        if (typeOfDrugAdministration.Value == null || typeOfDrugAdministration.IsFailure)
-            return Result<Medicine>.FromError(typeOfDrugAdministration, "Failed to parse type of medicine administration.");
-        return Result<Medicine>.Ok(new Medicine(name, description, price, typeOfDrugAdministration.Value));
+        Result<DrugAdministration> typeOfDrugAdministrationByString = DrugAdministration.createMedicineByString(administration);
+        if (typeOfDrugAdministrationByString.Value == null || typeOfDrugAdministrationByString.IsFailure)
+            return Result<Medicine>.FromError(typeOfDrugAdministrationByString, "Failed to parse type of medicine administration by string.");
+        return Result<Medicine>.Ok(new Medicine(name, description, price, typeOfDrugAdministrationByString.Value));
     }
 }

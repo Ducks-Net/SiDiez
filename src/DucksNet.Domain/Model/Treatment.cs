@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DucksNet.SharedKernel.Utils;
+﻿using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Domain.Model;
 public class Treatment
@@ -22,9 +17,8 @@ public class Treatment
 
     public void AddMedicineToTreatment(Medicine medicine)
     {
-        if (MedicineList.Contains(medicine))
-            return;
-        MedicineList.Add(medicine);
+        if (!MedicineList.Contains(medicine))
+            MedicineList.Add(medicine);
     }
 
     public static Result<Treatment> CreateTreatment()
