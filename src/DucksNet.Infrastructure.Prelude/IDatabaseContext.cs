@@ -14,7 +14,7 @@ public interface IDatabaseContext
     DbSet<Pet> Pets { get; }
     DbSet<User> Users { get; }
     DbSet<MedicalRecord> MedicalRecords { get; }
-    DbSet<Treatment> Treatments { get; }
+    //DbSet<Treatment> Treatments { get; }
     DbSet<Medicine> Medicines { get; }
     DbSet<Employee> Employees { get; }
 

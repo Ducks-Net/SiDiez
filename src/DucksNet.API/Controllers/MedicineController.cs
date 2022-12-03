@@ -1,6 +1,8 @@
-﻿using DucksNet.Domain.Model;
+﻿using DucksNet.API.DTO;
+using DucksNet.Domain.Model;
 using DucksNet.Domain.Model.Enums;
 using DucksNet.Infrastructure.Prelude;
+using DucksNet.Infrastructure.Sqlite;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DucksNet.API.Controllers;
@@ -41,5 +43,38 @@ public class MedicineController : ControllerBase
     {
         var medicine = _medicineRepository.GetAll().Where(m => m.DrugAdministration == drugAdministration).ToList();
         return Ok(medicine);
+    }
+
+    [HttpPost]
+    public IActionResult Create([FromBody] MedicineDTO dto)
+    {
+        var medicinePost = Medicine.Create(dto.Name, dto.Description, dto.Price, dto.DrugAdministrationString);
+        if (medicinePost.IsFailure)
+        {
+            return BadRequest(medicinePost.Errors);
+        }
+
+        var result = _medicineRepository.Add(medicinePost.Value!);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok(medicinePost.Value);
+    }
+
+    [HttpDelete("{token:guid}")]
+    public IActionResult Delete(Guid token)
+    {
+        var medicine = _medicineRepository.Get(token);
+        if (medicine.IsFailure)
+        {
+            return BadRequest(medicine.Errors);
+        }
+        var result = _medicineRepository.Delete(medicine.Value!);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok();
     }
 }

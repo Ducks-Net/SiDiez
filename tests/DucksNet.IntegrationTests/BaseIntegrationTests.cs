@@ -34,7 +34,7 @@ public class BaseIntegrationTests<T> where T : class
         context.RemoveRange(context.Users);
         context.RemoveRange(context.MedicalRecords);
         context.RemoveRange(context.Employees);
-        context.RemoveRange(context.Treatments);
+        //context.RemoveRange(context.Treatments);
         context.RemoveRange(context.Medicines);
         context.RemoveRange(context.Offices);
         context.RemoveRange(context.Businesses);

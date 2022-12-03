@@ -19,7 +19,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
     public DbSet<User> Users => Set<User>();
     public DbSet<MedicalRecord> MedicalRecords => Set<MedicalRecord>();
     public DbSet<Employee> Employees => Set<Employee>();
-    public DbSet<Treatment> Treatments => Set<Treatment>();
+    //public DbSet<Treatment> Treatments => Set<Treatment>();
     public DbSet<Medicine> Medicines => Set<Medicine>();
     public DbSet<Office> Offices => Set<Office>();
     public DbSet<Business> Businesses => Set<Business>();
@@ -48,6 +48,11 @@ public class DatabaseContext : DbContext, IDatabaseContext
             .HasConversion(
                 value => value.Id,
                 id => AppointmentType.CreateFromInt(id).Value!);
+        modelBuilder.Entity<Medicine>()
+            .Property(a => a.DrugAdministration)
+            .HasConversion(
+                value => value.Id,
+                id => DrugAdministration.createMedicineByInt(id).Value!);
     }
 
     void IDatabaseContext.SaveChanges()
