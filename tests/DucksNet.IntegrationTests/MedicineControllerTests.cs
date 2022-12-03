@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
+using DucksNet.Domain.Model.Enums;
+using DucksNet.Infrastructure.Prelude;
 
 namespace DucksNet.IntegrationTests;
 public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
@@ -16,6 +19,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
     [Fact]
     public async void When_CreatedMedicine_Then_ShouldReturnMedicineInTheGetRequest()
     {
+        ClearDatabase();
         //Arrange
         var sut = CreateSUT();
         //Act 
@@ -39,6 +43,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
     [Fact]
     public async void When_CreatedMedicine_Then_ShouldReturnMedicineByNameInTheGetRequest()
     {
+        ClearDatabase();
         //Arrange
         var sut = CreateSUT();
         //Act 
@@ -63,6 +68,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
     [Fact]
     public async void When_CreatedMedicine_Then_ShouldReturnMedicineByDescriptionInTheGetRequest()
     {
+        ClearDatabase();
         //Arrange
         var sut = CreateSUT();
         //Act 
@@ -87,6 +93,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
     [Fact]
     public async void When_CreatedMedicine_Then_ShouldReturnMedicineByDrugAdministrationInTheGetRequest()
     {
+        ClearDatabase();
         //Arrange
         var sut = CreateSUT();
         //Act 
@@ -111,6 +118,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
     [Fact]
     public async void When_CreatedMedicineAndDeleteIt_Then_ShouldReturnSucces()
     {
+        ClearDatabase();
         //Arrange
         var sut = CreateSUT();
         //Act 
@@ -120,6 +128,31 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
         //Assert
         medicineResponse.EnsureSuccessStatusCode();
         getMedicineResult.Content.Headers.ContentLength.Should().Be(0);
+    }
+
+    //[Fact]
+    //public async Task When_CreatedMedicineWithInvalidPrice_Then_ShouldReturnFail()
+    //{
+    //    ClearDatabase();
+    //    //Arrange
+    //    Guid id = Guid.NewGuid();
+    //    Medicine medicine = new Medicine(id, "Naldorex" , "Migraine", -999, DrugAdministration.Oral);
+    //    //Act
+    //    var medicineResponse = await TestingClient.PostAsJsonAsync(MedicineUrl, medicine);
+    //    //Assert
+    //    medicineResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    //}
+
+    [Fact]
+    public async Task When_SearchingMedicineThatDoesntExist_Then_ShouldReturnFail()
+    {
+        ClearDatabase();
+        //Arrange
+        Guid randomID= Guid.NewGuid();
+        //Act 
+        var getMedicineResult = await TestingClient.DeleteAsync(MedicineUrl + $"/{randomID}");
+        //Assert
+        getMedicineResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     private static MedicineDTO CreateSUT()

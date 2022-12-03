@@ -1,5 +1,6 @@
 ﻿using DucksNet.SharedKernel.Utils;
 using DucksNet.Domain.Model.Enums;
+using System.Net;
 
 namespace DucksNet.Domain.Model;
 public class Medicine
@@ -34,5 +35,21 @@ public class Medicine
         if (typeOfDrugAdministrationByString.Value == null || typeOfDrugAdministrationByString.IsFailure)
             return Result<Medicine>.FromError(typeOfDrugAdministrationByString, "Failed to parse type of medicine administration by string.");
         return Result<Medicine>.Ok(new Medicine(name, description, price, typeOfDrugAdministrationByString.Value));
+    }
+
+    public void UpdateMedicineFields(string name, string description, double price)
+    {
+        if (name != null)
+        {
+            Name = name;
+        }
+        if (description!= null)
+        {
+            Description = description;
+        }
+        if (price <= 0)
+        {
+            Price = price;
+        }
     }
 }

@@ -58,7 +58,7 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, idClient);
         //Act
         var medicalRecordResponse = await TestingClient.PostAsJsonAsync(ApiURL, medicalRecordDTO);
-        var medicalRecordResult = await TestingClient.GetAsync(ApiURL);
+        //var medicalRecordResult = await TestingClient.GetAsync(ApiURL);
         //Assert
         medicalRecordResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }

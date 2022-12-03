@@ -77,4 +77,21 @@ public class MedicineController : ControllerBase
         }
         return Ok();
     }
+
+    [HttpPut("{token:guid}")]
+    public IActionResult UpdateMedicine(Guid token, [FromBody] MedicineDTO dto)
+    {
+        var oldMedicine = _medicineRepository.Get(token);
+        if (oldMedicine.IsFailure)
+        {
+            return BadRequest(oldMedicine.Errors);
+        }
+        oldMedicine.Value!.UpdateMedicineFields(dto.Name, dto.Description, dto.Price);
+        var result = _medicineRepository.Update(oldMedicine.Value);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok(oldMedicine.Value);
+    }
 }
