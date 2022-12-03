@@ -67,12 +67,12 @@ public class EmployeesController : ControllerBase
         }
         return Ok(employeePost.Value);
     }
-    [HttpPut("{token:guid}")]
-    public IActionResult UpdatePersonalInformationEmployee(Guid token, [FromBody] EmployeeDTO dto)
+    [HttpPut("{employeeId:guid}")]
+    public IActionResult UpdatePersonalInformationEmployee(Guid employeeId, [FromBody] EmployeeDTO dto)
     {
         // TODO (RO): token must be based from the authentification token, not from employee id
         // TODO (RO): check the updated information
-        var oldEmployee = _employeesRepository.Get(token);
+        var oldEmployee = _employeesRepository.Get(employeeId);
         if (oldEmployee.IsFailure)
         {
             return BadRequest(oldEmployee.Errors);
@@ -85,12 +85,12 @@ public class EmployeesController : ControllerBase
         }
         return Ok(oldEmployee.Value);
     }
-    [HttpPut("{token:guid}/{newOfficeId:guid}")]
-    public IActionResult UpdateOfficeEmployee(Guid token, Guid newOfficeId)
+    [HttpPut("{employeeId:guid}/{newOfficeId:guid}")]
+    public IActionResult UpdateOfficeEmployee(Guid employeeId, Guid newOfficeId)
     {
         //TODO(RO): token must be based from the authentification token, not from employee id
         // TODO (RO): check the updated information
-        var oldEmployee = _employeesRepository.Get(token);
+        var oldEmployee = _employeesRepository.Get(employeeId);
         if (oldEmployee.IsFailure)
         {
             return BadRequest(oldEmployee.Errors);

@@ -67,27 +67,36 @@ public class Employee
     {
         IdOffice = idOffice;
     }
-    public void UpdateFields(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
+    public List<string> UpdateFields(string? surname, string? firstName, string? address, string? ownerPhone, string? ownerEmail)
     {
-        if (surname != null)
+        List<string> output= new List<string>();
+        bool hasNewInfo = false;
+        if (!string.IsNullOrWhiteSpace(surname) || !string.IsNullOrWhiteSpace(firstName) || !string.IsNullOrWhiteSpace(address) || !string.IsNullOrWhiteSpace(ownerPhone) || !string.IsNullOrWhiteSpace(ownerEmail))
         {
-            Surname = surname;
+            hasNewInfo = true;
         }
-        if (firstName != null)
+        if (!string.IsNullOrWhiteSpace(ownerPhone) && !Validation.IsTelephoneNumberValid(ownerPhone!))
+        { 
+            output.Add("The telephone number is not valid");
+        }
+        if (!string.IsNullOrWhiteSpace(ownerEmail) && !Validation.IsEmailValid(ownerEmail!))
         {
-            FirstName = firstName;
+            output.Add("The email is not valid");
         }
-        if (address != null)
+        if (!hasNewInfo)
         {
-            Address = address;
+            output.Add("You need to add at least one value");
         }
-        if (ownerPhone != null)
+        if (output.Count > 0)
         {
-            OwnerPhone = ownerPhone;
+            return output;
         }
-        if (OwnerEmail != null)
-        {
-            OwnerEmail = ownerEmail;
-        }
+        Surname = !string.IsNullOrWhiteSpace(surname) ? surname : Surname;
+        FirstName = !string.IsNullOrWhiteSpace(firstName) ? firstName : FirstName;
+        Address = !string.IsNullOrWhiteSpace(address) ? address : Address;
+        OwnerPhone = !string.IsNullOrWhiteSpace(ownerPhone) ? ownerPhone : OwnerPhone;
+        OwnerEmail = !string.IsNullOrWhiteSpace(ownerEmail) ? ownerEmail : OwnerEmail;
+        output.Add("The information has been updated");
+        return output;
     }
 }
