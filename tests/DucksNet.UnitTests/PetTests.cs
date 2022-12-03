@@ -1,7 +1,5 @@
 ﻿using DucksNet.Domain.Model;
-using DucksNet.Domain.Model.Enums;
 using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DucksNet.UnitTests;
 public class PetTests
@@ -9,7 +7,7 @@ public class PetTests
     [Fact]
     public void When_CreatePet_Then_ShouldReturnPet()
     {
-        Tuple< string, DateTime, string, string, Guid, string> sut = CreateSUT();
+        Tuple<string, DateTime, string, string, Guid, string> sut = CreateSUT();
         var result = Pet.Create(sut.Item1, sut.Item2, sut.Item3, sut.Item4, sut.Item5, sut.Item6);
         var copy = result.Value;
         copy.Name.Should().Be(sut.Item1);
@@ -30,7 +28,7 @@ public class PetTests
     }
 
     [Fact]
-    public void When_CreatePetWithUnavailableSize_Then_ShouldFail()
+    public void When_CreatePetWithInvalidSize_Then_ShouldFail()
     {
         var result = Pet.Create("Cleo", new DateTime(2021, 06, 04), "Cat", "European", Guid.NewGuid(), "little");
         result.IsFailure.Should().BeTrue();
@@ -38,11 +36,11 @@ public class PetTests
     }
 
     [Fact]
-    public void When_CreatePetWithNonexistingDate_Then_ShouldFail()
+    public void When_CreatePetWithInvalidDate_Then_ShouldFail()
     {
         var result = Pet.Create("Cleo", new DateTime(2023, 06, 04), "Cat", "European", Guid.NewGuid(), "Small");
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().Contain("This date is not a real date of birth.");
+        result.Errors.Should().Contain("This date is not a valid date of birth.");
     }
 
     [Fact]
@@ -61,7 +59,7 @@ public class PetTests
         result.Errors.Should().Contain("The breed field can not be empty.");
     }
 
-    private Tuple< string, DateTime, string, string, Guid, string> CreateSUT()
+    private Tuple<string, DateTime, string, string, Guid, string> CreateSUT()
     {
         Tuple<string, DateTime, string, string, Guid, string> sut = new("Cleo", new DateTime(2021, 06, 04), "Cat", "European", Guid.NewGuid(), "Small");
         return sut;

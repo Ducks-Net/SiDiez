@@ -1,5 +1,8 @@
-﻿using DucksNet.Domain.Model.Enums;
+﻿using System;
+using System.Globalization;
+using DucksNet.Domain.Model.Enums;
 using DucksNet.SharedKernel.Utils;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DucksNet.Domain.Model;
 
@@ -41,9 +44,9 @@ public class Pet
         {
             return Result<Pet>.Error("The name should contain at least one character.");
         }
-        if (DateTime.Compare(dateOfBirth, DateTime.Now) > 0)
+        if (dateOfBirth.CompareTo(DateTime.Now) > 0)
         {
-            return Result<Pet>.Error("This date is not a real date of birth.");
+            return Result<Pet>.Error("This date is not a valid date of birth.");
         }
         if (string.IsNullOrWhiteSpace(species))
         {
@@ -59,10 +62,12 @@ public class Pet
         {
             return Result<Pet>.FromError(sizeResult, "Failed to parse pet size.");
         }
+
+        dateOfBirth = new DateTime(dateOfBirth.Year, dateOfBirth.Month, dateOfBirth.Day);
         return Result<Pet>.Ok(new Pet(name, dateOfBirth, species, breed, ownerId, sizeResult.Value));
     }
 
-    public void AssignToOwner(Guid ownerId)
+    public void AssignPetToOwner(Guid ownerId)
     {
         OwnerId = ownerId;
     }
@@ -81,6 +86,10 @@ public class Pet
         if (!string.IsNullOrWhiteSpace(breed))
         {
             Breed = breed;
+        }
+        if ( dateOfBirth.CompareTo(DateTime.Now) > 0)
+        {
+            DateOfBirth = new DateTime(dateOfBirth.Year, dateOfBirth.Month, dateOfBirth.Day);
         }
         if (ownerId != null)
         {

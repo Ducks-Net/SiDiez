@@ -444,7 +444,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     { 
         var petDTO = new PetDTO
         {
-            OwnerId = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
             Size = petSizeString
         };
 

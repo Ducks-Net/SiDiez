@@ -23,6 +23,10 @@ builder.Services.AddHttpClient<IPetDataService, PetDataService>
     (
         client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
     );
+builder.Services.AddHttpClient<IUserDataService, UserDataService>
+    (
+        client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+    );
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 await builder.Build().RunAsync();

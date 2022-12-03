@@ -1,0 +1,35 @@
+﻿@page "/usersoverview"
+@inject HttpClient Http
+<h3>UsersOverview</h3>
+
+@if (Users == null)
+{
+		<p><em>Loading...</em></p>
+}
+else
+{
+		<table class="table table-light">
+			<thead class="table-primary">
+			<th>User Id</th>
+			<th>User FirstName</th>
+			<th>User LastName</th>
+			<th>User Address</th>
+			<th>User PhoneNumber</th>
+			<th>User Email</th>
+			</thead>
+			<tbody>
+			@foreach (var user in Users)
+			{
+						<tr>
+							<td>@user.Id</td>
+							<td>@user.FirstName</td>
+							<td>@user.LastName</td>
+							<td>@user.Address</td>
+							<td>@user.PhoneNumber</td>
+							<td>@user.Email</td>
+						</tr>
+			}
+			</tbody>
+		</table>
+
+}
