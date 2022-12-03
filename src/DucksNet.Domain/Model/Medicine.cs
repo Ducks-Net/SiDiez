@@ -10,12 +10,6 @@ public class Medicine
     public double Price { get; private set; }
     public DrugAdministration DrugAdministration { get; private set; }
 
-    private Medicine(string name, string description, double price, int drugAdministrationId)
-        : this(name, description, price, DrugAdministration.createMedicineByInt(drugAdministrationId).Value!)
-    { }
-    public Medicine(string name, string description, double price, string drugAdministrationString)
-        : this(name, description, price, DrugAdministration.createMedicineByString(drugAdministrationString).Value!)
-    { }
     public Medicine(Guid id, string name, string description, double price, DrugAdministration drugAdministration)
     {
         Id = id;
@@ -32,7 +26,6 @@ public class Medicine
         Price = price;
         DrugAdministration = drugAdministration;
     }
-
     public static Result<Medicine> Create(string name, string description, double price, string administration)
     {
         if (price <= 0)

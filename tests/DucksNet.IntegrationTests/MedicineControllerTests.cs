@@ -20,7 +20,6 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
         var sut = CreateSUT();
         //Act 
         var medicineResponse = await TestingClient.PostAsJsonAsync(MedicineUrl, sut);
-        Console.WriteLine(medicineResponse.Content.ReadAsStringAsync().Result);
         medicineResponse.EnsureSuccessStatusCode();
         var getMedicineResult = await TestingClient.GetAsync(MedicineUrl);
         //Assert
@@ -37,9 +36,6 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
         }
     }
 
-
-
-
     [Fact]
     public async void When_CreatedMedicine_Then_ShouldReturnMedicineByNameInTheGetRequest()
     {
@@ -52,7 +48,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
         //Assert
         medicineResponse.EnsureSuccessStatusCode();
 
-        var medicines = await getMedicineResult.Content.ReadFromJsonAsync<List<MedicineDTO>>();
+        var medicines = await getMedicineResult.Content.ReadFromJsonAsync<List<Medicine>>();
         medicines.Should().NotBeNull();
         medicines!.Count.Should().Be(1);
         foreach (var med in medicines!)
@@ -60,7 +56,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
             med.Name.Should().Be(sut.Name);
             med.Description.Should().Be(sut.Description);
             med.Price.Should().Be(sut.Price);
-            med.DrugAdministrationString.Should().Be(sut.DrugAdministrationString);
+            med.DrugAdministration.Name.Should().Be(sut.DrugAdministrationString);
         }
     }
 
@@ -76,7 +72,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
         //Assert
         medicineResponse.EnsureSuccessStatusCode();
         Console.WriteLine(medicineResponse.Content.ReadAsStringAsync().Result);
-        var medicines = await getMedicineResult.Content.ReadFromJsonAsync<List<MedicineDTO>>();
+        var medicines = await getMedicineResult.Content.ReadFromJsonAsync<List<Medicine>>();
         medicines.Should().NotBeNull();
         medicines!.Count.Should().Be(1);
         foreach (var med in medicines!)
@@ -84,7 +80,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
             med.Name.Should().Be(sut.Name);
             med.Description.Should().Be(sut.Description);
             med.Price.Should().Be(sut.Price);
-            med.DrugAdministrationString.Should().Be(sut.DrugAdministrationString);
+            med.DrugAdministration.Name.Should().Be(sut.DrugAdministrationString);
         }
     }
 
@@ -95,12 +91,12 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
         var sut = CreateSUT();
         //Act 
         var medicineResponse = await TestingClient.PostAsJsonAsync(MedicineUrl, sut);
-        var medicine = await medicineResponse.Content.ReadFromJsonAsync<Medicine>();
-        var getMedicineResult = await TestingClient.GetAsync(MedicineUrl + $"/byDrugAdministration/{medicine!.DrugAdministration}");
-        //Assert
         medicineResponse.EnsureSuccessStatusCode();
+        var medicine = await medicineResponse.Content.ReadFromJsonAsync<Medicine>();
+        var getMedicineResult = await TestingClient.GetAsync(MedicineUrl + $"/byDrugAdministration/{medicine!.DrugAdministration.Name}");
+        //Assert
 
-        var medicines = await getMedicineResult.Content.ReadFromJsonAsync<List<MedicineDTO>>();
+        var medicines = await getMedicineResult.Content.ReadFromJsonAsync<List<Medicine>>();
         medicines.Should().NotBeNull();
         medicines!.Count.Should().Be(1);
         foreach (var med in medicines!)
@@ -108,7 +104,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
             med.Name.Should().Be(sut.Name);
             med.Description.Should().Be(sut.Description);
             med.Price.Should().Be(sut.Price);
-            med.DrugAdministrationString.Should().Be(sut.DrugAdministrationString);
+            med.DrugAdministration.Name.Should().Be(sut.DrugAdministrationString);
         }
     }
 

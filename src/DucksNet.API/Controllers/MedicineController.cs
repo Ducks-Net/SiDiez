@@ -39,9 +39,9 @@ public class MedicineController : ControllerBase
     }
 
     [HttpGet("byDrugAdministration/{drugAdministration}")]
-    public IActionResult GetByClinicID(DrugAdministration drugAdministration)
+    public IActionResult GetByClinicID(string drugAdministration)
     {
-        var medicine = _medicineRepository.GetAll().Where(m => m.DrugAdministration == drugAdministration).ToList();
+        var medicine = _medicineRepository.GetAll().Where(m => m.DrugAdministration.Name == drugAdministration).ToList();
         return Ok(medicine);
     }
 
