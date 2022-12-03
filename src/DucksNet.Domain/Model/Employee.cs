@@ -74,22 +74,19 @@ public class Employee
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(surname);
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(firstName);
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(address);
-        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(ownerPhone);
-        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(ownerEmail);
         if (!string.IsNullOrWhiteSpace(ownerPhone) && !Validation.IsTelephoneNumberValid(ownerPhone!))
         { 
             output.Add("The telephone number is not valid");
+            return output;
         }
         if (!string.IsNullOrWhiteSpace(ownerEmail) && !Validation.IsEmailValid(ownerEmail!))
         {
             output.Add("The email is not valid");
+            return output;
         }
         if (!hasNewInfo)
         {
             output.Add("You need to add at least one value");
-        }
-        if (output.Count > 0)
-        {
             return output;
         }
         Surname = !string.IsNullOrWhiteSpace(surname) ? surname : Surname;
