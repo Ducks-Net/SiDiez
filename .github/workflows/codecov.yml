@@ -11,14 +11,18 @@ on:
 
 jobs:
   codecov:
-
+    # Set the enviroment variable DOTNET_USE_POLLING_FILE_WATCHER to true to enable file watching
+    # https://docs.microsoft.com/en-us/aspnet/core/tutorials/dotnet-watch?view=aspnetcore-5.0#run-the-app
+    env:
+      DOTNET_USE_POLLING_FILE_WATCHER: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 7.0.x
     - name: Add altcov dep
       run: dotnet add tests/DucksNet.UnitTests/ package AltCover
     - name: Add altcov dep to integration tests
@@ -27,9 +31,25 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Disable fs watchers
-      run: export DOTNET_USE_POLLING_FILE_WATCHER=true
-    - name: Test
-      run: dotnet test --no-build --verbosity normal -p:AltCover=true
+    - name: Unit Tests
+      run: dotnet test --no-build -p:AltCover=true --filter "FullyQualifiedName~DucksNet.UnitTests"
+    - name: Rename coverage file
+      run: mv tests/DucksNet.UnitTests/coverage.xml tests/DucksNet.UnitTests/coverage-unit.xml && mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.IntegrationTests/coverage-unit.xml
+    - name: Test Appointments
+      run: dotnet test --no-build -p:AltCover=true --filter "FullyQualifiedName~DucksNet.IntegrationTests.AppointmentsControllerTests"
+    - name: Rename coverage file
+      run: mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.IntegrationTests/appointments.coverage.xml
+    - name: Test Cages
+      run: dotnet test --no-build -p:AltCover=true -p:AltCoverReport="itests.cages.coverage.xml" --filter "FullyQualifiedName~DucksNet.IntegrationTests.CagesControllerTests"
+    - name: Rename coverage file
+      run: mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.IntegrationTests/cages.coverage.xml
+    - name: Test Employees
+      run: dotnet test --no-build -p:AltCover=true -p:AltCoverReport="itests.employees.coverage.xml" --filter "FullyQualifiedName~DucksNet.IntegrationTests.EmployeesControllerTests"
+    - name: Rename coverage file
+      run: mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.IntegrationTests/employees.coverage.xml
+    - name: Test MedicalRecords
+      run: dotnet test --no-build -p:AltCover=true -p:AltCoverReport="itests.medicalrecords.coverage.xml" --filter "FullyQualifiedName~DucksNet.IntegrationTests.MedicalRecordsControllerTests"
+    - name: Rename coverage file
+      run: mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.IntegrationTests/medicalrecords.coverage.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3

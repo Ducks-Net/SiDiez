@@ -22,7 +22,11 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Disable fs watchers
-      run: export DOTNET_USE_POLLING_FILE_WATCHER=true
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Test Appointments
+      run: dotnet test --no-build  --filter "FullyQualifiedName~DucksNet.IntegrationTests.AppointmentsControllerTests"
+    - name: Test Cages
+      run: dotnet test --no-build  --filter "FullyQualifiedName~DucksNet.IntegrationTests.CagesControllerTests"
+    - name: Test Employees
+      run: dotnet test --no-build  --filter "FullyQualifiedName~DucksNet.IntegrationTests.EmployeesControllerTests"
+    - name: Test MedicalRecords
+      run: dotnet test --no-build  --filter "FullyQualifiedName~DucksNet.IntegrationTests.MedicalRecordsControllerTests"
