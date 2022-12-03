@@ -60,7 +60,7 @@ public class EmployeesController : ControllerBase
                 return BadRequest("The telephone number already exists");
             }
         }
-        var result = _employeesRepository.Add(employeePost.Value);
+        _employeesRepository.Add(employeePost.Value);
         return Ok(employeePost.Value);
     }
     [HttpPut("{employeeId:guid}")]
@@ -89,7 +89,7 @@ public class EmployeesController : ControllerBase
         {
             return BadRequest(resultUpdated.First());
         }
-        var result = _employeesRepository.Update(oldEmployee.Value);
+        _employeesRepository.Update(oldEmployee.Value);
         return Ok(resultUpdated.First());
     }
     [HttpPut("{employeeId:guid}/{newOfficeId:guid}")]
@@ -107,7 +107,7 @@ public class EmployeesController : ControllerBase
         }
         if (oldEmployee.Value!.IdOffice != newOfficeId)
             oldEmployee.Value.AssignToOffice(newOfficeId);
-        var result = _employeesRepository.Update(oldEmployee.Value);
+        _employeesRepository.Update(oldEmployee.Value);
         return Ok(oldEmployee.Value);
     }
     [HttpDelete("{employeeId:guid}")]
@@ -118,7 +118,7 @@ public class EmployeesController : ControllerBase
         {
             return BadRequest(employee.Errors);
         }
-        var result = _employeesRepository.Delete(employee.Value!);
+        _employeesRepository.Delete(employee.Value!);
         return Ok();
     }
 }

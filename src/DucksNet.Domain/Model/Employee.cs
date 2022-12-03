@@ -71,10 +71,11 @@ public class Employee
     {
         List<string> output= new List<string>();
         bool hasNewInfo = false;
-        if (!string.IsNullOrWhiteSpace(surname) || !string.IsNullOrWhiteSpace(firstName) || !string.IsNullOrWhiteSpace(address) || !string.IsNullOrWhiteSpace(ownerPhone) || !string.IsNullOrWhiteSpace(ownerEmail))
-        {
-            hasNewInfo = true;
-        }
+        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(surname);
+        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(firstName);
+        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(address);
+        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(ownerPhone);
+        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(ownerEmail);
         if (!string.IsNullOrWhiteSpace(ownerPhone) && !Validation.IsTelephoneNumberValid(ownerPhone!))
         { 
             output.Add("The telephone number is not valid");

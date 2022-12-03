@@ -305,12 +305,12 @@ public class EmployeeTests
         copy.OwnerEmail.Should().Be(sut.Item6);
         copy.Id.Should().NotBeEmpty();
     }
-    private Tuple<Guid, string, string, string, string, string> CreateSUT()
+    private static Tuple<Guid, string, string, string, string, string> CreateSUT()
     {
         Tuple<Guid, string, string, string, string, string> sut = new(Guid.NewGuid(), "Mike", "Oxlong", "Blvd. Independentei", "0712123123", "uite@mail.com");
         return sut;
     }
-    private Tuple<string, string, string, string, string> CreateUpdatedSUT()
+    private static Tuple<string, string, string, string, string> CreateUpdatedSUT()
     {
         Tuple<string, string, string, string, string> sut = new("NewMike", "NewOxlong", "Blvd. Soarelui", "0769420666", "test@gmail.com");
         return sut;

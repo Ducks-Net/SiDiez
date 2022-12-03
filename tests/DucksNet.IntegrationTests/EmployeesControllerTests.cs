@@ -410,7 +410,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeResponse.EnsureSuccessStatusCode();
         employeeResponse2.EnsureSuccessStatusCode();
         //Act
-        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}/{employee2.IdOffice}", employee2.IdOffice);
+        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}/{employee2!.IdOffice}", employee2.IdOffice);
         var employeeUpdate = await updatedEmployeeResponse.Content.ReadFromJsonAsync<EmployeeDTO>();
         //Assert
         updatedEmployeeResponse.EnsureSuccessStatusCode();
@@ -435,7 +435,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeResponse.EnsureSuccessStatusCode();
         employeeResponse2.EnsureSuccessStatusCode();
         //Act
-        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}/{Guid.NewGuid()}", employee2.IdOffice);
+        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}/{Guid.NewGuid()}", employee2!.IdOffice);
         //Assert
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = updatedEmployeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
@@ -456,7 +456,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeResponse.EnsureSuccessStatusCode();
         employeeResponse2.EnsureSuccessStatusCode();
         //Act
-        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{Guid.NewGuid()}/{employee2.IdOffice}", employee2.IdOffice);
+        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{Guid.NewGuid()}/{employee2!.IdOffice}", employee2.IdOffice);
         //Assert
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = updatedEmployeeResponse.Content.ReadAsStringAsync().Result;
