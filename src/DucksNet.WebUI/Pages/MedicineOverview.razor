@@ -1,0 +1,33 @@
+﻿@page "/medicineoverview"
+@inject HttpClient Http
+<h3>MedicineOverview</h3>
+
+@if (Medicines == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-light">
+        <thead class="table-primary">
+        <th>Medicine ID</th>
+        <th>Medicine Name</th>
+        <th>Medicine Description</th>
+        <th>Medicine Price</th>
+        <th>Medicine DrugAdministration</th>
+        </thead>
+        <tbody>
+            @foreach (var medicine in Medicines)
+            {
+                <tr>
+                    <td>@medicine.Id</td>
+                    <td>@medicine.Name</td>
+                    <td>@medicine.Description</td>
+                    <td>@medicine.Price</td>
+                    <td>@medicine.DrugAdministration</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

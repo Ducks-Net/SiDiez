@@ -21,7 +21,7 @@ public class TestDbContext : DbContext, IDatabaseContext
     public DbSet<User> Users => Set<User>();
     public DbSet<MedicalRecord> MedicalRecords => Set<MedicalRecord>();
     public DbSet<Employee> Employees => Set<Employee>();
-    //public DbSet<Treatment> Treatments => Set<Treatment>();
+    public DbSet<Treatment> Treatments => Set<Treatment>();
     public DbSet<Medicine> Medicines => Set<Medicine>();
     public DbSet<Office> Offices => Set<Office>();
     public DbSet<Business> Businesses => Set<Business>();
