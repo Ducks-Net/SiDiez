@@ -1,11 +1,6 @@
-﻿using System.Formats.Asn1;
-using System.Globalization;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using DucksNet.API.DTO;
+﻿using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
-using DucksNet.Infrastructure.Sqlite;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DucksNet.API.Controllers;
@@ -42,12 +37,6 @@ public class PetsController : ControllerBase
     [HttpPost]
     public IActionResult Register([FromBody] PetDTO dto)
     {
-        //var user = _petsRepository.Get((Guid)dto.OwnerId);
-        //if (user.IsFailure)
-        //{
-        //    return BadRequest("User could not be found!");
-        //}
-        
         var pet = DucksNet.Domain.Model.Pet.Create(dto.Name, dto.DateOfBirth, dto.Species, dto.Breed, (Guid)dto.OwnerId, dto.Size);
         if (pet.IsFailure)
         {

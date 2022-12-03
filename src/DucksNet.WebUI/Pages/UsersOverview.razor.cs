@@ -3,7 +3,6 @@ using DucksNet.WebUI.Pages.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace DucksNet.WebUI.Pages;
-
 public partial class UsersOverview : ComponentBase
 {
     [Inject]

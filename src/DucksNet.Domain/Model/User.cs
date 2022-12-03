@@ -49,26 +49,18 @@ public class User
         {
             return Result<User>.Error("Address is required.");
         }
-        if (string.IsNullOrWhiteSpace(phoneNumber))
-        {
-            return Result<User>.Error("Phone Number is required.");
-        }
-        if (string.IsNullOrWhiteSpace(email))
-        {
-            return Result<User>.Error("Email is required.");
-        }
         if (string.IsNullOrWhiteSpace(password))
         {
             return Result<User>.Error("Password is required.");
         }
-        //if (!Validation.IsTelephoneNumberValid(phoneNumber))
-        //{
-        //    return Result<User>.Error("The phone number is not valid.");
-        //}
-        //if (!Validation.IsEmailValid(email))
-        //{
-        //    return Result<User>.Error("The email is not valid.");
-        //}
+        if (!Validation.IsTelephoneNumberValid(phoneNumber))
+        {
+            return Result<User>.Error("The phone number is not valid.");
+        }
+        if (!Validation.IsEmailValid(email))
+        {
+            return Result<User>.Error("The email is not valid.");
+        }
         return Result<User>.Ok(new User(firstName, lastName, address, phoneNumber, email, password));
     }
 

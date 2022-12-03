@@ -1,4 +1,4 @@
-using DucksNet.Domain.Model;
+﻿using DucksNet.Domain.Model;
 using DucksNet.Domain.Model.Enums;
 using DucksNet.Infrastructure.Prelude;
 
