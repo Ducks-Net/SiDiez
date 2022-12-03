@@ -40,7 +40,7 @@ public class EmployeesController : ControllerBase
         var office = _officeRepository.Get(dto.IdOffice);
         if (office.IsFailure)
         {
-            return BadRequest("Office could not be found!");
+            return BadRequest(office.Errors);
         }
         var employeePost = Employee.Create(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
         if (employeePost.IsFailure)
@@ -61,35 +61,53 @@ public class EmployeesController : ControllerBase
             }
         }
         var result = _employeesRepository.Add(employeePost.Value);
-        if (result.IsFailure)
+        //TODO (RO, AL): does it need this? in the repository there are no errors
+        /*if (result.IsFailure)
         {
             return BadRequest(result.Errors);
         }
+        */
         return Ok(employeePost.Value);
     }
     [HttpPut("{employeeId:guid}")]
     public IActionResult UpdatePersonalInformationEmployee(Guid employeeId, [FromBody] EmployeeDTO dto)
     {
-        // TODO (RO): token must be based from the authentification token, not from employee id
-        // TODO (RO): check the updated information
         var oldEmployee = _employeesRepository.Get(employeeId);
+ 
         if (oldEmployee.IsFailure)
         {
             return BadRequest(oldEmployee.Errors);
         }
-        oldEmployee.Value!.UpdateFields(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
+        var employees = _employeesRepository.GetAll();
+        foreach (var employee in employees)
+        {
+            if (employee.OwnerEmail == dto.OwnerEmail)
+            {
+                return BadRequest("The updated email already exists");
+            }
+            if (employee.OwnerPhone == dto.OwnerPhone)
+            {
+                return BadRequest("The updated telephone number already exists");
+            }
+        }
+        var resultUpdated = oldEmployee.Value!.UpdateFields(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
+        if(resultUpdated.First() != "The information has been updated")
+        {
+            return BadRequest(resultUpdated.First());
+        }
         var result = _employeesRepository.Update(oldEmployee.Value);
+        //TODO (RO, AL): does it need this? in the repository there are no errors
+        /*
         if (result.IsFailure)
         {
             return BadRequest(result.Errors);
         }
-        return Ok(oldEmployee.Value);
+        */
+        return Ok(resultUpdated.First());
     }
     [HttpPut("{employeeId:guid}/{newOfficeId:guid}")]
     public IActionResult UpdateOfficeEmployee(Guid employeeId, Guid newOfficeId)
     {
-        //TODO(RO): token must be based from the authentification token, not from employee id
-        // TODO (RO): check the updated information
         var oldEmployee = _employeesRepository.Get(employeeId);
         if (oldEmployee.IsFailure)
         {
@@ -102,27 +120,32 @@ public class EmployeesController : ControllerBase
         }
         if (oldEmployee.Value!.IdOffice != newOfficeId)
             oldEmployee.Value.AssignToOffice(newOfficeId);
+        //TODO (RO, AL): does it need this? in the repository there are no errors
+        /*
         var result = _employeesRepository.Update(oldEmployee.Value);
         if (result.IsFailure)
         {
             return BadRequest(result.Errors);
         }
+        */
         return Ok(oldEmployee.Value);
     }
-    [HttpDelete("{token:guid}")]
-    public IActionResult Delete(Guid token)
+    [HttpDelete("{employeeId:guid}")]
+    public IActionResult Delete(Guid employeeId)
     {
-        //TODO(RO): token must be based from the authentification token, not from employee id
-        var employee = _employeesRepository.Get(token);
+        var employee = _employeesRepository.Get(employeeId);
         if (employee.IsFailure)
         {
             return BadRequest(employee.Errors);
         }
         var result = _employeesRepository.Delete(employee.Value!);
+        //TODO (RO, AL): does it need this? in the repository there are no errors
+        /*
         if (result.IsFailure)
         {
             return BadRequest(result.Errors);
         }
+        */
         return Ok();
     }
 }
