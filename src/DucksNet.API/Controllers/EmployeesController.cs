@@ -61,12 +61,6 @@ public class EmployeesController : ControllerBase
             }
         }
         var result = _employeesRepository.Add(employeePost.Value);
-        //TODO (RO, AL): does it need this? in the repository there are no errors
-        /*if (result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
-        */
         return Ok(employeePost.Value);
     }
     [HttpPut("{employeeId:guid}")]
@@ -96,13 +90,6 @@ public class EmployeesController : ControllerBase
             return BadRequest(resultUpdated.First());
         }
         var result = _employeesRepository.Update(oldEmployee.Value);
-        //TODO (RO, AL): does it need this? in the repository there are no errors
-        /*
-        if (result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
-        */
         return Ok(resultUpdated.First());
     }
     [HttpPut("{employeeId:guid}/{newOfficeId:guid}")]
@@ -120,14 +107,7 @@ public class EmployeesController : ControllerBase
         }
         if (oldEmployee.Value!.IdOffice != newOfficeId)
             oldEmployee.Value.AssignToOffice(newOfficeId);
-        //TODO (RO, AL): does it need this? in the repository there are no errors
-        /*
         var result = _employeesRepository.Update(oldEmployee.Value);
-        if (result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
-        */
         return Ok(oldEmployee.Value);
     }
     [HttpDelete("{employeeId:guid}")]
@@ -139,13 +119,6 @@ public class EmployeesController : ControllerBase
             return BadRequest(employee.Errors);
         }
         var result = _employeesRepository.Delete(employee.Value!);
-        //TODO (RO, AL): does it need this? in the repository there are no errors
-        /*
-        if (result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
-        */
         return Ok();
     }
 }
