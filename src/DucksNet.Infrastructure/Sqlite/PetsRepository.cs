@@ -1,4 +1,4 @@
-using DucksNet.Domain.Model;
+﻿using DucksNet.Domain.Model;
 using DucksNet.SharedKernel.Utils;
 using DucksNet.Infrastructure.Prelude;
 
@@ -12,7 +12,7 @@ public class PetsRepository : IRepository<Pet>
     {
         _databaseContext = databaseContext;
     }
-    
+
     Result<Pet> IRepository<Pet>.Get(Guid id)
     {
         var pet = _databaseContext.Pets.Find(id);

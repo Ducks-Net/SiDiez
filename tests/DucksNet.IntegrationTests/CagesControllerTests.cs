@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
@@ -451,7 +451,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         var petResponse = TestingClient.PostAsJsonAsync(PetsUrl, petDTO).Result;
         petResponse.EnsureSuccessStatusCode();
         var pet = petResponse.Content.ReadFromJsonAsync<Pet>().Result;
-        return pet!.ID;
+        return pet!.Id;
     }
 
     private Guid SetupCage(Guid officeId, string size)

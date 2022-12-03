@@ -27,7 +27,7 @@ public class PetsController : ControllerBase
     public IActionResult Get(Guid id)
     {
         var pet = _petsRepository.Get(id);
-        if(pet.IsFailure)
+        if (pet.IsFailure)
         {
             return NotFound(pet.Errors);
         }
@@ -37,19 +37,19 @@ public class PetsController : ControllerBase
     [HttpPost]
     public IActionResult Register([FromBody] PetDTO dto)
     {
-        var pet = DucksNet.Domain.Model.Pet.Create(dto.Size);
-        if(pet.IsFailure)
+        var pet = DucksNet.Domain.Model.Pet.Create(dto.Name, dto.DateOfBirth, dto.Species, dto.Breed, (Guid)dto.OwnerId, dto.Size);
+        if (pet.IsFailure)
         {
             return BadRequest(pet.Errors);
         }
-        if(dto.OwnerId == null)
+        if (dto.OwnerId == null)
         {
             return BadRequest("Owner ID is required.");
         }
         pet.Value!.AssignToOwner(dto.OwnerId.Value);
 
         var result = _petsRepository.Add(pet.Value!);
-        if(result.IsFailure)
+        if (result.IsFailure)
         {
             return BadRequest(result.Errors);
         }
@@ -61,15 +61,15 @@ public class PetsController : ControllerBase
     {
         // Check if pet exists
         var pet = _petsRepository.Get(id);
-        if(pet.IsFailure)
+        if (pet.IsFailure)
         {
             return NotFound(pet.Errors);
         }
         // Update pet
-        pet.Value!.UpdateFields(dto.Size, dto.OwnerId);
+        pet.Value!.UpdateFields(dto.Name, dto.DateOfBirth, dto.Species, dto.Breed, dto.OwnerId, dto.Size);
 
         var result = _petsRepository.Update(pet.Value!);
-        if(result.IsFailure)
+        if (result.IsFailure)
         {
             return BadRequest(result.Errors);
         }
@@ -80,12 +80,12 @@ public class PetsController : ControllerBase
     public IActionResult Delete(Guid id)
     {
         var pet = _petsRepository.Get(id);
-        if(pet.IsFailure)
+        if (pet.IsFailure)
         {
             return NotFound(pet.Errors);
         }
         var result = _petsRepository.Delete(pet.Value!);
-        if(result.IsFailure)
+        if (result.IsFailure)
         {
             return BadRequest(result.Errors);
         }

@@ -134,7 +134,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     // }
 
     private Guid SetupPet(string petSizeString)
-    { 
+    {
         var petDTO = new PetDTO
         {
             OwnerId = Guid.NewGuid(),
@@ -144,7 +144,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         var petResponse = TestingClient.PostAsJsonAsync(PetsUrl, petDTO).Result;
         petResponse.EnsureSuccessStatusCode();
         var pet = petResponse.Content.ReadFromJsonAsync<Pet>().Result;
-        return pet!.ID;
+        return pet!.Id;
     }
 
     private Guid SetupCage(Guid officeId, string size)
