@@ -1,5 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
 using DucksNet.Domain.Model;
+using DucksNet.WebUI.Pages.Models;
 
 namespace DucksNet.WebUI.Pages.Services;
 
@@ -12,6 +14,11 @@ public class EmployeeDataService : IEmployeeDataService
     {
         this.httpClient = httpClient;
     }
+    public async Task CreateEmployee(CreateEmployeeModel createEmployeeModel)
+    {
+        var result = await httpClient.PostAsJsonAsync(ApiURL, createEmployeeModel);
+        var employee = await result.Content.ReadFromJsonAsync<Employee>();
+    }
     public async Task<IEnumerable<Employee>> GetAllPersons()
     {
 #pragma warning disable CS8603 // Possible null reference return.
@@ -20,10 +27,13 @@ public class EmployeeDataService : IEmployeeDataService
             (await httpClient.GetStreamAsync(ApiURL), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true, });
 #pragma warning restore CS8603 // Possible null reference return.
     }
-
-    public async Task<Employee> GetPersonDetail(Guid personId)
+    public async Task DeleteEmployee(string employeeId)
     {
-        //throw new NotImplementedException();
-        return null;
+        await httpClient.DeleteAsync($"{ApiURL}/{employeeId}");
+    }
+
+    public async Task UpdateEmployee(string employeeId, UpdateEmployeeModel updateEmployeeModel)
+    {
+        await httpClient.PutAsJsonAsync($"{ApiURL}/{employeeId}", updateEmployeeModel);
     }
 }

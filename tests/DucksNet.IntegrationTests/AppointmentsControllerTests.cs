@@ -20,7 +20,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     public void When_Post_WithValidDta_Should_ReturnAppointment()
     {
         var officeId = SetupOffice();
-        var petId = SetupPet(Size.Medium.Name);
+        var petId = SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
         var appointment = new ScheduleAppointmentDTO
         {
@@ -62,7 +62,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     public void When_GetAll_Should_ReturnAllAppointments()
     {
         var officeId = SetupOffice();
-        var petId = SetupPet(Size.Medium.Name);
+        var petId = SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
         var appointment = new ScheduleAppointmentDTO
         {
@@ -88,7 +88,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     public void When_GetByOffice_Should_ReturnAppointments()
     {
         var officeId = SetupOffice();
-        var petId = SetupPet(Size.Medium.Name);
+        var petId = SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
         var appointment = new ScheduleAppointmentDTO
         {
@@ -114,7 +114,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     public void When_Get_ByPet_Should_ReturnAppointments()
     {
         var officeId = SetupOffice();
-        var petId = SetupPet(Size.Medium.Name);
+        var petId = SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
         var appointment = new ScheduleAppointmentDTO
         {
@@ -136,18 +136,22 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         appointments!.Count.Should().Be(1);
     }
 
-    private Guid SetupPet(string petSizeString)
-    { 
+    private Guid SetupPet(Guid ownerId ,string petSizeString)
+    {
         var petDTO = new PetDTO
         {
-            OwnerId = Guid.NewGuid(),
+            Name = "Test Pet",    
+            DateOfBirth = DateTime.Now.AddYears(-1),
+            Species = "Dog",
+            Breed = "Labrador",
+            OwnerId = ownerId,
             Size = petSizeString
         };
 
         var petResponse = TestingClient.PostAsJsonAsync(PetsUrl, petDTO).Result;
         petResponse.EnsureSuccessStatusCode();
         var pet = petResponse.Content.ReadFromJsonAsync<Pet>().Result;
-        return pet!.ID;
+        return pet!.Id;
     }
 
     private Guid SetupCage(Guid officeId, string size)

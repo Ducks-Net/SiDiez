@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using DucksNet.Domain.Model;
+using DucksNet.WebUI.Pages.Models;
 
 namespace DucksNet.WebUI.Pages.Services;
 
@@ -13,14 +14,25 @@ public class CageDataService : ICageDataService
         this.httpClient = httpClient;
     }
 
-    public Task<IEnumerable<Cage>> GetAllCages()
+    public async Task<IEnumerable<Cage>> GetAllCages()
     {
-        var cages = httpClient.GetFromJsonAsync<IEnumerable<Cage>>(ApiURL);
-        return cages;
+        var cages = await httpClient.GetFromJsonAsync<IEnumerable<Cage>>(ApiURL);
+        return cages!;
     }
 
     public Task<Cage> GetCageDetail(Guid cageId)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task CreateCage(CageCreateModel cageCreateModel)
+    {
+        var result = await httpClient.PostAsJsonAsync(ApiURL, cageCreateModel);
+        var cage = await result.Content.ReadFromJsonAsync<Cage>();
+    }
+
+    public async Task DeleteCage(string cageId)
+    {
+        await httpClient.DeleteAsync($"{ApiURL}/{cageId}");
     }
 }
