@@ -40,7 +40,7 @@ public class UsersController : ControllerBase
     [HttpPost]
     public IActionResult Register([FromBody] UserDTO dto)
     {
-        var user = DucksNet.Domain.Model.User.Create(dto.FirstName, dto.LastName, dto.Address, dto.PhoneNumber, dto.Email, dto.Password);
+        var user = DucksNet.Domain.Model.User.Create(dto.FirstName, dto.LastName, dto.Address, dto.PhoneNumber!, dto.Email!, dto.Password);
         if(user.IsFailure)
         {
             return BadRequest(user.Errors);
@@ -64,7 +64,7 @@ public class UsersController : ControllerBase
         }
 
         // Update user
-        user.Value.UpdateFields(dto.FirstName, dto.LastName, dto.Address, dto.PhoneNumber, dto.Email, dto.Password);
+        user.Value.UpdateFields(dto.FirstName, dto.LastName, dto.Address, dto.PhoneNumber!, dto.Email!, dto.Password);
 
         var result = _usersRepository.Update(user.Value);
         if(result.IsFailure)

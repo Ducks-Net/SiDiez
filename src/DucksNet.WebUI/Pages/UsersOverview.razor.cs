@@ -10,6 +10,6 @@ public partial class UsersOverview : ComponentBase
     public List<User> Users { get; set; } = default!;
     protected async override Task OnInitializedAsync()
     {
-        Users = (await UserDataService.GetAllUsers()).ToList();
+        Users = (await UserDataService!.GetAllUsers()).ToList();
     }
 }

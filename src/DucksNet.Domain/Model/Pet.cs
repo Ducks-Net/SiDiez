@@ -17,7 +17,7 @@ public class Pet
     public Guid OwnerId { get; private set; }
     public Size Size { get; private set; }
 
-    private Pet(string name, DateTime dateOfBirth, string species, string breed, Guid ownerId, Size size) // TODO (Ad): This constructor only exists to make it json parsable
+    private Pet(string name, DateTime dateOfBirth, string species, string breed, Guid ownerId, Size size)
     {
         Id = Guid.NewGuid();
         Name = name;

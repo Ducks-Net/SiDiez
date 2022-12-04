@@ -11,6 +11,6 @@ public partial class PetsOverview : ComponentBase
     public List<Pet> Pets { get; set; } = default!;
     protected async override Task OnInitializedAsync()
     {
-        Pets = (await PetDataService.GetAllPets()).ToList();
+        Pets = (await PetDataService!.GetAllPets()).ToList();
     }
 }

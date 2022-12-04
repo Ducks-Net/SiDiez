@@ -11,7 +11,7 @@ public class PetTests
         Tuple<string, DateTime, string, string, Guid, string> sut = new("Cleo", new DateTime(2021, 06, 04), "Cat", "European", Guid.NewGuid(), "Small");
         var result = Pet.Create(sut.Item1, sut.Item2, sut.Item3, sut.Item4, sut.Item5, sut.Item6);
         var copy = result.Value;
-        copy.Name.Should().Be(sut.Item1);
+        copy!.Name.Should().Be(sut.Item1);
         copy.DateOfBirth.Should().Be(sut.Item2);
         copy.Species.Should().Be(sut.Item3);
         copy.Breed.Should().Be(sut.Item4);
@@ -69,7 +69,7 @@ public class PetTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, DateTime, string, string, Guid, string> newSut = new("CleoTheCat", new DateTime(2022, 06, 04), "Fluffy Cat", "Romanian", Guid.NewGuid(), "Medium");
-        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value!.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.Name.Should().Be(newSut.Item1);
@@ -90,7 +90,7 @@ public class PetTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, DateTime, string, string, Guid, string> newSut = new (" ", new DateTime(2022, 06, 04), "Fluffy Cat", "Romanian", Guid.NewGuid(), "Medium");
-        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value!.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.Name.Should().Be(sut.Item1);
@@ -111,7 +111,7 @@ public class PetTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, DateTime, string, string, Guid, string> newSut = new("Cleo", new DateTime(2023, 06, 04), "Fluffy Cat", "Romanian", Guid.NewGuid(), "Medium");
-        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value!.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.Name.Should().Be(newSut.Item1);
@@ -132,7 +132,7 @@ public class PetTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, DateTime, string, string, Guid, string> newSut = new("Cleo", new DateTime(2022, 06, 04), " ", "Romanian", Guid.NewGuid(), "Medium");
-        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value!.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.Name.Should().Be(newSut.Item1);
@@ -153,7 +153,7 @@ public class PetTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, DateTime, string, string, Guid, string> newSut = new("Cleo", new DateTime(2022, 06, 04), "Fluffy Cat", " ", Guid.NewGuid(), "Medium");
-        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value!.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.Name.Should().Be(newSut.Item1);
@@ -174,7 +174,7 @@ public class PetTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, DateTime, string, string, Guid, string> newSut = new("Cleo", new DateTime(2022, 06, 04), "Fluffy Cat", "Romanian", Guid.Empty, "Medium");
-        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value!.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.Name.Should().Be(newSut.Item1);
@@ -195,7 +195,7 @@ public class PetTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, DateTime, string, string, Guid, string> newSut = new("Cleo", new DateTime(2022, 06, 04), "Fluffy Cat", "Romanian", Guid.NewGuid(), "medium");
-        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value!.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.Name.Should().Be(newSut.Item1);

@@ -37,12 +37,12 @@ public class PetsController : ControllerBase
     [HttpPost]
     public IActionResult Register([FromBody] PetDTO dto)
     {
-        var pet = DucksNet.Domain.Model.Pet.Create(dto.Name, dto.DateOfBirth, dto.Species, dto.Breed, dto.OwnerId, dto.Size);
+        var pet = DucksNet.Domain.Model.Pet.Create(dto.Name!, dto.DateOfBirth, dto.Species!, dto.Breed!, dto.OwnerId, dto.Size);
         if (pet.IsFailure)
         {
             return BadRequest(pet.Errors);
         }
-        if (dto.OwnerId == null)
+        if (dto.OwnerId == Guid.Empty)
         {
             return BadRequest("Owner ID is required.");
         }
@@ -65,7 +65,7 @@ public class PetsController : ControllerBase
             return NotFound(pet.Errors);
         }
         // Update pet
-        pet.Value!.UpdateFields(dto.Name, dto.DateOfBirth, dto.Species, dto.Breed, dto.OwnerId, dto.Size);
+        pet.Value!.UpdateFields(dto.Name, dto.DateOfBirth, dto.Species!, dto.Breed!, dto.OwnerId, dto.Size);
 
         var result = _petsRepository.Update(pet.Value!);
         if (result.IsFailure)
