@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using DucksNet.Domain.Model;
-using Microsoft.VisualBasic;
-
 namespace DucksNet.UnitTests;
 public class EmployeeTests
 {

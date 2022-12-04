@@ -27,7 +27,7 @@ public class EmployeeRepository : IRepository<Employee>
 
     public Result<Employee> Get(Guid id)
     {
-        var employee = _databaseContext.Employees.Find(id); //TODO (RO): nu aduce si relatia, inainte de punct; nu mapeaza pe officeId -> incarci relatia + obiectul respectiv
+        var employee = _databaseContext.Employees.Find(id); //NOTE (RO): nu aduce si relatia, inainte de punct; nu mapeaza pe officeId -> incarci relatia + obiectul respectiv
         return employee is null ? Result<Employee>.Error("Employee not found") : Result<Employee>.Ok(employee);
     }
 

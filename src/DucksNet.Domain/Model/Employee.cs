@@ -67,6 +67,7 @@ public class Employee
     {
         IdOffice = idOffice;
     }
+    // NOTE (RO): make it return a Result, not a List<string>
     public List<string> UpdateFields(string? surname, string? firstName, string? address, string? ownerPhone, string? ownerEmail)
     {
         List<string> output= new List<string>();
