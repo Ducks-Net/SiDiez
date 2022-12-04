@@ -18,6 +18,8 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: true
     runs-on: ubuntu-latest
     steps:
+    - name: make sure we have make
+      run: sudo apt-get install make
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -29,27 +31,7 @@ jobs:
       run: dotnet add tests/DucksNet.IntegrationTests/ package AltCover
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Unit Tests
-      run: dotnet test --no-build -p:AltCover=true --filter "FullyQualifiedName~DucksNet.UnitTests"
-    - name: Rename coverage file
-      run: mv tests/DucksNet.UnitTests/coverage.xml tests/DucksNet.UnitTests/coverage-unit.xml && mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.IntegrationTests/coverage-unit.xml
-    - name: Test Appointments
-      run: dotnet test --no-build -p:AltCover=true --filter "FullyQualifiedName~DucksNet.IntegrationTests.AppointmentsControllerTests"
-    - name: Rename coverage file
-      run: mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.IntegrationTests/appointments.coverage.xml
-    - name: Test Cages
-      run: dotnet test --no-build -p:AltCover=true -p:AltCoverReport="itests.cages.coverage.xml" --filter "FullyQualifiedName~DucksNet.IntegrationTests.CagesControllerTests"
-    - name: Rename coverage file
-      run: mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.IntegrationTests/cages.coverage.xml
-    - name: Test Employees
-      run: dotnet test --no-build -p:AltCover=true -p:AltCoverReport="itests.employees.coverage.xml" --filter "FullyQualifiedName~DucksNet.IntegrationTests.EmployeesControllerTests"
-    - name: Rename coverage file
-      run: mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.IntegrationTests/employees.coverage.xml
-    - name: Test MedicalRecords
-      run: dotnet test --no-build -p:AltCover=true -p:AltCoverReport="itests.medicalrecords.coverage.xml" --filter "FullyQualifiedName~DucksNet.IntegrationTests.MedicalRecordsControllerTests"
-    - name: Rename coverage file
-      run: mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.IntegrationTests/medicalrecords.coverage.xml
+    - name: run tests
+      run: make test
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
