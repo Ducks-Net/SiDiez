@@ -1,27 +1,130 @@
 ﻿@page "/CagesOverview"
+@using DucksNet.WebUI.Models
+@using DucksNet.Domain.Model
 @inject HttpClient Http
 <h3>Cages Overview</h3>
 
-@if (Cages == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table table-light">
-        <thead class="table-primary">
-        <th>Cage ID</th>
-        <th>Cage Size</th>
-        </thead>
-        <tbody>
-            @foreach (var cage in Cages)
-            {
-                <tr>
-                    <td>@cage.ID</td>
-                    <td>@cage.Size</td>
-                </tr>
-            }
-        </tbody>
-    </table>
 
-}
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            GetAllCages
+            </button>
+            <button class="btn btn-primary" onclick="@ReloadAllCages">
+            Reload
+            </button>
+
+        </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            @if(Cages != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Cage</th>
+                            <th>Size</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cage in Cages)
+                        {
+                            <tr>
+                                <td>@cage.ID</td>
+                                <td>@cage.Size</td>
+                                <td>@cage.LocationId</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            } else {
+                <p><em>No cages found.</em></p>
+            }
+
+        </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+        <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            CreateCage
+            </button>
+        </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+        <div class="card-body">
+            <EditForm Model="@cageCreateModel" OnValidSubmit="@HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-group">
+                    <label for="Size">Size</label>
+                    <InputSelect @bind-Value="cageCreateModel.SizeString" id="Size" class="form-control">
+                        <option value="">Select size ...</option>
+                        <option value="Small">Small</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
+                    </InputSelect>
+                </div>
+                <div>
+                    <label for="Location">Location</label>
+                    <InputText class="form-control" id="Location" @bind-Value="cageCreateModel.LocationId" />
+                </div>
+
+                <br><br>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </EditForm>
+
+            @code {
+                private CageCreateModel cageCreateModel = new();
+
+                private void HandleValidSubmit()
+                {
+                    CreateCage(cageCreateModel);
+                }
+            }
+        </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+        <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            DeleteCage
+            </button>
+        </h5>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+        <div class="card-body">
+            <EditForm Model="@cageDeleteModel" OnValidSubmit="@HandleValidSubmitDelete">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                
+                <div>
+                    <label for="Cage">CageID</label>
+                    <InputText class="form-control" id="Location" @bind-Value="cageDeleteModel.CageId" />
+                </div>
+
+                <br><br>
+
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </EditForm>
+
+            @code {
+                private DeleteCreateModel cageDeleteModel = new();
+
+                private void HandleValidSubmitDelete()
+                {
+                    DeleteCage(cageDeleteModel.CageId);
+                }
+            }
+        </div>
+        </div>
+    </div>
+</div>
