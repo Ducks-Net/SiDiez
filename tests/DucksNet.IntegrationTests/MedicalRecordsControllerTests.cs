@@ -10,6 +10,7 @@ using DucksNet.Domain.Model;
 namespace DucksNet.IntegrationTests;
 public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecordsController>
 {
+    private const string MedicalRecordURL = "api/v1/medicalrecords";
     [Fact]
     public async Task When_CreatedMedicalRecord_Then_ShouldReturnMedicalRecordInTheGetRequest()
     {
