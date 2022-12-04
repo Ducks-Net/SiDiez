@@ -105,7 +105,7 @@ public class EmployeesController : ControllerBase
         {
             return BadRequest(newOffice.Errors);
         }
-        oldEmployee.Value.AssignToOffice(newOfficeId);
+        oldEmployee.Value!.AssignToOffice(newOfficeId);
         _employeesRepository.Update(oldEmployee.Value);
         return Ok(oldEmployee.Value);
     }
