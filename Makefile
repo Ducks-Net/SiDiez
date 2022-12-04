@@ -8,7 +8,7 @@ runUI: build
 	x-terminal-emulator --hold -e 'dotnet run --no-build --project ./src/DucksNet.API/' & \
     x-terminal-emulator --hold -e 'dotnet run --no-build --project ./src/DucksNet.WebUI/' &
 
-INTEGRATION_TESTTS=AppointmentsController CagesController EmployeesController MedicalRecordsController
+INTEGRATION_TESTTS=AppointmentsController CagesController EmployeesController MedicalRecordsController MedicineController
 
 test_integration: build
     # loop to each integration test

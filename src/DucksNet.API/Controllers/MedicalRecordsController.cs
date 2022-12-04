@@ -40,8 +40,6 @@ public class MedicalRecordsController : ControllerBase
     [HttpPost]
     public IActionResult Create([FromBody] MedicalRecordDTO dto)
     {
-        // TODO (RO): need some help for integration test
-        /*
         var appointment = _appointmentRepository.Get(dto.IdAppointment);
         if (appointment.IsFailure)
         {
@@ -52,34 +50,56 @@ public class MedicalRecordsController : ControllerBase
         {
             return BadRequest(client.Errors);
         }
-        */
-        var medicalRecord = MedicalRecord.Create(dto.IdAppointment, dto.IdClient);
-        if (medicalRecord.IsFailure)
-        {
-            return BadRequest(medicalRecord.Errors);
-        }
-        var result = _medicalRecordRepository.Add(medicalRecord!.Value);
-        if (result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
+        
+        var medicalRecord = MedicalRecord.Create(dto.IdAppointment, dto.IdClient); //do not need, the checks are done above
+        _medicalRecordRepository.Add(medicalRecord.Value!);
         return Ok(medicalRecord.Value);
     }
-    // TODO (RO): apis for update
-    [HttpDelete("{token:guid}")]
-    public IActionResult Delete(Guid token)
+    [HttpPut("{medicalRecordId:guid}/{newIdAppointment:guid}")]
+    public IActionResult UpdateAppointmentMedicalRecord(Guid medicalRecordId, Guid newIdAppointment)
     {
-        //TODO(RO): find a better way to delete a medical record
-        var medicalRecord = _medicalRecordRepository.Get(token);
+        var oldMedicalRecord = _medicalRecordRepository.Get(medicalRecordId);
+        if (oldMedicalRecord.IsFailure)
+        {
+            return BadRequest(oldMedicalRecord.Errors);
+        }
+        var newAppointment = _appointmentRepository.Get(newIdAppointment);
+        if (newAppointment.IsFailure)
+        {
+            return BadRequest(newAppointment.Errors);
+        }
+        if (oldMedicalRecord.Value!.IdAppointment != newIdAppointment)
+            oldMedicalRecord.Value.AssignToAppointment(newIdAppointment);
+        _medicalRecordRepository.Update(oldMedicalRecord.Value);
+        return Ok(oldMedicalRecord.Value);
+    }
+    [HttpPut("{medicalRecordId:guid}/{newIdClient:guid}")]
+    public IActionResult UpdateClientMedicalRecord(Guid medicalRecordId, Guid newIdClient)
+    {
+        var oldMedicalRecord = _medicalRecordRepository.Get(medicalRecordId);
+        if (oldMedicalRecord.IsFailure)
+        {
+            return BadRequest(oldMedicalRecord.Errors);
+        }
+        var newAppointment = _clientRepository.Get(newIdClient);
+        if (newAppointment.IsFailure)
+        {
+            return BadRequest(newAppointment.Errors);
+        }
+        if (oldMedicalRecord.Value!.IdClient != newIdClient)
+            oldMedicalRecord.Value.AssignToClient(newIdClient);
+        _medicalRecordRepository.Update(oldMedicalRecord.Value);
+        return Ok(oldMedicalRecord.Value);
+    }
+    [HttpDelete("{medicalRecordId:guid}")]
+    public IActionResult Delete(Guid medicalRecordId)
+    {
+        var medicalRecord = _medicalRecordRepository.Get(medicalRecordId);
         if (medicalRecord.IsFailure)
         {
             return BadRequest(medicalRecord.Errors);
         }
-        var result = _medicalRecordRepository.Delete(medicalRecord.Value!);
-        if (result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
+        _medicalRecordRepository.Delete(medicalRecord.Value!);
         return Ok();
     }
 }

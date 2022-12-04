@@ -67,27 +67,35 @@ public class Employee
     {
         IdOffice = idOffice;
     }
-    public void UpdateFields(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
+    // NOTE (RO): make it return a Result, not a List<string>
+    public List<string> UpdateFields(string? surname, string? firstName, string? address, string? ownerPhone, string? ownerEmail)
     {
-        if (surname != null)
-        {
-            Surname = surname;
+        List<string> output= new List<string>();
+        bool hasNewInfo = false;
+        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(surname);
+        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(firstName);
+        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(address);
+        if (!string.IsNullOrWhiteSpace(ownerPhone) && !Validation.IsTelephoneNumberValid(ownerPhone!))
+        { 
+            output.Add("The telephone number is not valid");
+            return output;
         }
-        if (firstName != null)
+        if (!string.IsNullOrWhiteSpace(ownerEmail) && !Validation.IsEmailValid(ownerEmail!))
         {
-            FirstName = firstName;
+            output.Add("The email is not valid");
+            return output;
         }
-        if (address != null)
+        if (!hasNewInfo)
         {
-            Address = address;
+            output.Add("You need to add at least one value");
+            return output;
         }
-        if (ownerPhone != null)
-        {
-            OwnerPhone = ownerPhone;
-        }
-        if (OwnerEmail != null)
-        {
-            OwnerEmail = ownerEmail;
-        }
+        Surname = !string.IsNullOrWhiteSpace(surname) ? surname : Surname;
+        FirstName = !string.IsNullOrWhiteSpace(firstName) ? firstName : FirstName;
+        Address = !string.IsNullOrWhiteSpace(address) ? address : Address;
+        OwnerPhone = !string.IsNullOrWhiteSpace(ownerPhone) ? ownerPhone : OwnerPhone;
+        OwnerEmail = !string.IsNullOrWhiteSpace(ownerEmail) ? ownerEmail : OwnerEmail;
+        output.Add("The information has been updated");
+        return output;
     }
 }
