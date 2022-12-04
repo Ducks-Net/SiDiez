@@ -12,7 +12,7 @@ runUI: build
     xdg-open "https://localhost:7143/"
 
 
-INTEGRATION_TESTTS=AppointmentsController CagesController EmployeesController MedicalRecordsController
+INTEGRATION_TESTTS=AppointmentsController CagesController EmployeesController MedicalRecordsController MedicineController
 
 test_integration: build
     # loop to each integration test
