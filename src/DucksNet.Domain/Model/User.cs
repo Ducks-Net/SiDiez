@@ -13,7 +13,7 @@ public class User
     public string Password { get; private set; }
     public virtual List<Pet> Pets { get; private set; } = new List<Pet>();
 
-    public User(Guid id, string firstName, string lastName, string phoneNumber, string address, string email, string password) // TODO (Ad): This constructor only exists to make it json parsable
+    public User(Guid id, string firstName, string lastName, string address, string phoneNumber, string email, string password) // TODO (Ad): This constructor only exists to make it json parsable
     {
         Id = id;
         FirstName = firstName;
@@ -24,7 +24,7 @@ public class User
         Password = password;
     }
 
-    private User(string firstName, string lastName, string phoneNumber, string address, string email, string password) 
+    private User(string firstName, string lastName, string address, string phoneNumber, string email, string password) 
     {
         Id = Guid.NewGuid();
         Console.WriteLine($"Create user id: {Id}");
@@ -36,7 +36,7 @@ public class User
         Password = password;
     }
 
-    public static Result<User> Create(string? firstName, string? lastName, string phoneNumber, string? address, string email, string? password)
+    public static Result<User> Create(string? firstName, string? lastName, string? address, string phoneNumber, string email, string? password)
     {
         if (string.IsNullOrWhiteSpace(firstName))
         {
@@ -65,7 +65,7 @@ public class User
         return Result<User>.Ok(new User(firstName, lastName, address, phoneNumber, email, password));
     }
 
-    public void UpdateFields(string? firstName, string? lastName, string phoneNumber, string? address, string email, string? password)
+    public void UpdateFields(string? firstName, string? lastName, string? address, string phoneNumber, string email, string? password)
     {
         if (!string.IsNullOrWhiteSpace(firstName))
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Net;
 using DucksNet.Domain.Model.Enums;
 using DucksNet.SharedKernel.Utils;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -67,12 +68,7 @@ public class Pet
         return Result<Pet>.Ok(new Pet(name, dateOfBirth, species, breed, ownerId, sizeResult.Value));
     }
 
-    public void AssignPetToOwner(Guid ownerId)
-    {
-        OwnerId = ownerId;
-    }
-
-    public void UpdateFields(string? name, DateTime dateOfBirth, string species, string breed, Guid? ownerId, string size)
+    public void UpdateFields(string? name, DateTime dateOfBirth, string species, string breed, Guid ownerId, string size)
     {
         if (!string.IsNullOrWhiteSpace(name))
         {
@@ -86,17 +82,17 @@ public class Pet
         {
             Breed = breed;
         }
-        if ( dateOfBirth.CompareTo(DateTime.Now) > 0)
+        if (dateOfBirth.CompareTo(DateTime.Now) < 0)
         {
             DateOfBirth = new DateTime(dateOfBirth.Year, dateOfBirth.Month, dateOfBirth.Day);
         }
-        if (ownerId != null)
+        if (ownerId != Guid.Empty)
         {
-            OwnerId = ownerId.Value;
+            OwnerId = ownerId;
         }
 
         Result<Size> sizeResult = Size.CreateFromString(size);
-        if (sizeResult.IsSuccess && sizeResult.Value != null)
+        if (!(sizeResult.IsFailure || sizeResult.Value == null))
         {
             Size = sizeResult.Value;
         }
