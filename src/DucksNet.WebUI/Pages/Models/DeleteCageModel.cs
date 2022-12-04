@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DucksNet.WebUI.Models;
+namespace DucksNet.WebUI.Pages.Models;
 
 public class DeleteCreateModel
 {

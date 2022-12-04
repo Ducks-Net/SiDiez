@@ -1,5 +1,5 @@
 ﻿using DucksNet.Domain.Model;
-using DucksNet.WebUI.Models;
+using DucksNet.WebUI.Pages.Models;
 
 namespace DucksNet.WebUI.Pages.Services;
 public interface ICageDataService
