@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
-using DucksNet.IntegrationTests;
 
-namespace DucksNet.API.Integration_Tests;
+namespace DucksNet.IntegrationTests;
 public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecordsController>
 {
-    private const string ApiURL = "api/v1/medicalrecords";
+    private const string MedicalRecordURL = "api/v1/medicalrecords";
     [Fact]
     public async Task When_CreatedMedicalRecord_Then_ShouldReturnMedicalRecordInTheGetRequest()
     {
@@ -21,8 +20,8 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
 
         MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, idClient);
         //Act
-        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(ApiURL, medicalRecordDTO);
-        var medicalRecordResult = await TestingClient.GetAsync(ApiURL);
+        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordURL, medicalRecordDTO);
+        var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordURL);
         //Assert
         medicalRecordResponse.EnsureSuccessStatusCode();
         var medicalRecords = await medicalRecordResult.Content.ReadFromJsonAsync<List<MedicalRecordDTO>>();
@@ -43,8 +42,8 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
 
         MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, idClient);
         //Act
-        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(ApiURL, medicalRecordDTO);
-        var medicalRecordResult = await TestingClient.GetAsync(ApiURL);
+        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordURL, medicalRecordDTO);
+        var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordURL);
         //Assert
         medicalRecordResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -57,9 +56,11 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
 
         MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, idClient);
         //Act
-        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(ApiURL, medicalRecordDTO);
-        //var medicalRecordResult = await TestingClient.GetAsync(ApiURL);
+        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordURL, medicalRecordDTO);
+        var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordURL);
         //Assert
         medicalRecordResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
+
+    // TODO(RO) : after push of pet, can start here
 }
