@@ -1,6 +1,8 @@
 using System;
 using DucksNet.Domain.Model;
 
+namespace DucksNet.UnitTests;
+
 public class BusinessTests
 {
     [Fact]

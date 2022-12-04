@@ -1,6 +1,8 @@
 ﻿using DucksNet.Domain.Model;
 using System;
 
+namespace DucksNet.UnitTests;
+
 public class CageTests
 {
     [Fact]

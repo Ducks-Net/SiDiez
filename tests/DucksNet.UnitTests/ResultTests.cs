@@ -2,6 +2,8 @@
 using System.Linq;
 using DucksNet.SharedKernel.Utils;
 
+namespace DucksNet.UnitTests;
+
 public class ResultTests 
 {
     [Fact]
