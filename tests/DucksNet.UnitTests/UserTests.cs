@@ -1,5 +1,5 @@
-﻿using DucksNet.Domain.Model;
-using System;
+﻿using System;
+using DucksNet.Domain.Model;
 
 namespace DucksNet.UnitTests;
 public class UserTests
@@ -76,7 +76,7 @@ public class UserTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, string, string, string, string, string> newSut = new ("Les", "Aristocats", "France, Paris, Bonfamille's Residence", "0700000001", "lesaristocats@yahoo.com", "CatsAreTheBest.");
-        result.Value?.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.FirstName.Should().Be(newSut.Item1);
@@ -97,7 +97,7 @@ public class UserTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, string, string, string, string, string> newSut = new(" ", "Aristocats", "France, Paris, Bonfamille's Residence", "0700000001", "lesaristocats@yahoo.com", "CatsAreTheBest.");
-        result.Value?.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.FirstName.Should().Be(sut.Item1);
@@ -118,7 +118,7 @@ public class UserTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, string, string, string, string, string> newSut = new("Les", " ", "France, Paris, Bonfamille's Residence", "0700000001", "lesaristocats@yahoo.com", "CatsAreTheBest.");
-        result.Value?.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.FirstName.Should().Be(newSut.Item1);
@@ -139,7 +139,7 @@ public class UserTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, string, string, string, string, string> newSut = new("Les", "Aristocats", " ", "0700000001", "lesaristocats@yahoo.com", "CatsAreTheBest.");
-        result.Value?.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.FirstName.Should().Be(newSut.Item1);
@@ -160,7 +160,7 @@ public class UserTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, string, string, string, string, string> newSut = new("Les", "Aristocats", "France, Paris, Bonfamille's Residence", "070000001", "lesaristocats@yahoo.com", "CatsAreTheBest.");
-        result.Value?.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.FirstName.Should().Be(newSut.Item1);
@@ -168,6 +168,27 @@ public class UserTests
         copy.Address.Should().Be(newSut.Item3);
         copy.PhoneNumber.Should().Be(sut.Item4);
         copy.Email.Should().Be(newSut.Item5);
+        copy.Password.Should().Be(newSut.Item6);
+        copy.Id.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void When_UpdateUserEmailIsInvalid_Then_ShouldNotUpdateUserEmail()
+    {
+        Tuple<string, string, string, string, string, string> sut = CreateSUT();
+        var result = User.Create(sut.Item1, sut.Item2, sut.Item3, sut.Item4, sut.Item5, sut.Item6);
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
+
+        Tuple<string, string, string, string, string, string> newSut = new("Les", "Aristocats", "France, Paris, Bonfamille's Residence", "0700000001", "lesaristocatsyahoo.com", "CatsAreTheBest.");
+        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+
+        var copy = result.Value;
+        copy.FirstName.Should().Be(newSut.Item1);
+        copy.LastName.Should().Be(newSut.Item2);
+        copy.Address.Should().Be(newSut.Item3);
+        copy.PhoneNumber.Should().Be(newSut.Item4);
+        copy.Email.Should().Be(sut.Item5);
         copy.Password.Should().Be(newSut.Item6);
         copy.Id.Should().NotBeEmpty();
     }
@@ -181,7 +202,7 @@ public class UserTests
         result.Value.Should().NotBeNull();
 
         Tuple<string, string, string, string, string, string> newSut = new("Les", "Aristocats", "France, Paris, Bonfamille's Residence", "0700000001", "lesaristocats@yahoo.com", " ");
-        result.Value?.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
+        result.Value.UpdateFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4, newSut.Item5, newSut.Item6);
 
         var copy = result.Value;
         copy.FirstName.Should().Be(newSut.Item1);

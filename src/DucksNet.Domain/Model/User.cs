@@ -13,17 +13,6 @@ public class User
     public string Password { get; private set; }
     public virtual List<Pet> Pets { get; private set; } = new List<Pet>();
 
-    public User(Guid id, string firstName, string lastName, string address, string phoneNumber, string email, string password) // TODO (Ad): This constructor only exists to make it json parsable
-    {
-        Id = id;
-        FirstName = firstName;
-        LastName = lastName;
-        PhoneNumber = phoneNumber;
-        Address = address;
-        Email = email;
-        Password = password;
-    }
-
     private User(string firstName, string lastName, string address, string phoneNumber, string email, string password) 
     {
         Id = Guid.NewGuid();
