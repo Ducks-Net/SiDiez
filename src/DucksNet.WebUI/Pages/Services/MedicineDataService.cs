@@ -1,5 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
 using DucksNet.Domain.Model;
+using DucksNet.WebUI.Pages.Models;
 
 namespace DucksNet.WebUI.Pages.Services;
 
@@ -12,6 +14,11 @@ public class MedicineDataService : IMedicineDataService
     {
         this.httpClient = httpClient;
     }
+    public async Task CreateMedicine(CreateMedicineModel createMedicineModel)
+    {
+        var result = await httpClient.PostAsJsonAsync(ApiURL, createMedicineModel);
+        var medicine = await result.Content.ReadFromJsonAsync<Medicine>();
+    }
     public async Task<IEnumerable<Medicine>> GetAllMedicine()
     {
 #pragma warning disable CS8603 // Possible null reference return.
@@ -21,9 +28,13 @@ public class MedicineDataService : IMedicineDataService
 #pragma warning restore CS8603 // Possible null reference return.
     }
 
-    public async Task<Medicine> GetMedicineDetail(Guid medicineId)
+    public async Task DeleteMedicine(string medicineId)
     {
-        //throw new NotImplementedException();
-        return null;
+        await httpClient.DeleteAsync($"{ApiURL}/{medicineId}");
+    }
+
+    public async Task UpdateMedicine(string medicineId, UpdateMedicineModel updateMedicineModel)
+    {
+        await httpClient.PutAsJsonAsync($"{ApiURL}/{medicineId}", updateMedicineModel);
     }
 }

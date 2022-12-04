@@ -10,12 +10,11 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class TreatmentController : ControllerBase
 {
+    //TODO(MG): Redo everything using List<Medicine> when it's fixed
     private readonly IRepository<Treatment> _treatmentRepository;
-    //private readonly IRepository<Medicine> _medicineRepository;
     public TreatmentController(IRepository<Treatment> treatmentRepository) // + IRepository<Medicine> medicineRepository
     {
         _treatmentRepository = treatmentRepository;
-        //_medicineRepository = medicineRepository;
     }
 
     [HttpGet]
@@ -49,8 +48,7 @@ public class TreatmentController : ControllerBase
     [HttpPost]
     public IActionResult Create([FromBody] TreatmentDTO dto)
     {
-        //var treatmentPost = Treatment.CreateTreatment(dto.MedicineIDList.ToList());
-        var treatmentPost = Treatment.CreateTreatment();
+        var treatmentPost = Treatment.CreateTreatment(dto.OwnerID, dto.ClientID, dto.ClinicID);
         if (treatmentPost.IsFailure)
         {
             return BadRequest(treatmentPost.Errors);

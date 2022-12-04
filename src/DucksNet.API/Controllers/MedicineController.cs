@@ -86,7 +86,7 @@ public class MedicineController : ControllerBase
         {
             return BadRequest(oldMedicine.Errors);
         }
-        oldMedicine.Value!.UpdateMedicineFields(dto.Name, dto.Description, dto.Price);
+        oldMedicine.Value!.UpdateMedicineFields(dto.Name, dto.Description, dto.Price, dto.DrugAdministrationString);
         var result = _medicineRepository.Update(oldMedicine.Value);
         if (result.IsFailure)
         {
