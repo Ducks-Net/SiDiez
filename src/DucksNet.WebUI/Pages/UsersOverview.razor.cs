@@ -13,4 +13,3 @@ public partial class UsersOverview : ComponentBase
         Users = (await UserDataService.GetAllUsers()).ToList();
     }
 }
-
