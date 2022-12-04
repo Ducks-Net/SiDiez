@@ -1,4 +1,6 @@
 ﻿using DucksNet.Domain.Model;
+using DucksNet.WebUI.Pages.Models;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace DucksNet.WebUI.Pages.Services;
@@ -12,17 +14,31 @@ public class PetDataService : IPetDataService
     {
         this.httpClient = httpClient;
     }
+
     public async Task<IEnumerable<Pet>> GetAllPets()
     {
-#pragma warning disable CS8603 // Possible null reference return.
-
-        return await JsonSerializer.DeserializeAsync<IEnumerable<Pet>>
-            (await httpClient.GetStreamAsync(ApiURL), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true, });
-#pragma warning restore CS8603 // Possible null reference return.
+        var pets = await httpClient.GetFromJsonAsync<IEnumerable<Pet>>(ApiURL);
+        return pets!;
     }
 
-    public async Task<Pet> GetPetDetail(Guid petId)
+    public Task<Pet> GetPetDetail(Guid petId)
     {
-        return null;
+        throw new NotImplementedException();
+    }
+
+    public async Task CreatePet(CreatePetModel petCreateModel)
+    {
+        var result = await httpClient.PostAsJsonAsync(ApiURL, petCreateModel);
+        var pet = await result.Content.ReadFromJsonAsync<Pet>();
+    }
+
+    public async Task UpdatePet(string petId, UpdatePetModel updatePetModel)
+    {
+        await httpClient.PutAsJsonAsync($"{ApiURL}/{petId}", updatePetModel);
+    }
+
+    public async Task DeletePet(string petId)
+    {
+        await httpClient.DeleteAsync($"{ApiURL}/{petId}");
     }
 }
