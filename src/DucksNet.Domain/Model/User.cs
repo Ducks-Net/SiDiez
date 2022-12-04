@@ -26,7 +26,8 @@ public class User
 
     private User(string firstName, string lastName, string phoneNumber, string address, string email, string password) 
     {
-        Id = new Guid();
+        Id = Guid.NewGuid();
+        Console.WriteLine($"Create user id: {Id}");
         FirstName = firstName;
         LastName = lastName;
         Address = address;
@@ -35,7 +36,7 @@ public class User
         Password = password;
     }
 
-    public static Result<User> Create(string? firstName, string? lastName, string phoneNumber, string? address, string? email, string? password)
+    public static Result<User> Create(string? firstName, string? lastName, string phoneNumber, string? address, string email, string? password)
     {
         if (string.IsNullOrWhiteSpace(firstName))
         {
@@ -64,7 +65,7 @@ public class User
         return Result<User>.Ok(new User(firstName, lastName, address, phoneNumber, email, password));
     }
 
-    public void UpdateFields(string? firstName, string? lastName, string? phoneNumber, string? address, string? email, string? password)
+    public void UpdateFields(string? firstName, string? lastName, string phoneNumber, string? address, string email, string? password)
     {
         if (!string.IsNullOrWhiteSpace(firstName))
         {

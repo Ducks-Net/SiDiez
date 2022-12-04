@@ -7,7 +7,7 @@ public class PetTests
     [Fact]
     public void When_CreatePet_Then_ShouldReturnPet()
     {
-        Tuple<string, DateTime, string, string, Guid, string> sut = CreateSUT();
+        Tuple<string, DateTime, string, string, Guid, string> sut = new("Cleo", new DateTime(2021, 06, 04), "Cat", "European", Guid.NewGuid(), "Small");
         var result = Pet.Create(sut.Item1, sut.Item2, sut.Item3, sut.Item4, sut.Item5, sut.Item6);
         var copy = result.Value;
         copy.Name.Should().Be(sut.Item1);
@@ -57,11 +57,5 @@ public class PetTests
         var result = Pet.Create("Cleo", new DateTime(2021, 06, 04), "Cat", " ", Guid.NewGuid(), "Small");
         result.IsFailure.Should().BeTrue();
         result.Errors.Should().Contain("The breed field can not be empty.");
-    }
-
-    private Tuple<string, DateTime, string, string, Guid, string> CreateSUT()
-    {
-        Tuple<string, DateTime, string, string, Guid, string> sut = new("Cleo", new DateTime(2021, 06, 04), "Cat", "European", Guid.NewGuid(), "Small");
-        return sut;
     }
 }
