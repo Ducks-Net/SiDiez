@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
-using DucksNet.Domain.Model.Enums;
-using DucksNet.Infrastructure.Prelude;
 
 namespace DucksNet.IntegrationTests;
 public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
