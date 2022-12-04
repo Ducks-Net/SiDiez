@@ -40,7 +40,7 @@ public class EmployeesController : ControllerBase
         var office = _officeRepository.Get(dto.IdOffice);
         if (office.IsFailure)
         {
-            return BadRequest("Office could not be found!");
+            return BadRequest(office.Errors);
         }
         var employeePost = Employee.Create(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
         if (employeePost.IsFailure)
@@ -60,37 +60,42 @@ public class EmployeesController : ControllerBase
                 return BadRequest("The telephone number already exists");
             }
         }
-        var result = _employeesRepository.Add(employeePost.Value);
-        if (result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
+        _employeesRepository.Add(employeePost.Value);
         return Ok(employeePost.Value);
     }
-    [HttpPut("{token:guid}")]
-    public IActionResult UpdatePersonalInformationEmployee(Guid token, [FromBody] EmployeeDTO dto)
+    [HttpPut("{employeeId:guid}")]
+    public IActionResult UpdatePersonalInformationEmployee(Guid employeeId, [FromBody] EmployeeDTO dto)
     {
-        // TODO (RO): token must be based from the authentification token, not from employee id
-        // TODO (RO): check the updated information
-        var oldEmployee = _employeesRepository.Get(token);
+        var oldEmployee = _employeesRepository.Get(employeeId);
+ 
         if (oldEmployee.IsFailure)
         {
             return BadRequest(oldEmployee.Errors);
         }
-        oldEmployee.Value!.UpdateFields(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
-        var result = _employeesRepository.Update(oldEmployee.Value);
-        if (result.IsFailure)
+        var employees = _employeesRepository.GetAll();
+        foreach (var employee in employees)
         {
-            return BadRequest(result.Errors);
+            if (employee.OwnerEmail == dto.OwnerEmail)
+            {
+                return BadRequest("The updated email already exists");
+            }
+            if (employee.OwnerPhone == dto.OwnerPhone)
+            {
+                return BadRequest("The updated telephone number already exists");
+            }
         }
-        return Ok(oldEmployee.Value);
+        var resultUpdated = oldEmployee.Value!.UpdateFields(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
+        if(resultUpdated.First() != "The information has been updated")
+        {
+            return BadRequest(resultUpdated.First());
+        }
+        _employeesRepository.Update(oldEmployee.Value);
+        return Ok(resultUpdated.First());
     }
-    [HttpPut("{token:guid}/{newOfficeId:guid}")]
-    public IActionResult UpdateOfficeEmployee(Guid token, Guid newOfficeId)
+    [HttpPut("{employeeId:guid}/{newOfficeId:guid}")]
+    public IActionResult UpdateOfficeEmployee(Guid employeeId, Guid newOfficeId)
     {
-        //TODO(RO): token must be based from the authentification token, not from employee id
-        // TODO (RO): check the updated information
-        var oldEmployee = _employeesRepository.Get(token);
+        var oldEmployee = _employeesRepository.Get(employeeId);
         if (oldEmployee.IsFailure)
         {
             return BadRequest(oldEmployee.Errors);
@@ -100,29 +105,19 @@ public class EmployeesController : ControllerBase
         {
             return BadRequest(newOffice.Errors);
         }
-        if (oldEmployee.Value!.IdOffice != newOfficeId)
-            oldEmployee.Value.AssignToOffice(newOfficeId);
-        var result = _employeesRepository.Update(oldEmployee.Value);
-        if (result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
+        oldEmployee.Value!.AssignToOffice(newOfficeId);
+        _employeesRepository.Update(oldEmployee.Value);
         return Ok(oldEmployee.Value);
     }
-    [HttpDelete("{token:guid}")]
-    public IActionResult Delete(Guid token)
+    [HttpDelete("{employeeId:guid}")]
+    public IActionResult Delete(Guid employeeId)
     {
-        //TODO(RO): token must be based from the authentification token, not from employee id
-        var employee = _employeesRepository.Get(token);
+        var employee = _employeesRepository.Get(employeeId);
         if (employee.IsFailure)
         {
             return BadRequest(employee.Errors);
         }
-        var result = _employeesRepository.Delete(employee.Value!);
-        if (result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
+        _employeesRepository.Delete(employee.Value!);
         return Ok();
     }
 }
