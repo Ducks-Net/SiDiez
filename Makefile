@@ -10,7 +10,7 @@ runUI: build
 
 INTEGRATION_TESTTS=AppointmentsController CagesController EmployeesController MedicalRecordsController MedicineController
 
-test_integration: build
+test_integration_cov: build
     # loop to each integration test
 	for test in $(INTEGRATION_TESTTS); do \
         # run the test \
@@ -19,8 +19,20 @@ test_integration: build
         mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.IntegrationTests/$$test.coverage.xml; \
     done
 
-test_unit: build
+test_integration: build
+    # loop to each integration test
+	for test in $(INTEGRATION_TESTTS); do \
+        # run the test \
+        dotnet test --no-build --filter "FullyQualifiedName~DucksNet.IntegrationTests.$$test"; \
+    done
+
+test_unit_cov: build
 	dotnet test --no-build -p:AltCover=true --filter "FullyQualifiedName~DucksNet.UnitTests"
 	mv tests/DucksNet.UnitTests/coverage.xml tests/DucksNet.UnitTests/UnitTests.coverage.xml || mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.UnitTests/UnitTests.coverage.xml
 
-test: test_unit test_integration
+test_unit: build
+	dotnet test --no-build --filter "FullyQualifiedName~DucksNet.UnitTests"
+
+test: test_unit_cov test_integration_cov
+
+test_nocov: test_unit test_integration
