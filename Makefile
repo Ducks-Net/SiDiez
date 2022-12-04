@@ -25,6 +25,6 @@ test_integration: build
 
 test_unit: build
 	dotnet test --no-build -p:AltCover=true --filter "FullyQualifiedName~DucksNet.UnitTests"
-	mv tests/DucksNet.UnitTests/coverage.xml tests/DucksNet.UnitTests/UnitTests.coverage.xml
+	mv tests/DucksNet.UnitTests/coverage.xml tests/DucksNet.UnitTests/UnitTests.coverage.xml || mv tests/DucksNet.IntegrationTests/coverage.xml tests/DucksNet.UnitTests/UnitTests.coverage.xml
 
 test: test_unit test_integration

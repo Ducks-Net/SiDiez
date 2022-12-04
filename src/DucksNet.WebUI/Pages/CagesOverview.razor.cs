@@ -7,9 +7,9 @@ namespace DucksNet.WebUI.Pages;
 public partial class CagesOverview : ComponentBase
 {
     [Inject]
-    public ICageDataService CageDataService { get; set; }
+    public ICageDataService CageDataService { get; set; } = default!;
     public List<Cage> Cages { get; set; } = default!;
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         Cages = (await CageDataService.GetAllCages()).ToList();
     }
