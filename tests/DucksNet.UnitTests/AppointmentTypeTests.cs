@@ -1,5 +1,7 @@
 using DucksNet.Domain.Model.Enums;
 
+namespace DucksNet.UnitTests;
+
 public class AppointmentTypeTests
 {
     [Fact]

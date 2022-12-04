@@ -11,25 +11,27 @@ on:
 
 jobs:
   codecov:
-
+    # Set the enviroment variable DOTNET_USE_POLLING_FILE_WATCHER to true to enable file watching
+    # https://docs.microsoft.com/en-us/aspnet/core/tutorials/dotnet-watch?view=aspnetcore-5.0#run-the-app
+    env:
+      DOTNET_USE_POLLING_FILE_WATCHER: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
     runs-on: ubuntu-latest
     steps:
+    - name: make sure we have make
+      run: sudo apt-get install make
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 7.0.x
     - name: Add altcov dep
       run: dotnet add tests/DucksNet.UnitTests/ package AltCover
     - name: Add altcov dep to integration tests
       run: dotnet add tests/DucksNet.IntegrationTests/ package AltCover
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Disable fs watchers
-      run: export DOTNET_USE_POLLING_FILE_WATCHER=true
-    - name: Test
-      run: dotnet test --no-build --verbosity normal -p:AltCover=true
+    - name: run tests
+      run: make test
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
