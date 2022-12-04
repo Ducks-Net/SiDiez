@@ -1,8 +1,11 @@
 ﻿using DucksNet.Domain.Model;
+using DucksNet.WebUI.Pages.Models;
 
 namespace DucksNet.WebUI.Pages.Services;
 public interface ITreatmentDataService
 {
-    Task<IEnumerable<Treatment>> GetAllTreatments();
-    Task<Treatment> GetTreatmentDetail(Guid treatmentId);
+    Task CreateTreatment(CreateTreatmentModel createTreatmentModel);
+    Task DeleteTreatment(string treatmentId);
+    Task<IEnumerable<Treatment>> GetAllTreatment();
+    Task UpdateTreatment(string treatmentId, UpdateTreatmentModel updateTreatmentModel);
 }

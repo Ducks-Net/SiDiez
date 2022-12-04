@@ -17,30 +17,7 @@ public class TreatmentControllerTests : BaseIntegrationTests<TreatmentController
     private const string TreatmentUrl = "api/v1/treatment";
 
     [Fact]
-    public async void When_CreatedTreatment_Then_ShouldReturnTreatmentInTheGetRequest()
-    {
-        ClearDatabase();
-        //Arrange
-        var sut = CreateSUT();
-        //Act 
-        var treatmentResponse = await TestingClient.PostAsJsonAsync(TreatmentUrl, sut);
-        treatmentResponse.EnsureSuccessStatusCode();
-        var getTreatmentResult = await TestingClient.GetAsync(TreatmentUrl);
-        //Assert
-
-        var treatments = await getTreatmentResult.Content.ReadFromJsonAsync<List<Treatment>>();
-        treatments.Should().NotBeNull();
-        treatments!.Count.Should().Be(1);
-        foreach (var treatment in treatments!)
-        {
-            treatment.OwnerID.Should().Be(sut.OwnerID);
-            treatment.ClientID.Should().Be(sut.ClientID);
-            treatment.ClinicID.Should().Be(sut.ClinicID);
-        }
-    }
-
-    [Fact]
-    public async void When_CreatedMedicine_Then_ShouldReturnMedicineByOwnerIDInTheGetRequest()
+    public async void When_CreatedTreatment_Then_ShouldReturnTreatmentByOwnerIDInTheGetRequest()
     {
         ClearDatabase();
         //Arrange
