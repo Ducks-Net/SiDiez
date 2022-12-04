@@ -3,14 +3,10 @@ build:
 	dotnet build
 
 runAPI: build
-	x-terminal-emulator --hold -e 'dotnet run --no-build --project ./src/DucksNet.API/' & \
-    xdg-open "https://localhost:7115/swagger/index.html" &
-
+	x-terminal-emulator --hold -e 'dotnet run --no-build --project ./src/DucksNet.API/' &
 runUI: build
 	x-terminal-emulator --hold -e 'dotnet run --no-build --project ./src/DucksNet.API/' & \
-    x-terminal-emulator --hold -e 'dotnet run --no-build --project ./src/DucksNet.WebUI/' & \
-    xdg-open "https://localhost:7143/"
-
+    x-terminal-emulator --hold -e 'dotnet run --no-build --project ./src/DucksNet.WebUI/' &
 
 INTEGRATION_TESTTS=AppointmentsController CagesController EmployeesController MedicalRecordsController
 
