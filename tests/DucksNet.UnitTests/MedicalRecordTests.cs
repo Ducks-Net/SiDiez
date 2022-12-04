@@ -46,6 +46,38 @@ public class MedicalRecordTests
         result.IsFailure.Should().BeTrue();
         result.Errors.Should().Contain("Id client can not be empty");
     }
+    [Fact]
+    public void When_CreateMedicalRecordAndUpdateIdAppointment_Then_ShouldReturnMedicalRecord()
+    {
+        //Arrange
+        var sut = CreateSUT();
+        var newIdAppointment = Guid.NewGuid();
+        //Act
+        var result = MedicalRecord.Create(sut.Item1, sut.Item2);
+        result.Value!.AssignToAppointment(newIdAppointment);
+        //Assert
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
+        result.Value!.IdAppointment.Should().Be(newIdAppointment);
+        result.Value.IdClient.Should().Be(sut.Item2);
+        result.Value.Id.Should().NotBeEmpty();
+    }
+    [Fact]
+    public void When_CreateMedicalRecordAndUpdateIdClient_Then_ShouldReturnMedicalRecord()
+    {
+        //Arrange
+        var sut = CreateSUT();
+        var newIdClient = Guid.NewGuid();
+        //Act
+        var result = MedicalRecord.Create(sut.Item1, sut.Item2);
+        result.Value!.AssignToClient(newIdClient);
+        //Assert
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
+        result.Value!.IdAppointment.Should().Be(sut.Item1);
+        result.Value.IdClient.Should().Be(newIdClient);
+        result.Value.Id.Should().NotBeEmpty();
+    }
     private Tuple<Guid, Guid> CreateSUT()
     {
         Tuple<Guid, Guid> sut = new(Guid.NewGuid(), Guid.NewGuid());
