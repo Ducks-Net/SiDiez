@@ -1,6 +1,9 @@
 using System;
 using DucksNet.Domain.Model;
 
+
+namespace DucksNet.UnitTests;
+
 public class AppointmentTests
 {
     [Fact]

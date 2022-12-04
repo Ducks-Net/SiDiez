@@ -1,5 +1,7 @@
 using DucksNet.SharedKernel.Utils;
 
+namespace DucksNet.UnitTests;
+
 public class EnumerationTests 
 {
     // We're gonna make a testing enumeration for this test
