@@ -257,7 +257,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     {
         ClearDatabase();
         //Arrange
-        var petId = SetupPet(Size.Small.Name);
+        var petId = SetupPet(Guid.NewGuid(), Size.Small.Name);
         var officeId = SetupOffice();
         var cageId = SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
@@ -313,7 +313,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     {
         ClearDatabase();
         //Arrange
-        var petId = SetupPet(Size.Small.Name);
+        var petId = SetupPet(Guid.NewGuid(), Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
         DateTime end = DateTime.Now.AddDays(1).AddHours(1);
         var scheduleDTO = new ScheduleCageDTO
@@ -336,7 +336,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     {
         ClearDatabase();
         //Arrange
-        var petId = SetupPet(Size.Small.Name);
+        var petId = SetupPet(Guid.NewGuid(), Size.Small.Name);
         var officeId = SetupOffice();
         var cageId = SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
@@ -361,7 +361,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     {
         ClearDatabase();
         //Arrange
-        var petId = SetupPet(Size.Small.Name);
+        var petId = SetupPet(Guid.NewGuid(), Size.Small.Name);
         var officeId = SetupOffice();
         var cageId = SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
@@ -383,7 +383,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     {
         ClearDatabase();
         //Arrange
-        var petId = SetupPet(Size.Small.Name);
+        var petId = SetupPet(Guid.NewGuid(), Size.Small.Name);
         var officeId = SetupOffice();
         var cageId = SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
@@ -440,11 +440,15 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         return cageTimeBlock!.Id;
     }
 
-    private Guid SetupPet(string petSizeString)
-    { 
+    private Guid SetupPet(Guid ownerId,string petSizeString)
+    {
         var petDTO = new PetDTO
         {
-            OwnerId = Guid.NewGuid(),
+            Name = "Test Pet",    
+            DateOfBirth = DateTime.Now.AddYears(-1),
+            Species = "Dog",
+            Breed = "Labrador",
+            OwnerId = ownerId,
             Size = petSizeString
         };
 
