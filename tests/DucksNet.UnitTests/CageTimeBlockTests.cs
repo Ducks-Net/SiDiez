@@ -2,6 +2,8 @@
 
 using DucksNet.Domain.Model;
 
+namespace DucksNet.UnitTests;
+
 public class CageTimeBlockTests
 {
     [Fact]

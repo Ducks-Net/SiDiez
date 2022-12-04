@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
-using DucksNet.IntegrationTests;
 
-namespace DucksNet.API.IntegrationTests;
+namespace DucksNet.IntegrationTests;
 public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController>
 {
     private const string EmployeesUrl = "api/v1/employees";
