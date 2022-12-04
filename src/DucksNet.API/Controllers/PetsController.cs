@@ -37,7 +37,7 @@ public class PetsController : ControllerBase
     [HttpPost]
     public IActionResult Register([FromBody] PetDTO dto)
     {
-        var pet = DucksNet.Domain.Model.Pet.Create(dto.Name, dto.DateOfBirth, dto.Species, dto.Breed, (Guid)dto.OwnerId, dto.Size);
+        var pet = DucksNet.Domain.Model.Pet.Create(dto.Name, dto.DateOfBirth, dto.Species, dto.Breed, dto.OwnerId, dto.Size);
         if (pet.IsFailure)
         {
             return BadRequest(pet.Errors);
@@ -46,7 +46,6 @@ public class PetsController : ControllerBase
         {
             return BadRequest("Owner ID is required.");
         }
-        pet.Value!.AssignPetToOwner(dto.OwnerId.Value);
 
         var result = _petsRepository.Add(pet.Value!);
         if (result.IsFailure)
