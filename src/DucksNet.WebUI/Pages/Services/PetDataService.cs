@@ -20,12 +20,6 @@ public class PetDataService : IPetDataService
         var pets = await httpClient.GetFromJsonAsync<IEnumerable<Pet>>(ApiURL);
         return pets!;
     }
-
-    public Task<Pet> GetPetDetail(Guid petId)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task CreatePet(CreatePetModel petCreateModel)
     {
         var result = await httpClient.PostAsJsonAsync(ApiURL, petCreateModel);

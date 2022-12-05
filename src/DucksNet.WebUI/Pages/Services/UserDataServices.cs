@@ -20,12 +20,6 @@ public class UserDataService : IUserDataService
         var users = await httpClient.GetFromJsonAsync<IEnumerable<User>>(ApiURL);
         return users!;
     }
-
-    public Task<User> GetUserDetail(Guid userId)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task CreateUser(CreateUserModel userCreateModel)
     {
         var result = await httpClient.PostAsJsonAsync(ApiURL, userCreateModel);

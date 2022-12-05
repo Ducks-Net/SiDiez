@@ -4,7 +4,6 @@ namespace DucksNet.WebUI.Pages.Models;
 
 public class CreatePetModel
 {
-    public string? PetId { get; set; }
 
     [Required]
     [StringLength(120, MinimumLength = 2, ErrorMessage = "Name must be at least 2 characters long.")]
