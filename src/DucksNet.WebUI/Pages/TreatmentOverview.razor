@@ -112,11 +112,6 @@
                 <EditForm Model="@createTreatmentModel" OnValidSubmit="@HandleValidSubmit">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
-
-                    <div>
-                        <label for="TreatmentId">IdTreatment</label>
-                        <InputText class="form-control" id="TreatmentId" @bind-Value="createTreatmentModel.TreatmentId" />
-                    </div>
                     <div>
                         <label for="OwnerId">IdOwner</label>
                         <InputText class="form-control" id="OwnerId" @bind-Value="createTreatmentModel.OwnerId" />
