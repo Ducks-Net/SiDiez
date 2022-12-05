@@ -1,8 +1,11 @@
 ﻿using DucksNet.Domain.Model;
+using DucksNet.WebUI.Pages.Models;
 
 namespace DucksNet.WebUI.Pages.Services;
 public interface IMedicalRecordDataService
 {
-    Task<IEnumerable<MedicalRecord>> GetAllPersons();
-    Task<MedicalRecord> GetPersonDetail(Guid personId);
+    Task CreateMedicalRecord(CreateMedicalRecord createMedicalRecord);
+    Task DeleteMedicalRecord(string medicalRecordId);
+    Task<IEnumerable<MedicalRecord>> GetAllMedicalRecords();
+    Task UpdateEmployee(string medicalRecordId, UpdateMedicalRecord updateMedicalRecordModel);
 }

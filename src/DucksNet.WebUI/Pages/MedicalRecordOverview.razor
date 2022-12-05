@@ -1,29 +1,169 @@
 ﻿@page "/medicalrecordoverview"
+@using DucksNet.WebUI.Pages.Models;
+
 @inject HttpClient Http
-<h3>MedicalRecord</h3>
 
-@if (MedicalRecords == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table table-light">
-        <thead class="table-primary">
-        <th>MedicalRecord ID</th>
-        <th>MedicalRecord IdAppointment</th>
-        <th>MedicalRecord IdClient</th>
-        </thead>
-        <tbody>
-            @foreach (var medicalRecord in MedicalRecords)
-            {
-            <tr>
-                <td>@medicalRecord.Id</td>
-                <td>@medicalRecord.IdAppointment</td>
-                <td>@medicalRecord.IdClient</td>
-            </tr>
-            }
-        </tbody>
-    </table>
+<h3>Medical Record Overview</h3>
 
-}
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    GetAllMedicalRecords
+                </button>
+                <button class="btn btn-primary" onclick="@ReloadAllMedicalRecords">
+                    Reload
+                </button>
+
+            </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                @if (MedicalRecords != null)
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>MedicalRecord Id</th>
+                                <th>MedicalRecord Id</th>
+                                <th>MedicalRecord Surname</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var medicalRecord in MedicalRecords)
+                            {
+                                <tr>
+                                    <td>@medicalRecord.Id</td>
+                                    <td>@medicalRecord.IdAppointment</td>
+                                    <td>@medicalRecord.IdClient</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p><em>No medical records found.</em></p>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Update Medical Record
+                </button>
+            </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                <EditForm Model="@updateMedicalRecordModel" OnValidSubmit="@HandleValidSubmitUpdate">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div>
+                        <label for="MedicalRecordId">Id Medical Record</label>
+                        <InputText class="form-control" id="RecordId" @bind-Value="updateMedicalRecordModel.MedicalRecordId" />
+                    </div>
+                    <div>
+                        <label for="IdClient">Id Client</label>
+                        <InputText class="form-control" id="IdClient" @bind-Value="updateMedicalRecordModel.IdClient" />
+                    </div>
+                    <div>
+                        <label for="IdAppintment">Id Appintment</label>
+                        <InputText class="form-control" id="IdAppintment" @bind-Value="updateMedicalRecordModel.IdAppintment" />
+                    </div>
+
+                    <br><br>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </EditForm>
+
+                @code {
+                    private UpdateMedicalRecord updateMedicalRecordModel = new();
+
+                    private void HandleValidSubmitUpdate()
+                    {
+                        UpdateMedicalRecord(updateMedicalRecordModel.MedicalRecordId, updateMedicalRecordModel);
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Create Medical Record
+                </button>
+            </h5>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                <EditForm Model="@createMedicalRecord" OnValidSubmit="@HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div>
+                        <label for="IdClient">Id Client</label>
+                        <InputText class="form-control" id="IdClient" @bind-Value="createMedicalRecord.IdClient" />
+                    </div>
+                    <div>
+                        <label for="IdAppintment">Id Appintment</label>
+                        <InputText class="form-control" id="IdAppintment" @bind-Value="createMedicalRecord.IdAppintment" />
+                    </div>
+
+                    <br><br>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </EditForm>
+
+                @code {
+                    private CreateMedicalRecord createMedicalRecord = new();
+
+                    private void HandleValidSubmit()
+                    {
+                        CreateMedicalRecord(createMedicalRecord);
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingFour">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Delete Medical Record
+                </button>
+            </h5>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+            <div class="card-body">
+                <EditForm Model="@deleteMedicalRecordModel" OnValidSubmit="@HandleValidSubmitDelete">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div>
+                        <label for="MedicalRecordId">Medical Record Id</label>
+                        <InputText class="form-control" id="MedicalRecordId" @bind-Value="deleteMedicalRecordModel.MedicalRecordId" />
+                    </div>
+
+                    <br><br>
+
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </EditForm>
+
+                @code {
+                    private DeleteMedicalRecord deleteMedicalRecordModel = new();
+
+                    private void HandleValidSubmitDelete()
+                    {
+                        DeleteMedicalRecord(deleteMedicalRecordModel.MedicalRecordId);
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
