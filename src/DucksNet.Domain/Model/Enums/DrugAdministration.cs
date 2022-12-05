@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DucksNet.SharedKernel.Utils;
+﻿using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Domain.Model.Enums;
 public class DrugAdministration : Enumeration
