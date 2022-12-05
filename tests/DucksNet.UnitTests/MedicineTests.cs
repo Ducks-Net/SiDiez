@@ -1,5 +1,6 @@
 ﻿using System;
 using DucksNet.Domain.Model;
+using DucksNet.Domain.Model.Enums;
 
 namespace DucksNet.UnitTests;
 
@@ -32,6 +33,24 @@ public class MedicineTests
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
         result.Value!.DrugAdministration.Name.Should().Be(drugAdministration);
+    }
+    [Fact]
+    public void When_CreateMedicine_WithValidAdministrationByInt_Should_Succeed()
+    {
+        int drugAdministration = 1;
+        var result = DrugAdministration.createMedicineByInt(drugAdministration);
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
+    }
+    [Fact]
+    public void When_CreateMedicine_WithInvalidAdministrationByInt_Should_Fail()
+    {
+        int drugAdministration = 174;
+        var result = DrugAdministration.createMedicineByInt(drugAdministration);
+        result.IsFailure.Should().BeTrue();
+        result.Value.Should().BeNull();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("Wrong type of drug administration");
     }
 
     [Fact]
