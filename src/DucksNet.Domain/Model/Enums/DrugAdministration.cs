@@ -22,9 +22,9 @@ public class DrugAdministration : Enumeration
     }
     public static Result<DrugAdministration> createMedicineByInt(int id)
     {
-        var administrationByString = GetAll<DrugAdministration>().FirstOrDefault(x => x.Id == id);
-        if (administrationByString == null)
+        var administrationByInt = GetAll<DrugAdministration>().FirstOrDefault(x => x.Id == id);
+        if (administrationByInt == null)
             return Result<DrugAdministration>.Error("Wrong type of drug administration");
-        return Result<DrugAdministration>.Ok(administrationByString);
+        return Result<DrugAdministration>.Ok(administrationByInt);
     }
 }

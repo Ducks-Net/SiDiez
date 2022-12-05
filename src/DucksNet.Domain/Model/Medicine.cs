@@ -55,7 +55,7 @@ public class Medicine
         {
             Name = name;
         }
-        else if (string.IsNullOrWhiteSpace(name))
+        else 
         {
             return Result.Error("Name is empty.");
         }
@@ -63,7 +63,7 @@ public class Medicine
         {
             Description = description;
         }
-        else if (string.IsNullOrWhiteSpace(description))
+        else 
         {
             return Result.Error("Description is empty.");
         }
@@ -71,7 +71,7 @@ public class Medicine
         {
             Price = price;
         }
-        else if (price <= 0)
+        else
         {
             return Result.Error("Invalid price.");
         }
@@ -80,7 +80,7 @@ public class Medicine
         {
             DrugAdministration = drugAdministrationResult.Value;
         }
-        else if (drugAdministrationResult.IsFailure || drugAdministrationResult.Value == null)
+        else 
         {
             return Result.Error("Invalid type of drug administration.");
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using DucksNet.Domain.Model;
+using DucksNet.Domain.Model.Enums;
 
 namespace DucksNet.UnitTests;
 
@@ -32,6 +33,24 @@ public class MedicineTests
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
         result.Value!.DrugAdministration.Name.Should().Be(drugAdministration);
+    }
+    [Fact]
+    public void When_CreateMedicine_WithValidAdministrationByInt_Should_Succeed()
+    {
+        int drugAdministration = 1;
+        var result = DrugAdministration.createMedicineByInt(drugAdministration);
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
+    }
+    [Fact]
+    public void When_CreateMedicine_WithInvalidAdministrationByInt_Should_Fail()
+    {
+        int drugAdministration = 174;
+        var result = DrugAdministration.createMedicineByInt(drugAdministration);
+        result.IsFailure.Should().BeTrue();
+        result.Value.Should().BeNull();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("Wrong type of drug administration");
     }
 
     [Fact]
@@ -132,7 +151,24 @@ public class MedicineTests
         copy.DrugAdministration.Name.Should().Be(newSut.Item4);
         copy.Id.Should().NotBeEmpty();
     }
+    [Fact]
+    public void When_AllInformationUpdatedInMedicine_Then_ShouldReturnUpdatedMedicine()
+    {
+        Tuple<string,string, double, string> sut = CreateSUT();
+        var result = Medicine.Create(sut.Item1, sut.Item2, sut.Item3, sut.Item4);
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
 
+        Tuple<string, string, double, string> newSut = new("Ibuprofen", "Headache", 20, "Intradermal");
+        result.Value!.UpdateMedicineFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4);
+
+        var copy = result.Value;
+        copy.Name.Should().Be(newSut.Item1);
+        copy.Description.Should().Be(newSut.Item2);
+        copy.Price.Should().Be(newSut.Item3);
+        copy.DrugAdministration.Name.Should().Be(newSut.Item4);
+        copy.Id.Should().NotBeEmpty();
+    }
     [Fact]
     public void When_UpdateDrugAdministrationIsNotValid_Then_ShouldNotUpateMedicineDrugAdministration()
     {
