@@ -40,6 +40,7 @@ public class MedicalRecordsController : ControllerBase
     [HttpPost]
     public IActionResult Create([FromBody] MedicalRecordDTO dto)
     {
+
         var appointment = _appointmentRepository.Get(dto.IdAppointment);
         if (appointment.IsFailure)
         {
