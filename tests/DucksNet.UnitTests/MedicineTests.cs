@@ -132,7 +132,24 @@ public class MedicineTests
         copy.DrugAdministration.Name.Should().Be(newSut.Item4);
         copy.Id.Should().NotBeEmpty();
     }
+    [Fact]
+    public void When_AllInformationUpdatedInMedicine_Then_ShouldReturnUpdatedMedicine()
+    {
+        Tuple<string,string, double, string> sut = CreateSUT();
+        var result = Medicine.Create(sut.Item1, sut.Item2, sut.Item3, sut.Item4);
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
 
+        Tuple<string, string, double, string> newSut = new("Ibuprofen", "Headache", 20, "Intradermal");
+        result.Value!.UpdateMedicineFields(newSut.Item1, newSut.Item2, newSut.Item3, newSut.Item4);
+
+        var copy = result.Value;
+        copy.Name.Should().Be(newSut.Item1);
+        copy.Description.Should().Be(newSut.Item2);
+        copy.Price.Should().Be(newSut.Item3);
+        copy.DrugAdministration.Name.Should().Be(newSut.Item4);
+        copy.Id.Should().NotBeEmpty();
+    }
     [Fact]
     public void When_UpdateDrugAdministrationIsNotValid_Then_ShouldNotUpateMedicineDrugAdministration()
     {
