@@ -1,0 +1,207 @@
+﻿@page "/usersoverview"
+@using DucksNet.Domain.Model
+@using DucksNet.WebUI.Pages.Models;
+@inject HttpClient Http
+<h3>UsersOverview</h3>
+
+<div id="accordion">
+	<div class="card">
+		<div class="card-header" id="headingOne">
+			<h5 class="mb-0">
+				<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+					GetAllUsers
+				</button>
+				<button class="btn btn-primary" onclick="@ReloadAllUsers">
+					Reload
+				</button>
+
+			</h5>
+		</div>
+
+		<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+			<div class="card-body">
+				@if (Users != null)
+				{
+					<table class="table">
+						<tr>
+							<th>User Id</th>
+							<th>User FirstName</th>
+							<th>User LastName</th>
+							<th>User Address</th>
+							<th>User PhoneNumber</th>
+							<th>User Email</th>
+						</tr>
+						<tbody>
+							@foreach (var user in Users)
+							{
+								<tr>
+									<td>@user.Id</td>
+									<td>@user.FirstName</td>
+									<td>@user.LastName</td>
+									<td>@user.Address</td>
+									<td>@user.PhoneNumber</td>
+									<td>@user.Email</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				}
+				else
+				{
+					<p><em>No users found.</em></p>
+				}
+
+			</div>
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-header" id="headingTwo">
+			<h5 class="mb-0">
+				<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					Create User
+				</button>
+			</h5>
+		</div>
+		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+			<div class="card-body">
+				<EditForm Model="@userCreateModel" OnValidSubmit="@HandleValidSubmitCreate">
+					<DataAnnotationsValidator />
+					<ValidationSummary />
+
+					<div>
+						<label for="FirstName">First name</label>
+						<InputText class="form-control" id="FirstName" @bind-Value="userCreateModel.FirstName" />
+					</div>
+					<div>
+						<label for="LastName">Last name</label>
+						<InputText class="form-control" id="LastName" @bind-Value="userCreateModel.LastName" />
+					</div>
+					<div>
+						<label for="Address">Address</label>
+						<InputText class="form-control" id="Address" @bind-Value="userCreateModel.Address" />
+					</div>
+					<div>
+						<label for="PhoneNumber">Phone number</label>
+						<InputText class="form-control" id="PhoneNumber" @bind-Value="userCreateModel.PhoneNumber" />
+					</div>
+					<div>
+						<label for="Email">Email</label>
+						<InputText class="form-control" id="Email" @bind-Value="userCreateModel.Email" />
+					</div>
+					<div>
+						<label for="Password">Password</label>
+						<InputText class="form-control" id="Password" @bind-Value="userCreateModel.Password" />
+					</div>
+
+					<br><br>
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</EditForm>
+
+				@code {
+					private CreateUserModel userCreateModel = new();
+
+					private void HandleValidSubmitCreate()
+					{
+						CreateUser(userCreateModel);
+					}
+				}
+			</div>
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-header" id="headingThree">
+			<h5 class="mb-0">
+				<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+					Update User
+				</button>
+			</h5>
+		</div>
+		<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+			<div class="card-body">
+				<EditForm Model="@userUpdateModel" OnValidSubmit="@HandleValidSubmitUpdate">
+					<DataAnnotationsValidator />
+					<ValidationSummary />
+
+					<div>
+						<label for="UserId">User Id</label>
+						<InputText class="form-control" id="UserId" @bind-Value="userUpdateModel.UserId" />
+					</div>
+					<div>
+						<label for="FirstName">First name</label>
+						<InputText class="form-control" id="FirstName" @bind-Value="userUpdateModel.FirstName" />
+					</div>
+					<div>
+						<label for="LastName">Last name</label>
+						<InputText class="form-control" id="LastName" @bind-Value="userUpdateModel.LastName" />
+					</div>
+					<div>
+						<label for="Address">Address</label>
+						<InputText class="form-control" id="Address" @bind-Value="userUpdateModel.Address" />
+					</div>
+					<div>
+						<label for="PhoneNumber">Phone number</label>
+						<InputText class="form-control" id="PhoneNumber" @bind-Value="userUpdateModel.PhoneNumber" />
+					</div>
+					<div>
+						<label for="Email">Email</label>
+						<InputText class="form-control" id="Email" @bind-Value="userUpdateModel.Email" />
+					</div>
+					<div>
+						<label for="Password">Password</label>
+						<InputText class="form-control" id="Password" @bind-Value="userUpdateModel.Password" />
+					</div>
+
+					<br><br>
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</EditForm>
+
+				@code {
+					private UpdateUserModel userUpdateModel = new();
+
+					private void HandleValidSubmitUpdate()
+					{
+						UpdateUser(userUpdateModel.UserId, userUpdateModel);
+					}
+				}
+			</div>
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-header" id="headingFour">
+			<h5 class="mb-0">
+				<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+					Delete User
+				</button>
+			</h5>
+		</div>
+		<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+			<div class="card-body">
+				<EditForm Model="@userDeleteModel" OnValidSubmit="@HandleValidSubmitDelete">
+					<DataAnnotationsValidator />
+					<ValidationSummary />
+
+					<div>
+						<label for="User">UserId</label>
+						<InputText class="form-control" id="UserId" @bind-Value="userDeleteModel.UserId" />
+					</div>
+
+					<br><br>
+
+					<button type="submit" class="btn btn-danger">Delete</button>
+				</EditForm>
+
+				@code {
+					private DeleteUserModel userDeleteModel = new();
+
+					private void HandleValidSubmitDelete()
+					{
+						DeleteUser(userDeleteModel.UserId);
+					}
+				}
+			</div>
+		</div>
+	</div>
+</div>
+

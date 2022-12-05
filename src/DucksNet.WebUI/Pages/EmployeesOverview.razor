@@ -1,37 +1,206 @@
 ﻿@page "/employeesverview"
+@using DucksNet.WebUI.Pages.Models;
+
 @inject HttpClient Http
-<h3>EmployeesOverview</h3>
 
-@if (Employees == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table table-light">
-        <thead class="table-primary">
-        <th>Person ID</th>
-        <th>Person IdOffice</th>
-        <th>Person Surname</th>
-        <th>Person FirsName</th>
-        <th>Person Address</th>
-        <th>Person OwnerPhone</th>
-        <th>Person OwnerEmail</th>
-        </thead>
-        <tbody>
-            @foreach (var employee in Employees)
-            {
-                <tr>
-                    <td>@employee.Id</td>
-                    <td>@employee.IdOffice</td>
-                    <td>@employee.Surname</td>
-                    <td>@employee.FirstName</td>
-                    <td>@employee.Address</td>
-                    <td>@employee.OwnerPhone</td>
-                    <td>@employee.OwnerEmail</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<h3>Employees Overview</h3>
 
-}
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    GetAllEmployees
+                </button>
+                <button class="btn btn-primary" onclick="@ReloadAllEmployees">
+                    Reload
+                </button>
+
+            </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                @if (Employees != null)
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Employee Id</th>
+                                <th>Employee IdOffice</th>
+                                <th>Employee Surname</th>
+                                <th>Employee FirsName</th>
+                                <th>Employee Address</th>
+                                <th>Employee OwnerPhone</th>
+                                <th>Employee OwnerEmail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var employee in Employees)
+                            {
+                                <tr>
+                                    <td>@employee.Id</td>
+                                    <td>@employee.IdOffice</td>
+                                    <td>@employee.Surname</td>
+                                    <td>@employee.FirstName</td>
+                                    <td>@employee.Address</td>
+                                    <td>@employee.OwnerPhone</td>
+                                    <td>@employee.OwnerEmail</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p><em>No employees found.</em></p>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Update Employee
+                </button>
+            </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                <EditForm Model="@updateEmployeeModel" OnValidSubmit="@HandleValidSubmitUpdate">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    
+                    <div>
+                        <label for="IdEmployee">Id Employee</label>
+                        <InputText class="form-control" id="IdEmployee" @bind-Value="updateEmployeeModel.EmployeeId" />
+                    </div>
+                    <div>
+                        <label for="Surname">Surname</label>
+                        <InputText class="form-control" id="Surname" @bind-Value="updateEmployeeModel.Surname" />
+                    </div>
+                    <div>
+                        <label for="FirstName">First Name</label>
+                        <InputText class="form-control" id="FirstName" @bind-Value="updateEmployeeModel.FirstName" />
+                    </div>
+                    <div>
+                        <label for="Address">Address</label>
+                        <InputText class="form-control" id="Address" @bind-Value="updateEmployeeModel.Address" />
+                    </div>
+                    <div>
+                        <label for="OwnerPhone">Phone</label>
+                        <InputText class="form-control" id="Phone" @bind-Value="updateEmployeeModel.OwnerPhone" />
+                    </div>
+                    <div>
+                        <label for="Email">Email</label>
+                        <InputText class="form-control" id="Email" @bind-Value="updateEmployeeModel.OwnerEmail" />
+                    </div>
+
+                    <br><br>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </EditForm>
+
+                @code {
+                    private UpdateEmployeeModel updateEmployeeModel = new();
+
+                    private void HandleValidSubmitUpdate()
+                    {
+                        UpdateEmployee(updateEmployeeModel.EmployeeId, updateEmployeeModel);
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Create Employee
+                </button>
+            </h5>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                <EditForm Model="@createEmployeeModel" OnValidSubmit="@HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div>
+                        <label for="IdOffice">Id Office</label>
+                        <InputText class="form-control" id="IdOffice" @bind-Value="createEmployeeModel.IdOffice" />
+                    </div>
+                    <div>
+                        <label for="Surname">Surname</label>
+                        <InputText class="form-control" id="Surname" @bind-Value="createEmployeeModel.Surname" />
+                    </div>
+                    <div>
+                        <label for="FirstName">First Name</label>
+                        <InputText class="form-control" id="FirstName" @bind-Value="createEmployeeModel.FirstName" />
+                    </div>
+                    <div>
+                        <label for="Address">Address</label>
+                        <InputText class="form-control" id="Address" @bind-Value="createEmployeeModel.Address" />
+                    </div>
+                    <div>
+                        <label for="OwnerPhone">Phone</label>
+                        <InputText class="form-control" id="Phone" @bind-Value="createEmployeeModel.OwnerPhone" />
+                    </div>
+                    <div>
+                        <label for="Email">Email</label>
+                        <InputText class="form-control" id="Email" @bind-Value="createEmployeeModel.OwnerEmail" />
+                    </div>
+
+                    <br><br>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </EditForm>
+
+                @code {
+                    private CreateEmployeeModel createEmployeeModel = new();
+
+                    private void HandleValidSubmit()
+                    {
+                        CreateEmployee(createEmployeeModel);
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingFour">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    DeleteCage
+                </button>
+            </h5>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+            <div class="card-body">
+                <EditForm Model="@deleteEmployeeModel" OnValidSubmit="@HandleValidSubmitDelete">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div>
+                        <label for="Employee">EmployeeId</label>
+                        <InputText class="form-control" id="Employee" @bind-Value="deleteEmployeeModel.EmployeeId" />
+                    </div>
+
+                    <br><br>
+
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </EditForm>
+
+                @code {
+                    private DeleteEmployeeModel deleteEmployeeModel = new();
+
+                    private void HandleValidSubmitDelete()
+                    {
+                        DeleteEmployee(deleteEmployeeModel.EmployeeId);
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,218 @@
+﻿@page "/petsoverview"
+@using DucksNet.Domain.Model
+@using DucksNet.WebUI.Pages.Models;
+@inject HttpClient Http
+<h3>PetsOverview</h3>
+
+<div id="accordion">
+	<div class="card">
+		<div class="card-header" id="headingOne">
+			<h5 class="mb-0">
+				<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+					GetAllPets
+				</button>
+				<button class="btn btn-primary" onclick="@ReloadAllPets">
+					Reload
+				</button>
+
+			</h5>
+		</div>
+
+		<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+			<div class="card-body">
+				@if (Pets != null)
+				{
+					<table class="table">
+						<tr>
+							<th>Pet Id</th>
+							<th>Pet Name</th>
+							<th>Pet DateOfBirth</th>
+							<th>Pet Species</th>
+							<th>Pet Breed</th>
+							<th>Pet OwnerId</th>
+							<th>Pet Size</th>
+						</tr>
+						<tbody>
+							@foreach (var pet in Pets)
+							{
+								<tr>
+									<td>@pet.Id</td>
+									<td>@pet.Name</td>
+									<td>@pet.DateOfBirth</td>
+									<td>@pet.Species</td>
+									<td>@pet.Breed</td>
+									<td>@pet.OwnerId</td>
+									<td>@pet.Size</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				}
+				else
+				{
+					<p><em>No pets found.</em></p>
+				}
+
+			</div>
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-header" id="headingTwo">
+			<h5 class="mb-0">
+				<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					Create Pet
+				</button>
+			</h5>
+		</div>
+		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+			<div class="card-body">
+				<EditForm Model="@petCreateModel" OnValidSubmit="@HandleValidSubmit">
+					<DataAnnotationsValidator />
+					<ValidationSummary />
+
+					<div>
+						<label for="Name">Name</label>
+						<InputText class="form-control" id="Name" @bind-Value="petCreateModel.Name" />
+					</div>
+					<div>
+						<label for="DateOfBirth">Date of birth</label>
+						<InputDate class="form-control" id="DateOfBirth" @bind-Value="petCreateModel.DateOfBirth" />
+					</div>
+					<div>
+						<label for="Species">Species</label>
+						<InputText class="form-control" id="Species" @bind-Value="petCreateModel.Species" />
+					</div>
+					<div>
+						<label for="Breed">Breed</label>
+						<InputText class="form-control" id="Breed" @bind-Value="petCreateModel.Breed" />
+					</div>
+					<div>
+						<label for="OwnerId">Id Owner</label>
+						<InputText class="form-control" id="OwnerId" @bind-Value="petCreateModel.OwnerId" />
+					</div>
+					<div class="form-group">
+						<label for="Size">Size</label>
+						<InputSelect @bind-Value="petCreateModel.Size" id="Size" class="form-control">
+							<option value="">Select size ...</option>
+							<option value="Small">Small</option>
+							<option value="Medium">Medium</option>
+							<option value="Large">Large</option>
+						</InputSelect>
+					</div>
+
+					<br><br>
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</EditForm>
+
+				@code {
+					private CreatePetModel petCreateModel = new();
+
+					private void HandleValidSubmit()
+					{
+						CreatePet(petCreateModel);
+					}
+				}
+			</div>
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-header" id="headingThree">
+			<h5 class="mb-0">
+				<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+					Update Pet
+				</button>
+			</h5>
+		</div>
+		<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+			<div class="card-body">
+				<EditForm Model="@petUpdateModel" OnValidSubmit="@HandleValidSubmitUpdate">
+					<DataAnnotationsValidator />
+					<ValidationSummary />
+
+					<div>
+						<label for="PetId">Pet Id</label>
+						<InputText class="form-control" id="PetId" @bind-Value="petUpdateModel.PetId" />
+					</div>
+					<div>
+						<label for="Name">Name</label>
+						<InputText class="form-control" id="Name" @bind-Value="petUpdateModel.Name" />
+					</div>
+					<div>
+						<label for="DateOfBirth">Date of birth</label>
+						<InputDate class="form-control" id="DateOfBirth" @bind-Value="petUpdateModel.DateOfBirth" />
+					</div>
+					<div>
+						<label for="Species">Species</label>
+						<InputText class="form-control" id="Species" @bind-Value="petUpdateModel.Species" />
+					</div>
+					<div>
+						<label for="Breed">Breed</label>
+						<InputText class="form-control" id="Breed" @bind-Value="petUpdateModel.Breed" />
+					</div>
+					<div>
+						<label for="OwnerId">Id Owner</label>
+						<InputText class="form-control" id="OwnerId" @bind-Value="petUpdateModel.OwnerId" />
+					</div>
+					<div class="form-group">
+						<label for="Size">Size</label>
+						<InputSelect @bind-Value="petUpdateModel.Size" id="Size" class="form-control">
+							<option value="">Select size ...</option>
+							<option value="Small">Small</option>
+							<option value="Medium">Medium</option>
+							<option value="Large">Large</option>
+						</InputSelect>
+					</div>
+
+					<br><br>
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</EditForm>
+
+				@code {
+					private UpdatePetModel petUpdateModel = new();
+
+					private void HandleValidSubmitUpdate()
+					{
+						UpdatePet(petUpdateModel.PetId, petUpdateModel);
+					}
+				}
+			</div>
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-header" id="headingFour">
+			<h5 class="mb-0">
+				<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+					Delete Pet
+				</button>
+			</h5>
+		</div>
+		<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+			<div class="card-body">
+				<EditForm Model="@petDeleteModel" OnValidSubmit="@HandleValidSubmitDelete">
+					<DataAnnotationsValidator />
+					<ValidationSummary />
+
+					<div>
+						<label for="Pet">PetId</label>
+						<InputText class="form-control" id="PetId" @bind-Value="petDeleteModel.PetId" />
+					</div>
+
+					<br><br>
+
+					<button type="submit" class="btn btn-danger">Delete</button>
+				</EditForm>
+
+				@code {
+					private DeletePetModel petDeleteModel = new();
+
+					private void HandleValidSubmitDelete()
+					{
+						DeletePet(petDeleteModel.PetId);
+					}
+				}
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
 using DucksNet.Domain.Model.Enums;
-using DucksNet.Infrastructure.Prelude;
 
 namespace DucksNet.IntegrationTests;
 public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
@@ -130,18 +127,18 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
         getMedicineResult.Content.Headers.ContentLength.Should().Be(0);
     }
 
-    //[Fact]
-    //public async Task When_CreatedMedicineWithInvalidPrice_Then_ShouldReturnFail()
-    //{
-    //    ClearDatabase();
-    //    //Arrange
-    //    Guid id = Guid.NewGuid();
-    //    Medicine medicine = new Medicine(id, "Naldorex" , "Migraine", -999, DrugAdministration.Oral);
-    //    //Act
-    //    var medicineResponse = await TestingClient.PostAsJsonAsync(MedicineUrl, medicine);
-    //    //Assert
-    //    medicineResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-    //}
+    [Fact]
+    public async Task When_CreatedMedicineWithInvalidPrice_Then_ShouldReturnFail()
+    {
+        ClearDatabase();
+        //Arrange
+        Guid id = Guid.NewGuid();
+        Medicine medicine = new Medicine(id, "Naldorex", "Migraine", -999, DrugAdministration.Oral);
+        //Act
+        var medicineResponse = await TestingClient.PostAsJsonAsync(MedicineUrl, medicine);
+        //Assert
+        medicineResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
 
     [Fact]
     public async Task When_SearchingMedicineThatDoesntExist_Then_ShouldReturnFail()

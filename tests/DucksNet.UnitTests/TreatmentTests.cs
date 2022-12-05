@@ -36,5 +36,4 @@ public class TreatmentTests
         Tuple<Guid, Guid, Guid> sut = new(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
         return sut;
     }
-
 }
