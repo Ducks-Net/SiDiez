@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using DucksNet.Domain.Model;
 
+namespace DucksNet.UnitTests;
 public class TreatmentTests
 {
     [Fact]
