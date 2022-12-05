@@ -4,7 +4,6 @@ using DucksNet.Domain.Model;
 namespace DucksNet.UnitTests;
 public class TreatmentTests
 {
-
     [Fact]
     public void When_CreateTreatmentWithEmptyOwnerID_Then_ShouldFail()
     {
