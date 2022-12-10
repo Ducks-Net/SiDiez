@@ -81,7 +81,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
 
         var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
         Assert.NotNull(appointments);
-        appointments!.Count.Should().Be(1);
+        appointments!.Count.Should().Be(2); // NOTE (Al): broken for science
     }
 
     [Fact]
