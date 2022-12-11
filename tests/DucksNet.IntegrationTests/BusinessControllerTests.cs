@@ -603,5 +603,39 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         result!.ID.Should().Be(businessId);
     }
+    [Fact]
+    public void When_Create_Should_Fail()
+    {
+        ClearDatabase();
+        var business = new BusinessDTO
+        {
+            BusinessName = "BusinessName",
+            Surname = "",
+            FirstName = "FirstName",
+            Address = "Address",
+            OwnerPhone = "0731678902",
+            OwnerEmail = "asd@asd.com",
+        };
 
+        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var errors = response.Content.ReadFromJsonAsync<List<string>>().Result;
+
+        errors.Should().NotBeNull();
+
+        errors.Count.Should().Be(1);
+
+        errors[0].Should().Be("Surname is required");
+
+    }
+    [Fact]
+    public void When_Delete_Should_Fail()
+    {
+        ClearDatabase();
+        var response =  TestingClient.DeleteAsync($"{businessUrl}/00000000-0000-0000-0000-000000000000").Result;
+
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
 }       
