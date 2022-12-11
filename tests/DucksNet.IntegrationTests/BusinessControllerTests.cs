@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
@@ -59,7 +59,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         var errors = response.Content.ReadFromJsonAsync<List<string>>().Result;
         errors.Should().NotBeNull();
-        errors[0].Should().Be("Business name is required");
+        errors![0].Should().Be("Business name is required");
     }
     [Fact]
     public void When_Post_WithBadSurname_Should_Fail()
@@ -82,7 +82,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
         var errors = response.Content.ReadFromJsonAsync<List<string>>().Result;
 
         errors.Should().NotBeNull();
-        errors[0].Should().Be("Surname is required");
+        errors![0].Should().Be("Surname is required");
 
     } 
     [Fact]
@@ -107,7 +107,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors.Should().NotBeNull();
 
-        errors[0].Should().Be("First name is required");
+        errors![0].Should().Be("First name is required");
     }
     [Fact] 
     public void When_Post_WithBadAddress_Should_Fail()
@@ -131,7 +131,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors.Should().NotBeNull();
 
-        errors[0].Should().Be("Address is required");
+        errors![0].Should().Be("Address is required");
 
     }
     [Fact]
@@ -156,7 +156,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors.Should().NotBeNull();
 
-        errors[0].Should().Be("Owner phone is required");
+        errors![0].Should().Be("Owner phone is required");
     }
     [Fact]
     public void When_Post_WithBadOwnerEmail_Should_Fail()
@@ -180,7 +180,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors.Should().NotBeNull();
 
-        errors[0].Should().Be("Owner email is required");
+        errors![0].Should().Be("Owner email is required");
     }
     [Fact]
     public void When_Post_WithBadOwnerEmail_Should_Fail2()
@@ -204,7 +204,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors.Should().NotBeNull();
 
-        errors[0].Should().Be("Owner email is invalid");
+        errors![0].Should().Be("Owner email is invalid");
     }
     [Fact]
     public void When_Get_Should_ReturnBusiness()
@@ -363,8 +363,8 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors.Should().NotBeNull();
 
-        errors.Count.Should().Be(1);
-        errors[0].Should().Be("Owner email is required");
+        errors!.Count.Should().Be(1);
+        errors![0].Should().Be("Owner email is required");
     }
     [Fact]
     public void When_GetAll_Should_ReturnAllValues4()
@@ -406,7 +406,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors.Should().NotBeNull();
 
-        errors.Count.Should().Be(1);
+        errors!.Count.Should().Be(1);
 
         errors[0].Should().Be("Owner email is invalid");
     }
@@ -450,7 +450,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors.Should().NotBeNull();
 
-        errors.Count.Should().Be(1);
+        errors!.Count.Should().Be(1);
 
         errors[0].Should().Be("Owner email is invalid");
     }
@@ -494,7 +494,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors.Should().NotBeNull();
 
-        errors.Count.Should().Be(1);
+        errors!.Count.Should().Be(1);
 
         errors[0].Should().Be("Owner email is invalid");
     }
@@ -585,7 +585,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         result.Should().NotBeNull();
 
-        result.Count.Should().Be(0);
+        result!.Count.Should().Be(0);
     }
 
     [Fact]
@@ -625,7 +625,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors.Should().NotBeNull();
 
-        errors.Count.Should().Be(1);
+        errors!.Count.Should().Be(1);
 
         errors[0].Should().Be("Surname is required");
 

@@ -52,15 +52,15 @@ public class Business
     }
     public static Result<Business> Create(string businessName, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
-        if(businessName == null || businessName == string.Empty)
+        if(string.IsNullOrWhiteSpace(businessName))
             return Result<Business>.Error("Business name is required");
-        if(surname == null || surname == string.Empty)
+        if(string.IsNullOrWhiteSpace(surname))
             return Result<Business>.Error("Surname is required");
-        if(firstName == null || firstName == string.Empty)
+        if(string.IsNullOrWhiteSpace(firstName))
             return Result<Business>.Error("First name is required");
-        if(address == null || address == string.Empty)
+        if(string.IsNullOrWhiteSpace(address))
             return Result<Business>.Error("Address is required");
-        if(ownerPhone == null || ownerPhone == string.Empty)  
+        if(string.IsNullOrWhiteSpace(ownerPhone))  
             return Result<Business>.Error("Owner phone is required");
 
         for(int i = 0; i < ownerPhone.Length; i++)
