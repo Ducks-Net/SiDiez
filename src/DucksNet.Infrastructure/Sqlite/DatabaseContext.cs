@@ -59,4 +59,9 @@ public class DatabaseContext : DbContext, IDatabaseContext
     {
         SaveChanges();
     }
+
+    Task IDatabaseContext.SaveChangesAsync()
+    {
+        return SaveChangesAsync();
+    }
 }
