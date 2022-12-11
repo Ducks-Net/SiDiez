@@ -1,8 +1,9 @@
-﻿using DucksNet.API.DTO;
+﻿
+using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
-using DucksNet.Domain.Model.Enums;
 using DucksNet.Infrastructure.Prelude;
-using DucksNet.Infrastructure.Sqlite;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DucksNet.API.Controllers;
@@ -11,9 +12,11 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class MedicineController : ControllerBase
 {
+    private readonly IValidator<MedicineDTO> _validatorMedicine;
     private readonly IRepository<Medicine> _medicineRepository;
-    public MedicineController(IRepository<Medicine> repository)
+    public MedicineController(IValidator<MedicineDTO> validatorMedicine, IRepository<Medicine> repository)
     {
+        _validatorMedicine = validatorMedicine;
         _medicineRepository = repository;
     }
 
@@ -46,8 +49,20 @@ public class MedicineController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] MedicineDTO dto)
+    public async Task<IActionResult> Create([FromBody] MedicineDTO dto)
     {
+        ValidationResult resultValidate = await _validatorMedicine.ValidateAsync(dto,
+            options => options.IncludeRuleSets("CreateMedicine"));
+        if (!resultValidate.IsValid)
+        {
+            List<string> errorsList = new List<string>();
+            foreach (var error in resultValidate.Errors)
+            {
+                errorsList.Add(error.ErrorMessage);
+            }
+            return BadRequest(errorsList);
+        }
+        //NOTE (MG) : add validator to remove this
         var medicinePost = Medicine.Create(dto.Name, dto.Description, dto.Price, dto.DrugAdministrationString);
         if (medicinePost.IsFailure)
         {
@@ -79,12 +94,23 @@ public class MedicineController : ControllerBase
     }
 
     [HttpPut("{token:guid}")]
-    public IActionResult UpdateMedicine(Guid token, [FromBody] MedicineDTO dto)
+    public async Task<IActionResult> UpdateMedicine(Guid token, [FromBody] MedicineDTO dto)
     {
         var oldMedicine = _medicineRepository.Get(token);
         if (oldMedicine.IsFailure)
         {
             return BadRequest(oldMedicine.Errors);
+        }
+        ValidationResult resultValidate = await _validatorMedicine.ValidateAsync(dto,
+            options => options.IncludeRuleSets("CreateMedicine"));
+        if (!resultValidate.IsValid)
+        {
+            List<string> errorsList = new List<string>();
+            foreach (var error in resultValidate.Errors)
+            {
+                errorsList.Add(error.ErrorMessage);
+            }
+            return BadRequest(errorsList);
         }
         oldMedicine.Value!.UpdateMedicineFields(dto.Name, dto.Description, dto.Price, dto.DrugAdministrationString);
         var result = _medicineRepository.Update(oldMedicine.Value);

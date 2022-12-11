@@ -50,7 +50,8 @@ public class Medicine
 
     public Result UpdateMedicineFields(string name, string description, double price, string drugAdministrationString)
     {
-        // TODO(MG): simplify it
+        // NOTE (MG): simplify it
+        // NOTE (MG): accept also null values
         if (!string.IsNullOrWhiteSpace(name))
         {
             Name = name;

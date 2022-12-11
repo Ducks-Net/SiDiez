@@ -69,7 +69,6 @@ public class Employee
     }
     public Result UpdateFields(string? surname, string? firstName, string? address, string? ownerPhone, string? ownerEmail)
     {
-        List<string> output= new List<string>();
         bool hasNewInfo = false;
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(surname);
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(firstName);
