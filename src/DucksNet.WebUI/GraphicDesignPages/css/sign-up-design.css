@@ -1,0 +1,51 @@
+﻿body {
+    background-color: #D9C5B2;
+    border: none;
+    border-radius: 15px;
+    height: 50vh;
+    width: 75vw;
+}
+
+.sign-up-main-section {
+    color: #283D3B;
+    font-family: 'Playfair Display SC';
+    font-size: 48px;
+    text-align: center;
+}
+
+.sign-up-form {
+    background-color: #EDDDD4;
+    border: none;
+    border-radius: 15px;
+    padding-bottom: 1%;
+    width: 35vw;
+    margin: auto;
+}
+
+    .sign-up-form ::placeholder {
+        color: #197278;
+    }
+
+    .sign-up-form input {
+        background-color: #D9C5B2;
+        border: none;
+        border-radius: 15px;
+        color: #197278;
+        font-family: 'Playfair Display';
+        font-size: 50%;
+        font-weight: lighter;
+        height: 50%;
+        text-indent: 8%;
+        width: 90%;
+    }
+
+.sign-up-main-section button {
+    background-color: #EDDDD4;
+    border-radius: 15px;
+    border: none;
+    color: #283D3B;
+    text-align: center;
+    font-family: 'Playfair Display SC';
+    font-size: 50%;
+    font-weight: 700;
+}

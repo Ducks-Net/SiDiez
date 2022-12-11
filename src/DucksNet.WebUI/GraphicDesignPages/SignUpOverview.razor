@@ -1,0 +1,47 @@
+﻿@page "/signupoverview"
+@using DucksNet.Domain.Model
+@using DucksNet.WebUI.Pages.Models
+@using DucksNet.WebUI.Pages
+@inject HttpClient Http
+<h3>SignUpOverview</h3>
+
+<div class="card">
+	<div class="card-body">
+		<EditForm Model="@userCreateModel" OnValidSubmit="@HandleValidSubmitCreate">
+		<DataAnnotationsValidator />
+		<ValidationSummary />
+
+		<div>
+			<InputText class="form-control" id="FirstName" placeholder = "First Name" @bind-Value="userCreateModel.FirstName" />
+		</div>
+		<div>
+			<InputText class="form-control" id="LastName" placeholder = "Last Name" @bind-Value="userCreateModel.LastName" />
+		</div>
+		<div>
+			<InputText class="form-control" id="Address" placeholder = "Address" @bind-Value="userCreateModel.Address" />
+		</div>
+		<div>
+			<InputText class="form-control" id="PhoneNumber" placeholder = "Phone Number" @bind-Value="userCreateModel.PhoneNumber" />
+		</div>
+		<div>
+			<InputText class="form-control" id="Email" placeholder = "Email" @bind-Value="userCreateModel.Email" />
+		</div>
+		<div>
+			<InputText class="form-control" id="Password" placeholder = "Password" @bind-Value="userCreateModel.Password" />
+		</div>
+
+		<br><br>
+
+		<button type="submit" class="btn btn-primary">SIGN ME UP</button>
+		</EditForm>
+
+		@code {
+			private CreateUserModel userCreateModel = new();
+
+			private void HandleValidSubmitCreate()
+			{
+				CreateUser(userCreateModel);
+			}
+		}
+	</div>
+</div>
