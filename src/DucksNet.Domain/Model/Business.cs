@@ -11,6 +11,17 @@ public class Business
     public string OwnerPhone {get; private set;}
     public string OwnerEmail {get; private set;}
 
+    public Business(Guid id, string businessName, string surname, string firstName, string address, string ownerPhone, string ownerEmail) 
+    {
+        ID = id;
+        BusinessName = businessName;
+        Surname = surname;
+        FirstName = firstName;
+        Address = address;
+        OwnerPhone = ownerPhone;
+        OwnerEmail = ownerEmail;
+    }
+
     private Business(string businessName, string surname, string firstName, string address, string ownerPhone, string ownerEmail) 
     {
         ID = new Guid();
