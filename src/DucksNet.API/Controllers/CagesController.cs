@@ -1,6 +1,8 @@
-﻿using DucksNet.API.DTO;
+﻿using AutoMapper;
+using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
+using DucksNet.SharedKernel.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DucksNet.API.Controllers;
@@ -14,13 +16,15 @@ public class CagesController : ControllerBase
     private readonly IRepositoryAsync<Pet> _petsRepository;
     private readonly IRepositoryAsync<Office> _officeRepository;
     private readonly CageScheduleService _cageScheduleService;
-    public CagesController(IRepositoryAsync<Cage> cages, IRepositoryAsync<CageTimeBlock> cageTimeBlocks, IRepositoryAsync<Pet> pets, IRepositoryAsync<Office> officeRepository)
+    private readonly IMapper _mapper;
+    public CagesController(IRepositoryAsync<Cage> cages, IRepositoryAsync<CageTimeBlock> cageTimeBlocks, IRepositoryAsync<Pet> pets, IRepositoryAsync<Office> officeRepository, IMapper mapper)
     {
         _cagesRepository = cages;
         _cageTimeBlocksRepository = cageTimeBlocks;
         _petsRepository = pets;
         _officeRepository = officeRepository;
         _cageScheduleService = new CageScheduleService(_cagesRepository, _cageTimeBlocksRepository, _petsRepository);
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -56,7 +60,7 @@ public class CagesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateCageDTO dto)
     {
-        var cage = DucksNet.Domain.Model.Cage.Create(dto.SizeString);
+        var cage = _mapper.Map<Result<Cage>>(dto);
         if(cage.IsFailure || cage.Value == null)
         {
             return BadRequest(cage.Errors);
@@ -67,7 +71,7 @@ public class CagesController : ControllerBase
         {
             return BadRequest(location.Errors);
         }
-        cage.Value!.AssignToLocation(dto.LocationId);
+        cage.Value.AssignToLocation(dto.LocationId);
 
         var result = await _cagesRepository.AddAsync(cage.Value!);
         if(result.IsFailure)

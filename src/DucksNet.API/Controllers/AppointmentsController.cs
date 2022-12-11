@@ -9,15 +9,11 @@ namespace DucksNet.API.Controllers;
 public class AppointmentsController : ControllerBase
 {
     private readonly IRepositoryAsync<Appointment> _appointmentsRepository;
-    private readonly IRepositoryAsync<Office> _officeRepository;
-    private readonly IRepositoryAsync<Pet> _animalRepository;
     private readonly AppointmentScheduleService _appointmentScheduleService;
 
     public AppointmentsController(IRepositoryAsync<Appointment> repository, IRepositoryAsync<Office> officeRepository, IRepositoryAsync<Pet> animalRepository)
     {
         _appointmentsRepository = repository;
-        _officeRepository = officeRepository;
-        _animalRepository = animalRepository;
         _appointmentScheduleService = new AppointmentScheduleService(repository, officeRepository, animalRepository);
     }
 
