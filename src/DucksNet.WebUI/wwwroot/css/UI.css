@@ -150,6 +150,7 @@ h4 {
 
 .dec {
     align-items: center;
+    display: inline-flex;
 }
 
 #buton:hover {
