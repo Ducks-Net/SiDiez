@@ -30,7 +30,6 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordURL, medicalRecordDTO);
         var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordURL);
 
-        Console.WriteLine(medicalRecordResponse.Content.ReadAsStringAsync().Result);
         //Assert
         medicalRecordResponse.EnsureSuccessStatusCode();
         var medicalRecords = await medicalRecordResult.Content.ReadFromJsonAsync<List<MedicalRecordDTO>>();
@@ -70,6 +69,31 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordURL);
         //Assert
         medicalRecordResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public void When_GetById_Should_Succeed()
+    {
+        ClearDatabase();
+        // Arrange
+        var petId = SetupPet(Guid.NewGuid(), Size.Medium.Name);
+        var officeId = SetupOffice();
+        var idAppointment = SetupAppointment(petId, officeId);
+
+        MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, petId);
+        var medicalRecordResponse = TestingClient.PostAsJsonAsync(MedicalRecordURL, medicalRecordDTO).Result;
+        medicalRecordResponse.EnsureSuccessStatusCode();
+        var mr = medicalRecordResponse.Content.ReadFromJsonAsync<MedicalRecord>().Result!;
+        // Act
+        var response = TestingClient.GetAsync($"{MedicalRecordURL}/byId/{mr.Id}").Result;
+        response.EnsureSuccessStatusCode();
+        var result = response.Content.ReadFromJsonAsync<MedicalRecord>().Result!;
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        result.Should().NotBeNull();
+        result.IdAppointment.Should().Be(idAppointment);
+        result.IdClient.Should().Be(petId);
     }
 
     // TODO(RO) : after push of pet, can start here

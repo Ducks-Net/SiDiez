@@ -10,6 +10,13 @@ public class MedicalRecord
         IdClient = idClient;
     }
 
+    public MedicalRecord(Guid id, Guid idAppointment, Guid idClient) // NOTE(Al): json constructor
+    {
+        Id = id;
+        IdAppointment = idAppointment;
+        IdClient = idClient;
+    }
+
     public Guid Id { get; private set; }
     public Guid IdAppointment { get; private set; }
     public Guid IdClient { get; private set; }

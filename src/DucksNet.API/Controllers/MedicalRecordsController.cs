@@ -27,8 +27,8 @@ public class MedicalRecordsController : ControllerBase
         var cages = _medicalRecordRepository.GetAll();
         return Ok(cages);
     }
-    [HttpGet("{medicalRecordId:guid}")]
-    public IActionResult GetByLocationID(Guid medicalRecordId)
+    [HttpGet("byId/{medicalRecordId}")]
+    public IActionResult GetById(Guid medicalRecordId)
     {
         var medicalRecord = _medicalRecordRepository.Get(medicalRecordId);
         if (medicalRecord.IsFailure)
