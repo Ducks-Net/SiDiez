@@ -1,6 +1,8 @@
-﻿using DucksNet.API.DTO;
+﻿using AutoMapper;
+using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
+using DucksNet.SharedKernel.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DucksNet.API.Controllers;
@@ -14,13 +16,15 @@ public class CagesController : ControllerBase
     private readonly IRepository<Pet> _petsRepository;
     private readonly IRepository<Office> _officeRepository;
     private readonly CageScheduleService _cageScheduleService;
-    public CagesController(IRepository<Cage> cages, IRepository<CageTimeBlock> cageTimeBlocks, IRepository<Pet> pets, IRepository<Office> officeRepository)
+    private readonly IMapper _mapper;
+    public CagesController(IRepository<Cage> cages, IRepository<CageTimeBlock> cageTimeBlocks, IRepository<Pet> pets, IRepository<Office> officeRepository, IMapper mapper)
     {
         _cagesRepository = cages;
         _cageTimeBlocksRepository = cageTimeBlocks;
         _petsRepository = pets;
         _officeRepository = officeRepository;
         _cageScheduleService = new CageScheduleService(_cagesRepository, _cageTimeBlocksRepository, _petsRepository);
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -55,7 +59,7 @@ public class CagesController : ControllerBase
     [HttpPost]
     public IActionResult Create([FromBody] CreateCageDTO dto)
     {
-        var cage = DucksNet.Domain.Model.Cage.Create(dto.SizeString);
+        var cage = _mapper.Map<Result<Cage>>(dto);
         if(cage.IsFailure || cage.Value == null)
         {
             return BadRequest(cage.Errors);
@@ -66,9 +70,9 @@ public class CagesController : ControllerBase
         {
             return BadRequest(location.Errors);
         }
-        cage.Value!.AssignToLocation(dto.LocationId);
+        cage.Value.AssignToLocation(dto.LocationId);
 
-        var result = _cagesRepository.Add(cage.Value!);
+        var result = _cagesRepository.Add(cage.Value);
         if(result.IsFailure)
         {
             return BadRequest(result.Errors);
