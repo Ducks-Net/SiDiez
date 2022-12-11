@@ -85,12 +85,12 @@ public class EmployeesController : ControllerBase
             }
         }
         var resultUpdated = oldEmployee.Value!.UpdateFields(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
-        if(resultUpdated.First() != "The information has been updated")
+        if(resultUpdated.IsFailure)
         {
-            return BadRequest(resultUpdated.First());
+            return BadRequest(resultUpdated.Errors);
         }
         _employeesRepository.Update(oldEmployee.Value);
-        return Ok(resultUpdated.First());
+        return Ok("The information has been updated");
     }
     [HttpPut("{employeeId:guid}/{newOfficeId:guid}")]
     public IActionResult UpdateOfficeEmployee(Guid employeeId, Guid newOfficeId)
