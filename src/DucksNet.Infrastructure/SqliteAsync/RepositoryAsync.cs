@@ -19,7 +19,7 @@ public class RepositoryAsync<T> : IRepositoryAsync<T> where T : class
         var entity = await _context.Set<T>().FindAsync(id);
         if (entity == null)
         {
-            return Result<T>.Error($"Entity of type {typeof(T).Name} with id {id} was not found");
+            return Result<T>.Error($"Entity of type {typeof(T).Name} was not found.");
         }
 
         return Result<T>.Ok(entity);
