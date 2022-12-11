@@ -586,6 +586,22 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
         result.Should().NotBeNull();
 
         result.Count.Should().Be(0);
-
     }
+
+    [Fact]
+    public void When_Get_Should_ReturnValue()
+    {
+        ClearDatabase();
+        var businessId = GetBusinessId();
+        var response =  TestingClient.GetAsync($"{businessUrl}/{businessId}").Result;
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+
+        result.Should().NotBeNull();
+
+        result!.ID.Should().Be(businessId);
+    }
+
 }       
