@@ -55,7 +55,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         cageResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = cageResponse.Content.ReadFromJsonAsync<List<string>>().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("Office not found.");
+        errors.Should().Contain("Entity of type Office was not found.");
     }
 
     [Fact]

@@ -6,6 +6,8 @@ namespace DucksNet.Infrastructure.Prelude;
 
 public interface IDatabaseContext
 {
+    DbSet<T> Set<T>() where T : class;
+
     DbSet<Cage> Cages { get; }
     DbSet<CageTimeBlock> CageTimeBlocks { get; }
     DbSet<Business> Businesses { get; }
@@ -19,4 +21,5 @@ public interface IDatabaseContext
     DbSet<Employee> Employees { get; }
 
     void SaveChanges();
+    Task SaveChangesAsync();
 }

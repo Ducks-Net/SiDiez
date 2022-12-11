@@ -56,7 +56,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("Office not found.");
+        errors.Should().Contain("Entity of type Office was not found.");
     }
     [Fact]
     public async void When_CreateEmployeeWithEmptySurname_Then_ShouldFail()
@@ -233,7 +233,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         getEmployeeResult.StatusCode.Should().Be(HttpStatusCode.NotFound);
         var errors = getEmployeeResult.Content.ReadAsStringAsync().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("Employee not found");
+        errors.Should().Contain("Entity of type Employee was not found.");
     }
     [Fact]
     public async void When_CreatedEmployeeAndDeleteIt_Then_ShouldReturnSucces()
@@ -268,7 +268,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         getEmployeeResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = getEmployeeResult.Content.ReadFromJsonAsync<List<string>>().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("Employee not found");
+        errors.Should().Contain("Entity of type Employee was not found.");
     }
     [Fact]
     public async void When_CreatedEmployeeAndUpdateThePersonalInformation_Then_ShouldReturnModifiedEmployee()
@@ -303,7 +303,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         var errors = updatedEmployeeResponse.Content.ReadAsStringAsync().Result;
         //Assert
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        errors.Should().Contain("Employee not found");
+        errors.Should().Contain("Entity of type Employee was not found.");
     }
     [Fact]
     public async void When_CreatedEmployeeAndUpdateDuplicateEmail_Then_ShouldFail()
@@ -439,7 +439,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = updatedEmployeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("Office not found.");
+        errors.Should().Contain("Entity of type Office was not found.");
     }
     [Fact]
     public async void When_CreatedEmployeeAndUpdateOfficeWithInvalidGuid_Then_ShouldReturnModifiedEmployee()
@@ -460,7 +460,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = updatedEmployeeResponse.Content.ReadAsStringAsync().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("Employee not found");
+        errors.Should().Contain("Entity of type Employee was not found.");
     }
     private static EmployeeDTO CreateSUT()
     {
