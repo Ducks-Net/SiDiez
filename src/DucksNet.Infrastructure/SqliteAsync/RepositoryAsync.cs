@@ -6,7 +6,6 @@ namespace DucksNet.Infrastructure.Sqlite;
 
 public class RepositoryAsync<T> : IRepositoryAsync<T> where T : class
 {
-
     private readonly IDatabaseContext _context;
     
     public RepositoryAsync(IDatabaseContext context)
