@@ -4,7 +4,6 @@ namespace DucksNet.Domain.Model;
 
 public class User
 {
-    
     public Guid Id { get; private set; }
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
