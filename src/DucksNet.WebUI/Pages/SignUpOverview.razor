@@ -1,9 +1,7 @@
 ﻿@page "/signupoverview"
 @using DucksNet.Domain.Model
-@using DucksNet.WebUI.Pages.Models
-@using DucksNet.WebUI.Pages
+@using DucksNet.WebUI.Pages.Models;
 @inject HttpClient Http
-<h3>SignUpOverview</h3>
 
 <div class="card">
 	<div class="card-body">
@@ -11,28 +9,37 @@
 		<DataAnnotationsValidator />
 		<ValidationSummary />
 
-		<div>
-			<InputText class="form-control" id="FirstName" placeholder = "First Name" @bind-Value="userCreateModel.FirstName" />
-		</div>
-		<div>
-			<InputText class="form-control" id="LastName" placeholder = "Last Name" @bind-Value="userCreateModel.LastName" />
-		</div>
-		<div>
-			<InputText class="form-control" id="Address" placeholder = "Address" @bind-Value="userCreateModel.Address" />
-		</div>
-		<div>
-			<InputText class="form-control" id="PhoneNumber" placeholder = "Phone Number" @bind-Value="userCreateModel.PhoneNumber" />
-		</div>
-		<div>
-			<InputText class="form-control" id="Email" placeholder = "Email" @bind-Value="userCreateModel.Email" />
-		</div>
-		<div>
-			<InputText class="form-control" id="Password" placeholder = "Password" @bind-Value="userCreateModel.Password" />
-		</div>
-
-		<br><br>
-
+		<body>
+        <div class = "sign-up-main-section">
+            <h4>SIGN UP FOR FREE</h4>
+            <form class = "sign-up-form">
+				<div class = "input-boxes">
+	                <section class = "input-box">
+						<InputText class="form-control" id="FirstName" placeholder = "First Name" @bind-Value = "userCreateModel.FirstName" />
+					</section>
+					<section>
+						<InputText class="form-control" id="LastName" placeholder = "Last Name" @bind-Value = "userCreateModel.LastName" />
+					</section>
+					<section>
+						<InputText class="form-control" id="Address" placeholder = "Address" @bind-Value = "userCreateModel.Address" />
+					</section>
+					<section>
+						<InputText class="form-control" id="PhoneNumber" placeholder = "Phone Number" @bind-Value = "userCreateModel.PhoneNumber" />
+					</section>
+					<section>
+						<InputText class="form-control" id="Email" placeholder = "Email" @bind-Value = "userCreateModel.Email" />
+					</section>
+					<section>
+						<InputText class="form-control" type="password" id = "Password" placeholder = "Create Password" @bind-Value = "userCreateModel.Password" />
+					</section>
+					<section>
+						<InputText class="form-control" type = "password" id = "Password" placeholder = "Confirm Password" @bind-Value = "userCreateModel.ConfirmedPassword" />
+					</section>
+				</div>
+			</form>
 		<button type="submit" class="btn btn-primary">SIGN ME UP</button>
+		</div>
+		</body>
 		</EditForm>
 
 		@code {
