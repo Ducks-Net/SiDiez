@@ -21,6 +21,24 @@ public class Business
         OwnerPhone = ownerPhone;
         OwnerEmail = ownerEmail;
     }
+    private static bool checkValidEmail(string email)
+    {
+        bool isValid = true;
+        bool hasAt = false;
+        bool hasDot = false;
+        for(int i = 0; i < email.Length; i++)
+        {
+            if(email[i] == '@')
+                hasAt = true;
+            if(email[i] == '.')
+                hasDot = true;
+            if(!char.IsLetterOrDigit(email[i]) && email[i] != '@' && email[i] != '.')
+                isValid = false;
+        }
+        if(!hasAt || !hasDot)
+            isValid = false;
+        return isValid;
+    }
     public static Result<Business> Create(string businessName, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
         if(businessName == null || businessName == string.Empty)
@@ -33,8 +51,18 @@ public class Business
             return Result<Business>.Error("Address is required");
         if(ownerPhone == null || ownerPhone == string.Empty)  
             return Result<Business>.Error("Owner phone is required");
+
+        for(int i = 0; i < ownerPhone.Length; i++)
+            if(!char.IsDigit(ownerPhone[i]))
+                return Result<Business>.Error("Phone number must be numeric");
+        if(ownerPhone.Length != 10)
+            return Result<Business>.Error("Phone number must be 10 digits");
+
         if(ownerEmail == null || ownerEmail == string.Empty)  
             return Result<Business>.Error("Owner email is required");
+        if(!checkValidEmail(ownerEmail))
+            return Result<Business>.Error("Owner email is invalid");
+            
         return Result<Business>.Ok(new Business(businessName, surname, firstName, address, ownerPhone, ownerEmail));
     }
 }
