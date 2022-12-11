@@ -4,8 +4,6 @@ namespace DucksNet.WebUI.Pages.Models;
 
 public class CreateUserModel
 {
-    public string? UserId { get; set; }
-
     [Required]
     [StringLength(120, MinimumLength = 2, ErrorMessage = "First Name must be at least 2 characters long.")]
     public string? FirstName { get; set; }

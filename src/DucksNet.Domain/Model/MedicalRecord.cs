@@ -3,13 +3,6 @@
 namespace DucksNet.Domain.Model;
 public class MedicalRecord
 {
-
-    public MedicalRecord(Guid id, Guid idAppointment, Guid idClient)
-    {
-        Id = id;
-        IdAppointment = idAppointment;
-        IdClient = idClient;
-    }
     private MedicalRecord(Guid idAppointment, Guid idClient)
     {
         Id = Guid.NewGuid();
