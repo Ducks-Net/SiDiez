@@ -454,5 +454,138 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors[0].Should().Be("Owner email is invalid");
     }
-        
+    [Fact]
+    public void When_GetAll_Should_ReturnAllValues6()
+    {
+        ClearDatabase();
+        var business = new BusinessDTO
+        {
+            BusinessName = "BusinessName",
+            Surname = "Surname",
+            FirstName = "FirstName",
+            Address = "Address",
+            OwnerPhone = "0731678902",
+            OwnerEmail = "a@a.com",
+        };
+
+        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+
+        result.Should().NotBeNull();
+
+        var business2 = new BusinessDTO
+        {
+            BusinessName = "BusinessName2",
+            Surname = "Surname2",
+            FirstName = "FirstName2",
+            Address = "Address2",
+            OwnerPhone = "0734678902",
+            OwnerEmail = "asd@asd",
+        };
+
+        var response2 =  TestingClient.PostAsJsonAsync(businessUrl, business2).Result;
+
+        response2.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var errors = response2.Content.ReadFromJsonAsync<List<string>>().Result;
+
+        errors.Should().NotBeNull();
+
+        errors.Count.Should().Be(1);
+
+        errors[0].Should().Be("Owner email is invalid");
+    }
+    private Guid GetBusinessId()
+    {
+        var business = new BusinessDTO
+        {
+            BusinessName = "BusinessName",
+            Surname = "Surname",
+            FirstName = "FirstName",
+            Address = "Address",
+            OwnerPhone = "0731678902",
+            OwnerEmail = "asd@asd.com",
+        };
+
+        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+    
+        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+
+        result.Should().NotBeNull();
+
+        return result!.ID;
+    }
+    [Fact]
+    public void When_Delete_ShouldOnlyDeleteSelected()
+    {
+        ClearDatabase();
+        var businessId = GetBusinessId();
+        var businessId2 = GetBusinessId();
+        var businessId3 = GetBusinessId();
+
+        var response =  TestingClient.DeleteAsync($"{businessUrl}/{businessId}").Result;
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var response2 =  TestingClient.GetAsync($"{businessUrl}/{businessId}").Result;
+
+        response2.StatusCode.Should().Be(HttpStatusCode.NotFound);
+
+        var response3 =  TestingClient.GetAsync($"{businessUrl}/{businessId2}").Result;
+
+        response3.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var response4 =  TestingClient.GetAsync($"{businessUrl}/{businessId3}").Result;
+
+        response4.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var response5 =  TestingClient.DeleteAsync($"{businessUrl}/{businessId2}").Result;
+
+        response5.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var response6 =  TestingClient.GetAsync($"{businessUrl}/{businessId2}").Result;
+
+        response6.StatusCode.Should().Be(HttpStatusCode.NotFound);
+
+        var response7 =  TestingClient.GetAsync($"{businessUrl}/{businessId3}").Result;
+
+        response7.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var response8 =  TestingClient.DeleteAsync($"{businessUrl}/{businessId3}").Result;
+
+        response8.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var response9 =  TestingClient.GetAsync($"{businessUrl}/{businessId3}").Result;
+
+        response9.StatusCode.Should().Be(HttpStatusCode.NotFound);
+
+        var response10 =  TestingClient.GetAsync($"{businessUrl}/{businessId}").Result;
+
+        response10.StatusCode.Should().Be(HttpStatusCode.NotFound);
+
+        var response11 =  TestingClient.GetAsync($"{businessUrl}/{businessId2}").Result;
+
+        response11.StatusCode.Should().Be(HttpStatusCode.NotFound);
+
+        var response12 =  TestingClient.GetAsync($"{businessUrl}/{businessId3}").Result;
+
+        response12.StatusCode.Should().Be(HttpStatusCode.NotFound);
+
+        var response13 =  TestingClient.GetAsync(businessUrl).Result;
+
+        response13.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var result = response13.Content.ReadFromJsonAsync<List<Business>>().Result;
+
+        result.Should().NotBeNull();
+
+        result.Count.Should().Be(0);
+
+    }
 }       
