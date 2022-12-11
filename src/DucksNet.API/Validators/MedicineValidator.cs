@@ -9,7 +9,6 @@ namespace DucksNet.API.Validators;
 
 public class MedicineValidator : AbstractValidator<MedicineDTO>
 {
-
     public MedicineValidator()
     {
         RuleSet("CreateMedicine", () =>
@@ -19,6 +18,5 @@ public class MedicineValidator : AbstractValidator<MedicineDTO>
             RuleFor(e => e.Price).GreaterThan(0).WithMessage("Invalid price");
             // NOTE (MG) : add a rule for drug administration
         });
-        
     }
 }

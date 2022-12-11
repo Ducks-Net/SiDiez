@@ -13,6 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddValidatorsFromAssemblyContaining<EmployeeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<PetValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<MedicineValidator>();
 
 builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
 builder.Services.AddScoped<IRepository<Cage>, CagesRepository>();

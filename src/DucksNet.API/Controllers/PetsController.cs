@@ -1,6 +1,8 @@
 ﻿using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DucksNet.API.Controllers;
@@ -9,10 +11,12 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class PetsController : ControllerBase
 {
+    private readonly IValidator<PetDTO> _petValidator;
     private readonly IRepository<Pet> _petsRepository;
 
-    public PetsController(IRepository<Pet> pets)
+    public PetsController(IValidator<PetDTO> petValidator, IRepository<Pet> pets)
     {
+        _petValidator = petValidator;
         _petsRepository = pets;
     }
 
@@ -35,9 +39,20 @@ public class PetsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Register([FromBody] PetDTO dto)
+    public async Task<IActionResult> Register([FromBody] PetDTO dto)
     {
-        var pet = DucksNet.Domain.Model.Pet.Create(dto.Name!, dto.DateOfBirth, dto.Species!, dto.Breed!, dto.OwnerId, dto.Size);
+        ValidationResult resultValidate = await _petValidator.ValidateAsync(dto,
+            options => options.IncludeRuleSets("CreatePet"));
+        if (!resultValidate.IsValid)
+        {
+            List<string> errorsList = new List<string>();
+            foreach (var error in resultValidate.Errors)
+            {
+                errorsList.Add(error.ErrorMessage);
+            }
+            return BadRequest(errorsList);
+        }
+        var pet = Pet.Create(dto.Name!, dto.DateOfBirth, dto.Species!, dto.Breed!, dto.OwnerId, dto.Size);
         if (pet.IsFailure)
         {
             return BadRequest(pet.Errors);
