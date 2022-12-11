@@ -1,7 +1,8 @@
 ﻿using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
-
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DucksNet.API.Controllers;
@@ -10,11 +11,13 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class UsersController : ControllerBase
 {
+    private readonly IValidator<UserDTO> _userValidator;
     private readonly IRepository<User> _usersRepository;
     private readonly IRepository<Pet> _petsRepository;
 
-    public UsersController(IRepository<User> users, IRepository<Pet> pets)
+    public UsersController(IValidator<UserDTO> userValidator, IRepository<User> users, IRepository<Pet> pets)
     {
+        _userValidator = userValidator;
         _usersRepository = users;
         _petsRepository = pets;
     }
@@ -38,13 +41,20 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Register([FromBody] UserDTO dto)
+    public async Task<IActionResult> Register([FromBody] UserDTO dto)
     {
-        var user = DucksNet.Domain.Model.User.Create(dto.FirstName, dto.LastName, dto.Address, dto.PhoneNumber!, dto.Email!, dto.Password);
-        if(user.IsFailure)
+        ValidationResult resultValidate = await _userValidator.ValidateAsync(dto,
+            options => options.IncludeRuleSets("CreateUser"));
+        if (!resultValidate.IsValid)
         {
-            return BadRequest(user.Errors);
+            List<string> errorsList = new List<string>();
+            foreach (var error in resultValidate.Errors)
+            {
+                errorsList.Add(error.ErrorMessage);
+            }
+            return BadRequest(errorsList);
         }
+        var user = Domain.Model.User.Create(dto.FirstName, dto.LastName, dto.Address, dto.PhoneNumber!, dto.Email!, dto.Password);
         var result = _usersRepository.Add(user.Value!);
         if(result.IsFailure)
         {
