@@ -27,4 +27,8 @@ public class CreateUserModel
     [Required]
     [StringLength(50, MinimumLength = 5, ErrorMessage = "Password must be at least 5 characters long.")]
     public string? Password { get; set; }
+
+    [Required]
+    [Compare(nameof(Password), ErrorMessage = "Both passwords must be the same")]
+    public string? ConfirmedPassword { get; set; }
 }

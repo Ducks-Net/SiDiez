@@ -4,6 +4,7 @@ namespace DucksNet.Domain.Model;
 
 public class User
 {
+    
     public Guid Id { get; private set; }
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
@@ -23,6 +24,18 @@ public class User
         PhoneNumber = phoneNumber;
         Email = email;
         Password = password;
+    }
+
+    public User(Guid id, string firstName, string lastName, string address, string phoneNumber, string email, string password, List<Pet> pets)
+    {
+        Id = id;
+        FirstName = firstName;
+        LastName = lastName;
+        Address = address;
+        PhoneNumber = phoneNumber;
+        Email = email;
+        Password = password;
+        Pets = pets;
     }
 
     public static Result<User> Create(string? firstName, string? lastName, string? address, string phoneNumber, string email, string? password)
