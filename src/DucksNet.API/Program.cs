@@ -1,6 +1,7 @@
 ﻿using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Sqlite;
 using DucksNet.Infrastructure.Prelude;
+using DucksNet.API.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -19,6 +20,8 @@ builder.Services.AddScoped<IRepositoryAsync<MedicalRecord>, RepositoryAsync<Medi
 builder.Services.AddScoped<IRepositoryAsync<Employee>, RepositoryAsync<Employee>>();
 builder.Services.AddScoped<IRepositoryAsync<Business>, RepositoryAsync<Business>>();
 builder.Services.AddScoped<IRepositoryAsync<Office>, RepositoryAsync<Office>>();
+
+builder.Services.AddAutoMapper(typeof(CageMappingProfile).Assembly);
 
 builder.Services.AddCors(options =>
 {

@@ -1,5 +1,6 @@
 
 build:
+	export DOTNET_USE_POLLING_FILE_WATCHER=true;
 	dotnet build
 
 runAPI: build
