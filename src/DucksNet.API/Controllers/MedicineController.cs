@@ -11,42 +11,42 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class MedicineController : ControllerBase
 {
-    private readonly IRepository<Medicine> _medicineRepository;
-    public MedicineController(IRepository<Medicine> repository)
+    private readonly IRepositoryAsync<Medicine> _medicineRepository;
+    public MedicineController(IRepositoryAsync<Medicine> repository)
     {
         _medicineRepository = repository;
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var medicines = _medicineRepository.GetAll();
+        var medicines = await _medicineRepository.GetAllAsync();
         return Ok(medicines);
     }
 
     [HttpGet("byName/{name}")]
     public IActionResult GetByName(string name)
     {
-        var medicine = _medicineRepository.GetAll().Where(m => m.Name == name).ToList();
+        var medicine = _medicineRepository.GetAllAsync().Result.Where(m => m.Name == name).ToList();
         return Ok(medicine);
     }
 
     [HttpGet("byDescription/{description}")]
     public IActionResult GetByDescription(string description)
     {
-        var medicine = _medicineRepository.GetAll().Where(m => m.Description == description).ToList();
+        var medicine = _medicineRepository.GetAllAsync().Result.Where(m => m.Description == description).ToList();
         return Ok(medicine);
     }
 
     [HttpGet("byDrugAdministration/{drugAdministration}")]
     public IActionResult GetByClinicID(string drugAdministration)
     {
-        var medicine = _medicineRepository.GetAll().Where(m => m.DrugAdministration.Name == drugAdministration).ToList();
+        var medicine = _medicineRepository.GetAllAsync().Result.Where(m => m.DrugAdministration.Name == drugAdministration).ToList();
         return Ok(medicine);
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] MedicineDTO dto)
+    public async Task<IActionResult> Create([FromBody] MedicineDTO dto)
     {
         var medicinePost = Medicine.Create(dto.Name, dto.Description, dto.Price, dto.DrugAdministrationString);
         if (medicinePost.IsFailure)
@@ -54,7 +54,7 @@ public class MedicineController : ControllerBase
             return BadRequest(medicinePost.Errors);
         }
 
-        var result = _medicineRepository.Add(medicinePost.Value!);
+        var result = await _medicineRepository.AddAsync(medicinePost.Value!);
         if (result.IsFailure)
         {
             return BadRequest(result.Errors);
@@ -63,14 +63,14 @@ public class MedicineController : ControllerBase
     }
 
     [HttpDelete("{token:guid}")]
-    public IActionResult Delete(Guid token)
+    public async Task<IActionResult> Delete(Guid token)
     {
-        var medicine = _medicineRepository.Get(token);
+        var medicine = await _medicineRepository.GetAsync(token);
         if (medicine.IsFailure)
         {
             return BadRequest(medicine.Errors);
         }
-        var result = _medicineRepository.Delete(medicine.Value!);
+        var result = await _medicineRepository.DeleteAsync(medicine.Value!);
         if (result.IsFailure)
         {
             return BadRequest(result.Errors);
@@ -79,15 +79,15 @@ public class MedicineController : ControllerBase
     }
 
     [HttpPut("{token:guid}")]
-    public IActionResult UpdateMedicine(Guid token, [FromBody] MedicineDTO dto)
+    public async Task<IActionResult> UpdateMedicine(Guid token, [FromBody] MedicineDTO dto)
     {
-        var oldMedicine = _medicineRepository.Get(token);
+        var oldMedicine = await _medicineRepository.GetAsync(token);
         if (oldMedicine.IsFailure)
         {
             return BadRequest(oldMedicine.Errors);
         }
         oldMedicine.Value!.UpdateMedicineFields(dto.Name, dto.Description, dto.Price, dto.DrugAdministrationString);
-        var result = _medicineRepository.Update(oldMedicine.Value);
+        var result = await _medicineRepository.UpdateAsync(oldMedicine.Value);
         if (result.IsFailure)
         {
             return BadRequest(result.Errors);

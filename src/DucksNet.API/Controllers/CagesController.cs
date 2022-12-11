@@ -9,12 +9,12 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class CagesController : ControllerBase
 {
-    private readonly IRepository<Cage> _cagesRepository;
-    private readonly IRepository<CageTimeBlock> _cageTimeBlocksRepository;
-    private readonly IRepository<Pet> _petsRepository;
-    private readonly IRepository<Office> _officeRepository;
+    private readonly IRepositoryAsync<Cage> _cagesRepository;
+    private readonly IRepositoryAsync<CageTimeBlock> _cageTimeBlocksRepository;
+    private readonly IRepositoryAsync<Pet> _petsRepository;
+    private readonly IRepositoryAsync<Office> _officeRepository;
     private readonly CageScheduleService _cageScheduleService;
-    public CagesController(IRepository<Cage> cages, IRepository<CageTimeBlock> cageTimeBlocks, IRepository<Pet> pets, IRepository<Office> officeRepository)
+    public CagesController(IRepositoryAsync<Cage> cages, IRepositoryAsync<CageTimeBlock> cageTimeBlocks, IRepositoryAsync<Pet> pets, IRepositoryAsync<Office> officeRepository)
     {
         _cagesRepository = cages;
         _cageTimeBlocksRepository = cageTimeBlocks;
@@ -24,16 +24,16 @@ public class CagesController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var cages = _cagesRepository.GetAll();
+        var cages = await _cagesRepository.GetAllAsync();
         return Ok(cages);
     }
 
     [HttpGet("{id}")]
-    public IActionResult Get(Guid id)
+    public async Task<IActionResult> Get(Guid id)
     {
-        var cage = _cagesRepository.Get(id);
+        var cage = await _cagesRepository.GetAsync(id);
         if (cage.IsFailure)
         {
             return NotFound(cage.Errors);
@@ -42,18 +42,19 @@ public class CagesController : ControllerBase
     }
 
     [HttpGet("byLocation/{locationId}")]
-    public IActionResult GetByLocationID(Guid locationId)
+    public async Task<IActionResult> GetByLocationID(Guid locationId)
     {
-        var cages = _cagesRepository.GetAll().Where(c => c.LocationId == locationId).ToList();
-        if (cages is null || cages.Count == 0)
+        var cages = await _cagesRepository.GetAllAsync();
+        var cagesAtLocation = cages.Where(c => c.LocationId == locationId);
+        if (cagesAtLocation is null || !cagesAtLocation.Any())
         {
             return NotFound();
         }
-        return Ok(cages);
+        return Ok(cagesAtLocation);
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] CreateCageDTO dto)
+    public async Task<IActionResult> Create([FromBody] CreateCageDTO dto)
     {
         var cage = DucksNet.Domain.Model.Cage.Create(dto.SizeString);
         if(cage.IsFailure || cage.Value == null)
@@ -61,14 +62,14 @@ public class CagesController : ControllerBase
             return BadRequest(cage.Errors);
         }
 
-        var location = _officeRepository.Get(dto.LocationId);
+        var location = await _officeRepository.GetAsync(dto.LocationId);
         if(location.IsFailure)
         {
             return BadRequest(location.Errors);
         }
         cage.Value!.AssignToLocation(dto.LocationId);
 
-        var result = _cagesRepository.Add(cage.Value!);
+        var result = await _cagesRepository.AddAsync(cage.Value!);
         if(result.IsFailure)
         {
             return BadRequest(result.Errors);
@@ -78,18 +79,14 @@ public class CagesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var cage = _cagesRepository.Get(id);
+        var cage = await _cagesRepository.GetAsync(id);
         if(cage.IsFailure)
         {
             return NotFound(cage.Errors);
         }
-        var result = _cagesRepository.Delete(cage.Value!);
-        if(result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
+        await _cagesRepository.DeleteAsync(cage.Value!);
         return Ok();
     }
     
