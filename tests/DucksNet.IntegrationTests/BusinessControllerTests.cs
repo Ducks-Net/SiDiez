@@ -30,11 +30,15 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
         var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        System.Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+        //System.Console.WriteLine(response.Content.ReadAsStringAsync().Result);
         var result = response.Content.ReadFromJsonAsync<Business>().Result;
         result.Should().NotBeNull();
         result!.BusinessName.Should().Be(business.BusinessName);
-
+        result!.Surname.Should().Be(business.Surname);
+        result!.FirstName.Should().Be(business.FirstName);
+        result!.Address.Should().Be(business.Address);
+        result!.OwnerPhone.Should().Be(business.OwnerPhone);
+        result!.OwnerEmail.Should().Be(business.OwnerEmail);
     }
     [Fact]
     public void When_Post_WithBadBusinessName_Should_Fail()
@@ -203,5 +207,32 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors[0].Should().Be("Owner email is invalid");
     }
+    [Fact]
+    public void When_Get_Should_ReturnBusiness()
+    {
+        ClearDatabase();
+        var business = new BusinessDTO
+        {
+            BusinessName = "BusinessName",
+            Surname = "Surname",
+            FirstName = "FirstName",
+            Address = "Address",
+            OwnerPhone = "0734567890",
+            OwnerEmail = "ion@e.com",
+        };
 
+        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+
+        result.Should().NotBeNull();
+        result!.BusinessName.Should().Be(business.BusinessName);
+        result.Surname.Should().Be(business.Surname);
+        result.FirstName.Should().Be(business.FirstName);
+        result.Address.Should().Be(business.Address);
+        result.OwnerPhone.Should().Be(business.OwnerPhone);
+        result.OwnerEmail.Should().Be(business.OwnerEmail);
+    }
 }
