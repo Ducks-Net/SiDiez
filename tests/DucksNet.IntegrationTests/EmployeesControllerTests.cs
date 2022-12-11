@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
+using FluentValidation.Results;
 
 namespace DucksNet.IntegrationTests;
 public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController>
@@ -86,7 +88,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("First name can not be empty");
+        errors!.First().Should().Contain("First name can not be empty");
     }
     [Fact]
     public async void When_CreateEmployeeWithEmptyAddress_Then_ShouldFail()
@@ -101,7 +103,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("Address can not be empty");
+        errors!.First().Should().Contain("Address can not be empty");
     }
     [Fact]
     public async void When_CreateEmployeeWithEmptyEmail_Then_ShouldFail()
@@ -116,7 +118,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("Email can not be empty");
+        errors!.First().Should().Contain("Email can not be empty");
     }
     [Fact]
     public async void When_CreateEmployeeWithEmptyTelephone_Then_ShouldFail()
@@ -131,7 +133,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("Telephone can not be empty");
+        errors!.First().Should().Contain("Telephone can not be empty");
     }
     [Fact]
     public async void When_CreateEmployeeWithInvalidTelephone_Then_ShouldFail()
@@ -146,7 +148,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("The telephone number is not valid");
+        errors!.First().Should().Contain("The telephone number is not valid");
     }
     [Fact]
     public async void When_CreateEmployeeWithInvalidEmail_Then_ShouldFail()
@@ -161,7 +163,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("The email is not valid");
+        errors!.First().Should().Contain("The email is not valid");
     }
     [Fact]
     public async void When_CreateTwoEmployeeWithSameEmail_Then_ShouldFail()

@@ -55,7 +55,7 @@ public class CagesController : ControllerBase
     [HttpPost]
     public IActionResult Create([FromBody] CreateCageDTO dto)
     {
-        var cage = DucksNet.Domain.Model.Cage.Create(dto.SizeString);
+        var cage = Cage.Create(dto.SizeString);
         if(cage.IsFailure || cage.Value == null)
         {
             return BadRequest(cage.Errors);

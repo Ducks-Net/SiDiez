@@ -1,6 +1,10 @@
 ﻿using DucksNet.API.DTO;
+using DucksNet.API.Validators;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
+using DucksNet.SharedKernel.Utils;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,12 +14,14 @@ namespace DucksNet.API.Controllers;
 [ApiController]
 public class EmployeesController : ControllerBase
 {
+    private readonly IValidator<EmployeeDTO> _createValidator;
     private readonly IRepository<Employee> _employeesRepository;
     private readonly IRepository<Office> _officeRepository;
 
-    public EmployeesController(IRepository<Employee> employeeRepository, IRepository<Office> officeRepository)
+    public EmployeesController(IValidator<EmployeeDTO> validator, IRepository<Employee> employeeRepository, IRepository<Office> officeRepository)
     {
-       _employeesRepository = employeeRepository;
+        _createValidator = validator;
+        _employeesRepository = employeeRepository;
         _officeRepository = officeRepository;
     }
     [HttpGet]
@@ -35,36 +41,43 @@ public class EmployeesController : ControllerBase
         return Ok(employee.Value);
     }
     [HttpPost]
-    public IActionResult Create([FromBody] EmployeeDTO dto)
+    public async Task<IActionResult> Create([FromBody] EmployeeDTO dto)
     {
         var office = _officeRepository.Get(dto.IdOffice);
         if (office.IsFailure)
         {
             return BadRequest(office.Errors);
         }
-        var employeePost = Employee.Create(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
-        if (employeePost.IsFailure)
+        ValidationResult resultValidate = await _createValidator.ValidateAsync(dto, 
+            options => options.IncludeRuleSets("CreateEmployee"));
+        if (!resultValidate.IsValid)
         {
-            return BadRequest(employeePost.Errors);
+            List<string> errorsList = new List<string>();
+            foreach(var error in resultValidate.Errors)
+            {
+                errorsList.Add(error.ErrorMessage);
+            }
+            return BadRequest(errorsList);
         }
+        var employeePost = Employee.Create(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
         employeePost.Value!.AssignToOffice(office.Value!.ID);
         var employees = _employeesRepository.GetAll();
         foreach (var employee in employees)
         {
-            if(employee.OwnerEmail == dto.OwnerEmail)
+            if (employee.OwnerEmail == dto.OwnerEmail)
             {
-                return BadRequest("The email already exists");
+                return BadRequest(new List<string> { "The email already exists" });
             }
             if (employee.OwnerPhone == dto.OwnerPhone)
             {
-                return BadRequest("The telephone number already exists");
+                return BadRequest(new List<string> { "The telephone number already exists" });
             }
         }
         _employeesRepository.Add(employeePost.Value);
         return Ok(employeePost.Value);
     }
     [HttpPut("{employeeId:guid}")]
-    public IActionResult UpdatePersonalInformationEmployee(Guid employeeId, [FromBody] EmployeeDTO dto)
+    public async Task<IActionResult> UpdatePersonalInformationEmployee(Guid employeeId, [FromBody] EmployeeDTO dto)
     {
         var oldEmployee = _employeesRepository.Get(employeeId);
  
@@ -77,18 +90,25 @@ public class EmployeesController : ControllerBase
         {
             if (employee.OwnerEmail == dto.OwnerEmail)
             {
-                return BadRequest("The updated email already exists");
+                return BadRequest(new List<string> { "The updated email already exists" });
             }
             if (employee.OwnerPhone == dto.OwnerPhone)
             {
-                return BadRequest("The updated telephone number already exists");
+                return BadRequest(new List<string> { "The updated telephone number already exists" });
             }
         }
-        var resultUpdated = oldEmployee.Value!.UpdateFields(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
-        if(resultUpdated.IsFailure)
+        ValidationResult resultValidate = await _createValidator.ValidateAsync(dto,
+            options => options.IncludeRuleSets("UpdateEmployee"));
+        if (!resultValidate.IsValid)
         {
-            return BadRequest(resultUpdated.Errors);
+            List<string> errorsList = new List<string>();
+            foreach (var error in resultValidate.Errors)
+            {
+                errorsList.Add(error.ErrorMessage);
+            }
+            return BadRequest(errorsList);
         }
+        oldEmployee.Value!.UpdateFields(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
         _employeesRepository.Update(oldEmployee.Value);
         return Ok("The information has been updated");
     }

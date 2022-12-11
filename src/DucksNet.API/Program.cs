@@ -1,12 +1,18 @@
 ﻿using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Sqlite;
 using DucksNet.Infrastructure.Prelude;
+using FluentValidation.AspNetCore;
+using System.Reflection;
+using DucksNet.API.Validators;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddValidatorsFromAssemblyContaining<EmployeeValidator>();
 
 builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
 builder.Services.AddScoped<IRepository<Cage>, CagesRepository>();
