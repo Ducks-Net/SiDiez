@@ -1,11 +1,12 @@
 ﻿using DucksNet.Domain.Model;
+using DucksNet.SharedKernel.Utils;
 using DucksNet.WebUI.Pages.Models;
 
 namespace DucksNet.WebUI.Pages.Services;
 public interface IPetDataService
 {
-    Task CreatePet(CreatePetModel petCreateModel);
-    Task DeletePet(string petId);
-    Task<IEnumerable<Pet>> GetAllPets();
-    Task UpdatePet(string petId, UpdatePetModel updatePetModel);
+    Task<Result> CreatePet(CreatePetModel petCreateModel);
+    Task<Result> DeletePet(string petId);
+    Task<Result<IEnumerable<Pet>>> GetAllPets();
+    Task<Result> UpdatePet(string petId, UpdatePetModel updatePetModel);
 }
