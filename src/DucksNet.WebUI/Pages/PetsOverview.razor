@@ -15,7 +15,6 @@
 				<button class="btn btn-primary" onclick="@ReloadAllPets">
 					Reload
 				</button>
-
 			</h5>
 		</div>
 
@@ -63,7 +62,7 @@
                                         <td><InputDate class="form-control" @bind-Value="_petUpdateModel.DateOfBirth" /></td>
                                         <td><InputText class="form-control" @bind-Value="_petUpdateModel.Species" /></td>
                                         <td><InputText class="form-control" @bind-Value="_petUpdateModel.Breed" /></td>
-                                        <td><InputText class="form-control" @bind-Value="_petUpdateModel.OwnerId" /></td>
+                                        <td><InputSelect class="form-select" data-live-search="true" @bind-Value="_petUpdateModel.OwnerId"> @foreach (var owner in Owners) { <option value="@owner.Id" class="mx-5">@owner.FirstName @owner.LastName </option> }</InputSelect> </td>
                                         <td><InputText class="form-control" @bind-Value="_petUpdateModel.Size" /></td>
                                         <td>
                                             <!-- Space out the buttons -->
@@ -85,7 +84,7 @@
                     @code {
                         private UpdatePetModel _petUpdateModel = new();
                         private Result? resultOfUpdate = null;
-
+                        
                         private async Task OnDeletePet(string id)
                         {
                             var response = await DeletePet(id);

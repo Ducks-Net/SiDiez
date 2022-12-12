@@ -10,7 +10,16 @@ public partial class PetsOverview : ComponentBase
 {
     [Inject]
     public IPetDataService? PetDataService { get; set; }
+    [Inject]
+    public IUserDataService? UserDataService { get; set; }
     public List<Pet> Pets { get; set; } = default!;
+    public IEnumerable<User> Owners { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ReloadAllPets();
+        Owners = (await GetUsers())!;
+    }
 
     protected async Task ReloadAllPets()
     {
@@ -34,5 +43,10 @@ public partial class PetsOverview : ComponentBase
     protected async Task<Result> DeletePet(string petId)
     {
         return await PetDataService!.DeletePet(petId);
+    }
+
+    protected async Task<IEnumerable<User>> GetUsers()
+    {
+        return (await UserDataService!.GetAllUsers())!;
     }
 }
