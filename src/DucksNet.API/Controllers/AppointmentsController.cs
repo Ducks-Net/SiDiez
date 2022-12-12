@@ -8,45 +8,41 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class AppointmentsController : ControllerBase
 {
-    private readonly IRepository<Appointment> _appointmentsRepository;
+    private readonly IRepositoryAsync<Appointment> _appointmentsRepository;
     private readonly AppointmentScheduleService _appointmentScheduleService;
-    private readonly IRepository<Office> _officeRepository;
-    private readonly IRepository<Pet> _animalRepository;
 
-    public AppointmentsController(IRepository<Appointment> repository, IRepository<Office> officeRepository, IRepository<Pet> animalRepository)
+    public AppointmentsController(IRepositoryAsync<Appointment> repository, IRepositoryAsync<Office> officeRepository, IRepositoryAsync<Pet> animalRepository)
     {
         _appointmentsRepository = repository;
-        _officeRepository = officeRepository;
-        _animalRepository = animalRepository;
         _appointmentScheduleService = new AppointmentScheduleService(repository, officeRepository, animalRepository);
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var appointments = _appointmentsRepository.GetAll();
+        var appointments = await _appointmentsRepository.GetAllAsync();
         return Ok(appointments);
     }
 
     [HttpGet("byPet/{petId}")]
-    public IActionResult GetByPetID(Guid petId)
+    public async Task<IActionResult> GetByPetID(Guid petId)
     {
-        var appointments = _appointmentsRepository.GetAll().Where(a => a.PetId == petId).ToList();
-        return Ok(appointments);
+        var appointments = await _appointmentsRepository.GetAllAsync();
+        return Ok(appointments.Where(a => a.PetId == petId));
     }
 
     [HttpGet("byEmployee/{employeeId}")]
-    public IActionResult GetByVetID(Guid vetId)
+    public async Task<IActionResult> GetByVetID(Guid vetId)
     {
-        var appointments = _appointmentsRepository.GetAll().Where(a => a.VetId == vetId).ToList();
-        return Ok(appointments);
+        var appointments = await _appointmentsRepository.GetAllAsync();
+        return Ok(appointments.Where(a => a.VetId == vetId));
     }
 
     [HttpGet("byOffice/{locationId}")]
-    public IActionResult GetByLocationID(Guid? locationId)
+    public async Task<IActionResult> GetByLocationID(Guid? locationId)
     {
-        var appointments = _appointmentsRepository.GetAll().Where(a => a.LocationId == locationId).ToList();
-        return Ok(appointments);
+        var appointments = await _appointmentsRepository.GetAllAsync();
+        return Ok(appointments.Where(a => a.LocationId == locationId));
     }
 
     [HttpPost]

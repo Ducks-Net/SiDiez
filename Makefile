@@ -1,5 +1,6 @@
 
 build:
+	export DOTNET_USE_POLLING_FILE_WATCHER=true;
 	dotnet build
 
 runAPI: build
@@ -8,7 +9,7 @@ runUI: build
 	x-terminal-emulator --hold -e 'dotnet run --no-build --project ./src/DucksNet.API/' & \
     x-terminal-emulator --hold -e 'dotnet run --no-build --project ./src/DucksNet.WebUI/' &
 
-INTEGRATION_TESTTS=AppointmentsController CagesController EmployeesController MedicalRecordsController MedicineController TreatmentController
+INTEGRATION_TESTTS=OfficeController BusinessController AppointmentsController CagesController EmployeesController MedicalRecordsController MedicineController TreatmentController 
 
 test_integration_cov: build
     # loop to each integration test

@@ -9,37 +9,37 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class BusinessController : ControllerBase
 {
-    private readonly IRepository<Business> repository;
+    private readonly IRepositoryAsync<Business> _repository;
 
-    public BusinessController(IRepository<Business> repository)
+    public BusinessController(IRepositoryAsync<Business> repository)
     {
-        this.repository = repository;
+        this._repository = repository;
     }
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var businesses = repository.GetAll();
+        var businesses = await _repository.GetAllAsync();
         return Ok(businesses);
     }
     [HttpPost]
-    public IActionResult Create([FromBody] BusinessDTO dto)
+    public async Task<IActionResult> Create([FromBody] BusinessDTO dto)
     {
         var business = DucksNet.Domain.Model.Business.Create(dto.BusinessName, dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
         if(business.IsFailure)
         {
             return BadRequest(business.Errors);
         }
-        var result = repository.Add(business.Value!);
+        var result = await _repository.AddAsync(business.Value!);
         if(result.IsFailure)
         {
             return BadRequest(result.Errors);
         }
-        return Ok(business);
+        return Ok(business.Value!);
     }
     [HttpGet("{id}")]
-    public IActionResult Get(Guid id)
+    public async Task<IActionResult> Get(Guid id)
     {
-        var business = repository.Get(id);
+        var business = await _repository.GetAsync(id);
         if(business.IsFailure)
         {
             return NotFound(business.Errors);
@@ -47,14 +47,14 @@ public class BusinessController : ControllerBase
         return Ok(business.Value);
     }
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var business = repository.Get(id);
+        var business = await _repository.GetAsync(id);
         if(business.IsFailure)
         {
             return NotFound(business.Errors);
         }
-        var result = repository.Delete(business.Value!);
+        var result = await _repository.DeleteAsync(business.Value!);
         if(result.IsFailure)
         {
             return BadRequest(result.Errors);

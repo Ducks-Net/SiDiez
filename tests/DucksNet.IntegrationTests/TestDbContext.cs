@@ -1,4 +1,5 @@
-﻿using DucksNet.Domain.Model;
+﻿using System.Threading.Tasks;
+using DucksNet.Domain.Model;
 using DucksNet.Domain.Model.Enums;
 using DucksNet.Infrastructure.Prelude;
 
@@ -61,5 +62,10 @@ public class TestDbContext : DbContext, IDatabaseContext
     void IDatabaseContext.SaveChanges()
     {
         SaveChanges();
+    }
+
+    public Task SaveChangesAsync()
+    {
+        return base.SaveChangesAsync();
     }
 }
