@@ -23,6 +23,14 @@ builder.Services.AddHttpClient<IPetDataService, PetDataService>
     (
         client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
     );
+builder.Services.AddHttpClient<IMedicineDataService, MedicineDataService>
+    (
+        client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+    );
+builder.Services.AddHttpClient<ITreatmentDataService, TreatmentDataService>
+    (
+        client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+    );
 builder.Services.AddHttpClient<IUserDataService, UserDataService>
     (
         client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)

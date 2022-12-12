@@ -8,27 +8,28 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class OfficeController : ControllerBase
 {
-    private readonly IRepository<Office> repository;
+    private readonly IRepositoryAsync<Office> _repository;
 
-    public OfficeController(IRepository<Office> repository)
+    public OfficeController(IRepositoryAsync<Office> repository)
     {
-        this.repository = repository;
+        this._repository = repository;
     }
+
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var offices = repository.GetAll();
+        var offices = await _repository.GetAllAsync();
         return Ok(offices);
     }
     [HttpPost]
-    public IActionResult Create([FromBody] OfficeDTO dto)
+    public async Task<IActionResult> Create([FromBody] OfficeDTO dto)
     {
         var office = DucksNet.Domain.Model.Office.Create(dto.BusinessId, dto.Address, dto.AnimalCapacity);
         if(office.IsFailure)
         {
             return BadRequest(office.Errors);
         }
-        var result = repository.Add(office.Value!);
+        var result = await _repository.AddAsync(office.Value!);
         if(result.IsFailure)
         {
             return BadRequest(result.Errors);
@@ -36,9 +37,9 @@ public class OfficeController : ControllerBase
         return Ok(office.Value!);
     }
     [HttpGet("{id}")]
-    public IActionResult Get(Guid id)
+    public async Task<IActionResult> Get(Guid id)
     {
-        var office = repository.Get(id);
+        var office = await _repository.GetAsync(id);
         if(office.IsFailure)
         {
             return NotFound(office.Errors);
@@ -46,14 +47,14 @@ public class OfficeController : ControllerBase
         return Ok(office.Value);
     }
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var office = repository.Get(id);
+        var office = await _repository.GetAsync(id);
         if(office.IsFailure)
         {
             return NotFound(office.Errors);
         }
-        var result = repository.Delete(office.Value!);
+        var result = await _repository.DeleteAsync(office.Value!);
         if(result.IsFailure)
         {
             return BadRequest(result.Errors);

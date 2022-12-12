@@ -5,11 +5,11 @@ using DucksNet.SharedKernel.Utils;
 namespace DucksNet.Infrastructure.Prelude;
 public class AppointmentScheduleService
 {
-    private readonly IRepository<Appointment> _appointmentsRepository;
-    private readonly IRepository<Office> _locationsRepository;
-    private readonly IRepository<Pet> _petsRepository;
+    private readonly IRepositoryAsync<Appointment> _appointmentsRepository;
+    private readonly IRepositoryAsync<Office> _locationsRepository;
+    private readonly IRepositoryAsync<Pet> _petsRepository;
 
-    public AppointmentScheduleService(IRepository<Appointment> appointmentsRepository, IRepository<Office> locationsRepository, IRepository<Pet> petsRepository)
+    public AppointmentScheduleService(IRepositoryAsync<Appointment> appointmentsRepository, IRepositoryAsync<Office> locationsRepository, IRepositoryAsync<Pet> petsRepository)
     {
         _appointmentsRepository = appointmentsRepository;
         _locationsRepository = locationsRepository;
@@ -18,17 +18,17 @@ public class AppointmentScheduleService
 
     public Result<List<Appointment>> GetLocationSchedule(Guid locationId)
     {
-        var res = _appointmentsRepository.GetAll().Where(a => a.LocationId == locationId).ToList();
+        var res = _appointmentsRepository.GetAllAsync().Result.Where(a => a.LocationId == locationId).ToList();
         return Result<List<Appointment>>.Ok(res);
     }
 
     public Result<Appointment> ScheduleAppointment(string typeString, Guid petID, Guid locationID, DateTime startTime, DateTime endTime)
     {
-        var pet = _petsRepository.Get(petID);
+        var pet = _petsRepository.GetAsync(petID).Result;
         if (pet.IsFailure || pet.Value == null)
             return Result<Appointment>.FromError(pet, "Pet not found.");
         
-        var location = _locationsRepository.Get(locationID);
+        var location = _locationsRepository.GetAsync(locationID).Result;
         if (location.IsFailure || location.Value == null)
             return Result<Appointment>.FromError(location, "Location not found.");
 
@@ -36,7 +36,7 @@ public class AppointmentScheduleService
         if (appointment.IsFailure || appointment.Value is null)
             return Result<Appointment>.ErrorList(appointment.Errors);
 
-        var overlappingAppointments = _appointmentsRepository.GetAll()
+        var overlappingAppointments = _appointmentsRepository.GetAllAsync().Result
             .Where(a => a.StartTime < endTime && a.EndTime > startTime)
             .Where(a => a.PetId == petID);
 
@@ -46,7 +46,7 @@ public class AppointmentScheduleService
         appointment.Value.AssignToLocation(locationID);
         appointment.Value.AssignToPet(petID);
 
-        _appointmentsRepository.Add(appointment.Value!);
+        _appointmentsRepository.AddAsync(appointment.Value!);
         return Result<Appointment>.Ok(appointment.Value!);
     }
 }

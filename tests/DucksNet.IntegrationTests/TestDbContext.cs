@@ -1,4 +1,5 @@
-﻿using DucksNet.Domain.Model;
+﻿using System.Threading.Tasks;
+using DucksNet.Domain.Model;
 using DucksNet.Domain.Model.Enums;
 using DucksNet.Infrastructure.Prelude;
 
@@ -51,10 +52,20 @@ public class TestDbContext : DbContext, IDatabaseContext
             .HasConversion(
                 value => value.Id,
                 id => AppointmentType.CreateFromInt(id).Value!);
+        modelBuilder.Entity<Medicine>()
+            .Property(a => a.DrugAdministration)
+            .HasConversion(
+                value => value.Id,
+                id => DrugAdministration.createMedicineByInt(id).Value!);
     }
     
     void IDatabaseContext.SaveChanges()
     {
         SaveChanges();
+    }
+
+    public Task SaveChangesAsync()
+    {
+        return base.SaveChangesAsync();
     }
 }

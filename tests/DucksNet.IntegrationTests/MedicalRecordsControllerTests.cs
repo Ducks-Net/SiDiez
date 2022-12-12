@@ -16,7 +16,7 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
     private const string ClientURL = "api/v1/pets";
     private const string OfficesUrl = "api/v1/office";
     private const string PetsUrl = "api/v1/pets";
-    
+
     [Fact]
     public async Task When_CreatedMedicalRecord_Then_ShouldReturnMedicalRecordInTheGetRequest()
     {
@@ -53,7 +53,7 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, idClient);
         //Act
         var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordURL, medicalRecordDTO);
-        var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordURL);
+        var _ = await TestingClient.GetAsync(MedicalRecordURL);
         //Assert
         medicalRecordResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -93,7 +93,7 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
     {
         var petDTO = new PetDTO
         {
-            Name = "Test Pet",    
+            Name = "Test Pet",
             DateOfBirth = DateTime.Now.AddYears(-1),
             Species = "Dog",
             Breed = "Labrador",

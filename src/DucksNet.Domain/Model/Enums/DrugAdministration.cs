@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DucksNet.SharedKernel.Utils;
+﻿using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Domain.Model.Enums;
 public class DrugAdministration : Enumeration
@@ -27,9 +22,9 @@ public class DrugAdministration : Enumeration
     }
     public static Result<DrugAdministration> createMedicineByInt(int id)
     {
-        var administrationByString = GetAll<DrugAdministration>().FirstOrDefault(x => x.Id == id);
-        if (administrationByString == null)
+        var administrationByInt = GetAll<DrugAdministration>().FirstOrDefault(x => x.Id == id);
+        if (administrationByInt == null)
             return Result<DrugAdministration>.Error("Wrong type of drug administration");
-        return Result<DrugAdministration>.Ok(administrationByString);
+        return Result<DrugAdministration>.Ok(administrationByInt);
     }
 }

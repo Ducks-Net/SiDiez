@@ -48,10 +48,20 @@ public class DatabaseContext : DbContext, IDatabaseContext
             .HasConversion(
                 value => value.Id,
                 id => AppointmentType.CreateFromInt(id).Value!);
+        modelBuilder.Entity<Medicine>()
+            .Property(a => a.DrugAdministration)
+            .HasConversion(
+                value => value.Id,
+                id => DrugAdministration.createMedicineByInt(id).Value!);
     }
 
     void IDatabaseContext.SaveChanges()
     {
         SaveChanges();
+    }
+
+    Task IDatabaseContext.SaveChangesAsync()
+    {
+        return SaveChangesAsync();
     }
 }

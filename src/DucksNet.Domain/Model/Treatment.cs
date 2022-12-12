@@ -4,26 +4,33 @@ namespace DucksNet.Domain.Model;
 public class Treatment
 {
     public Guid ID { get; private set; }
-    public Guid? OwnerID { get; }
-    public Guid? ClientID { get; }
-    public Guid? ClinicID { get; }
-    List<Medicine> MedicineList { get; set; }
-
-    private Treatment()
+    public Guid? OwnerID { get; private set; }
+    public Guid? ClientID { get; private set; }
+    public Guid? ClinicID { get; private set; }
+    
+    public Treatment(Guid ID, Guid? OwnerID, Guid? ClientID, Guid? ClinicID) 
     {
-        ID = new Guid();
-        MedicineList = new List<Medicine>();
+        this.ID = ID;
+        this.OwnerID = OwnerID;
+        this.ClientID = ClientID;
+        this.ClinicID = ClinicID;
+    }
+    private Treatment(Guid? OwnerID, Guid? ClientID, Guid? ClinicID) 
+    {
+        ID = Guid.NewGuid();
+        this.OwnerID = OwnerID;
+        this.ClientID = ClientID;
+        this.ClinicID = ClinicID;
     }
 
-    public void AddMedicineToTreatment(Medicine medicine)
+    public static Result<Treatment> CreateTreatment(Guid? OwnerID, Guid? ClientID, Guid? ClinicID)
     {
-        if (MedicineList.Contains(medicine))
-            return;
-        MedicineList.Add(medicine);
-    }
-
-    public static Result<Treatment> CreateTreatment()
-    {
-        return Result<Treatment>.Ok(new Treatment());
+        if (OwnerID == null || OwnerID == Guid.Empty)
+            return Result<Treatment>.Error("Owner ID can not be empty");
+        if (ClientID == null || ClientID == Guid.Empty)
+            return Result<Treatment>.Error("Client ID can not be empty");
+        if (ClinicID == null || ClinicID == Guid.Empty)
+            return Result<Treatment>.Error("Clinic ID can not be empty");
+        return Result<Treatment>.Ok(new Treatment(OwnerID, ClientID, ClinicID));
     }
 }
