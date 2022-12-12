@@ -166,8 +166,10 @@
 					<div>
 						<label for="OwnerId">Id Owner</label>
                         <InputSelect class="form-select" data-live-search="true" id="OwnerId" @bind-Value="petCreateModel.OwnerId"> 
-                                @foreach (var owner in Owners) {
-                                     <option value="@owner.Id" class="mx-5">@owner.FirstName @owner.LastName </option>
+                                @if(Owners != null) {
+                                    @foreach (var owner in Owners) {
+                                        <option value="@owner.Id" class="mx-5">@owner.FirstName @owner.LastName </option>
+                                    }
                                 }
                         </InputSelect>
 					</div>
@@ -206,109 +208,6 @@
 						result = await CreatePet(petCreateModel);
                         Console.WriteLine($"Create pet after await {result.IsSuccess}");
                         StateHasChanged();
-					}
-				}
-			</div>
-		</div>
-	</div>
-	<div class="card">
-		<div class="card-header" id="headingThree">
-			<h5 class="mb-0">
-				<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-					Update Pet
-				</button>
-			</h5>
-		</div>
-		<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-			<div class="card-body">
-				<EditForm Model="@petUpdateModel" OnValidSubmit="@HandleValidSubmitUpdate">
-					<DataAnnotationsValidator />
-					<ValidationSummary />
-
-					<div>
-						<label for="PetId">Pet Id</label>
-						<InputText class="form-control" id="PetId" @bind-Value="petUpdateModel.PetId" />
-					</div>
-					<div>
-						<label for="Name">Name</label>
-						<InputText class="form-control" id="Name" @bind-Value="petUpdateModel.Name" />
-					</div>
-					<div>
-						<label for="DateOfBirth">Date of birth</label>
-						<InputDate class="form-control" id="DateOfBirth" @bind-Value="petUpdateModel.DateOfBirth" />
-					</div>
-					<div>
-						<label for="Species">Species</label>
-						<InputText class="form-control" id="Species" @bind-Value="petUpdateModel.Species" />
-					</div>
-					<div>
-						<label for="Breed">Breed</label>
-						<InputText class="form-control" id="Breed" @bind-Value="petUpdateModel.Breed" />
-					</div>
-					<div>
-						<label for="OwnerId">Id Owner</label>
-                        <InputSelect class="form-select" data-live-search="true" id="OwnerId" @bind-Value="petUpdateModel.OwnerId"> 
-                                @foreach (var owner in Owners) {
-                                     <option value="@owner.Id" class="mx-5">@owner.FirstName @owner.LastName </option>
-                                }
-                        </InputSelect>
-					</div>
-					<div class="form-group">
-						<label for="Size">Size</label>
-						<InputSelect @bind-Value="petUpdateModel.Size" id="Size" class="form-control">
-							<option value="">Select size ...</option>
-							<option value="Small">Small</option>
-							<option value="Medium">Medium</option>
-							<option value="Large">Large</option>
-						</InputSelect>
-					</div>
-
-					<br><br>
-
-					<button type="submit" class="btn btn-primary">Submit</button>
-				</EditForm>
-
-				@code {
-					private UpdatePetModel petUpdateModel = new();
-
-					private void HandleValidSubmitUpdate()
-					{
-						UpdatePet(petUpdateModel.PetId, petUpdateModel);
-					}
-				}
-			</div>
-		</div>
-	</div>
-	<div class="card">
-		<div class="card-header" id="headingFour">
-			<h5 class="mb-0">
-				<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-					Delete Pet
-				</button>
-			</h5>
-		</div>
-		<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-			<div class="card-body">
-				<EditForm Model="@petDeleteModel" OnValidSubmit="@HandleValidSubmitDelete">
-					<DataAnnotationsValidator />
-					<ValidationSummary />
-
-					<div>
-						<label for="Pet">PetId</label>
-						<InputText class="form-control" id="PetId" @bind-Value="petDeleteModel.PetId" />
-					</div>
-
-					<br><br>
-
-					<button type="submit" class="btn btn-danger">Delete</button>
-				</EditForm>
-
-				@code {
-					private DeletePetModel petDeleteModel = new();
-
-					private void HandleValidSubmitDelete()
-					{
-						DeletePet(petDeleteModel.PetId);
 					}
 				}
 			</div>
