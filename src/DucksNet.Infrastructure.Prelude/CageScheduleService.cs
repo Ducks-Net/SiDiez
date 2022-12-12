@@ -68,7 +68,7 @@ public class  CageScheduleService
                                        .Where(t => t.CageId != null)
                                        .Where(t => t.CageId == c.ID)
                                        .Where(t => t.StartTime <= startTime && t.EndTime >= endTime)
-                                       .Any())
+                                       .Count() == 0)
                            .Where(c => c.Size == pet.Value!.Size)
                            .ToList();
 
