@@ -34,7 +34,7 @@ public class BusinessController : ControllerBase
         {
             return BadRequest(result.Errors);
         }
-        return Ok(business);
+        return Ok(business.Value!);
     }
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
