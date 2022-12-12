@@ -94,4 +94,5 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
         var deleteResponse = TestingClient.DeleteAsync($"{OfficesUrl}/{officeId}").Result;
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
+    
 }
