@@ -411,50 +411,6 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
         errors[0].Should().Be("Owner email is invalid");
     }
     [Fact]
-    public void When_GetAll_Should_ReturnAllValues5()
-    {
-        ClearDatabase();
-        var business = new BusinessDTO
-        {
-            BusinessName = "BusinessName",
-            Surname = "Surname",
-            FirstName = "FirstName",
-            Address = "Address",
-            OwnerPhone = "0731678902",
-            OwnerEmail = "a@asd.comasd",
-        };
-
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
-
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        var result = response.Content.ReadFromJsonAsync<Business>().Result;
-
-        result.Should().NotBeNull();
-
-        var business2 = new BusinessDTO
-        {
-            BusinessName = "BusinessName2",
-            Surname = "Surname2",
-            FirstName = "FirstName2",
-            Address = "Address2",
-            OwnerPhone = "0734678902",
-            OwnerEmail = "asd.asd",
-        };
-
-        var response2 =  TestingClient.PostAsJsonAsync(businessUrl, business2).Result;
-
-        response2.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        var errors = response2.Content.ReadFromJsonAsync<List<string>>().Result;
-
-        errors.Should().NotBeNull();
-
-        errors!.Count.Should().Be(1);
-
-        errors[0].Should().Be("Owner email is invalid");
-    }
-    [Fact]
     public void When_GetAll_Should_ReturnAllValues6()
     {
         ClearDatabase();
