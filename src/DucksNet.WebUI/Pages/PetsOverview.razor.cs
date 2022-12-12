@@ -1,4 +1,5 @@
 ﻿using DucksNet.Domain.Model;
+using DucksNet.SharedKernel.Utils;
 using DucksNet.WebUI.Pages.Models;
 using DucksNet.WebUI.Pages.Services;
 using Microsoft.AspNetCore.Components;
@@ -13,25 +14,25 @@ public partial class PetsOverview : ComponentBase
 
     protected async Task ReloadAllPets()
     {
-        Pets = (await PetDataService!.GetAllPets()).ToList();
+        Pets = (await PetDataService!.GetAllPets()).Value!.ToList();
         if (Pets.Count == 0)
         {
             Pets = default!;
         }
     }
 
-    protected async Task CreatePet(CreatePetModel petCreateModel)
+    protected Task<Result> CreatePet(CreatePetModel petCreateModel)
     {
-        await PetDataService!.CreatePet(petCreateModel);
+        return PetDataService!.CreatePet(petCreateModel);
     }
 
-    protected async Task UpdatePet(string petId, UpdatePetModel updatePetModel)
+    protected async Task<Result> UpdatePet(string petId, UpdatePetModel updatePetModel)
     {
-        await PetDataService!.UpdatePet(petId, updatePetModel);
+        return await PetDataService!.UpdatePet(petId, updatePetModel);
     }
 
-    protected async Task DeletePet(string petId)
+    protected async Task<Result> DeletePet(string petId)
     {
-        await PetDataService!.DeletePet(petId);
+        return await PetDataService!.DeletePet(petId);
     }
 }
