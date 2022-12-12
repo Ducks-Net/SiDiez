@@ -165,7 +165,11 @@
 					</div>
 					<div>
 						<label for="OwnerId">Id Owner</label>
-						<InputText class="form-control" id="OwnerId" @bind-Value="petCreateModel.OwnerId" />
+                        <InputSelect class="form-select" data-live-search="true" id="OwnerId" @bind-Value="petCreateModel.OwnerId"> 
+                                @foreach (var owner in Owners) {
+                                     <option value="@owner.Id" class="mx-5">@owner.FirstName @owner.LastName </option>
+                                }
+                        </InputSelect>
 					</div>
 					<div class="form-group">
 						<label for="Size">Size</label>
@@ -243,7 +247,11 @@
 					</div>
 					<div>
 						<label for="OwnerId">Id Owner</label>
-						<InputText class="form-control" id="OwnerId" @bind-Value="petUpdateModel.OwnerId" />
+                        <InputSelect class="form-select" data-live-search="true" id="OwnerId" @bind-Value="petUpdateModel.OwnerId"> 
+                                @foreach (var owner in Owners) {
+                                     <option value="@owner.Id" class="mx-5">@owner.FirstName @owner.LastName </option>
+                                }
+                        </InputSelect>
 					</div>
 					<div class="form-group">
 						<label for="Size">Size</label>
