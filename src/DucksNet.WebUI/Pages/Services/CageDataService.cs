@@ -6,7 +6,9 @@ namespace DucksNet.WebUI.Pages.Services;
 
 public class CageDataService : ICageDataService
 {
+#pragma warning disable S1075 // URIs should not be hardcoded  
     private const string ApiURL = "https://localhost:7115/api/v1/cages";
+#pragma warning disable S1075 // URIs should not be hardcoded  
     private readonly HttpClient httpClient;
 
     public CageDataService(HttpClient httpClient)
@@ -28,7 +30,7 @@ public class CageDataService : ICageDataService
     public async Task CreateCage(CageCreateModel cageCreateModel)
     {
         var result = await httpClient.PostAsJsonAsync(ApiURL, cageCreateModel);
-        var cage = await result.Content.ReadFromJsonAsync<Cage>();
+        await result.Content.ReadFromJsonAsync<Cage>();
     }
 
     public async Task DeleteCage(string cageId)

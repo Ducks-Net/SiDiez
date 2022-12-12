@@ -67,35 +67,29 @@ public class Employee
     {
         IdOffice = idOffice;
     }
-    // NOTE (RO): make it return a Result, not a List<string>
-    public List<string> UpdateFields(string? surname, string? firstName, string? address, string? ownerPhone, string? ownerEmail)
+    public Result UpdateFields(string? surname, string? firstName, string? address, string? ownerPhone, string? ownerEmail)
     {
-        List<string> output= new List<string>();
         bool hasNewInfo = false;
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(surname);
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(firstName);
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(address);
         if (!string.IsNullOrWhiteSpace(ownerPhone) && !Validation.IsTelephoneNumberValid(ownerPhone!))
-        { 
-            output.Add("The telephone number is not valid");
-            return output;
+        {
+            return Result.Error("The telephone number is not valid");
         }
         if (!string.IsNullOrWhiteSpace(ownerEmail) && !Validation.IsEmailValid(ownerEmail!))
         {
-            output.Add("The email is not valid");
-            return output;
+            return Result.Error("The email is not valid");
         }
         if (!hasNewInfo)
         {
-            output.Add("You need to add at least one value");
-            return output;
+            return Result.Error("You need to add at least one value");
         }
         Surname = !string.IsNullOrWhiteSpace(surname) ? surname : Surname;
         FirstName = !string.IsNullOrWhiteSpace(firstName) ? firstName : FirstName;
         Address = !string.IsNullOrWhiteSpace(address) ? address : Address;
         OwnerPhone = !string.IsNullOrWhiteSpace(ownerPhone) ? ownerPhone : OwnerPhone;
         OwnerEmail = !string.IsNullOrWhiteSpace(ownerEmail) ? ownerEmail : OwnerEmail;
-        output.Add("The information has been updated");
-        return output;
+        return Result.Ok();
     }
 }

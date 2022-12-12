@@ -99,8 +99,8 @@ public class EmployeeTests
         var newResult = result.Value.UpdateFields(updatedSut.Item1, updatedSut.Item2, updatedSut.Item3, updatedSut.Item4, updatedSut.Item5);
 
         //Assert
-        newResult.Count.Should().Be(1);
-        newResult.First().Should().Contain("The information has been updated");
+        newResult.IsSuccess.Should().BeTrue();
+        newResult.Errors.Should().BeEmpty();
         var copy = result.Value;
         copy.IdOffice.Should().Be(sut.Item1);
         copy.Surname.Should().Be(updatedSut.Item1);
@@ -123,8 +123,8 @@ public class EmployeeTests
         var newResult = result.Value.UpdateFields("", updatedSut.Item2, updatedSut.Item3, updatedSut.Item4, updatedSut.Item5);
 
         //Assert
-        newResult.Count.Should().Be(1);
-        newResult.First().Should().Contain("The information has been updated");
+        newResult.IsSuccess.Should().BeTrue();
+        newResult.Errors.Should().BeEmpty();
         var copy = result.Value;
         copy.IdOffice.Should().Be(sut.Item1);
         copy.Surname.Should().Be(copy.Surname);
@@ -147,8 +147,8 @@ public class EmployeeTests
         var newResult = result.Value.UpdateFields(updatedSut.Item1, "", updatedSut.Item3, updatedSut.Item4, updatedSut.Item5);
 
         //Assert
-        newResult.Count.Should().Be(1);
-        newResult.First().Should().Contain("The information has been updated");
+        newResult.IsSuccess.Should().BeTrue();
+        newResult.Errors.Should().BeEmpty();
         var copy = result.Value;
         copy.IdOffice.Should().Be(sut.Item1);
         copy.Surname.Should().Be(updatedSut.Item1);
@@ -171,8 +171,8 @@ public class EmployeeTests
         var newResult = result.Value.UpdateFields(updatedSut.Item1, updatedSut.Item2, "", updatedSut.Item4, updatedSut.Item5);
 
         //Assert
-        newResult.Count.Should().Be(1);
-        newResult.First().Should().Contain("The information has been updated");
+        newResult.IsSuccess.Should().BeTrue();
+        newResult.Errors.Should().BeEmpty();
         var copy = result.Value;
         copy.IdOffice.Should().Be(sut.Item1);
         copy.Surname.Should().Be(updatedSut.Item1);
@@ -195,8 +195,8 @@ public class EmployeeTests
         var newResult = result.Value.UpdateFields(updatedSut.Item1, updatedSut.Item2, updatedSut.Item3, "", updatedSut.Item5);
 
         //Assert
-        newResult.Count.Should().Be(1);
-        newResult.First().Should().Contain("The information has been updated");
+        newResult.IsSuccess.Should().BeTrue();
+        newResult.Errors.Should().BeEmpty();
         var copy = result.Value;
         copy.IdOffice.Should().Be(sut.Item1);
         copy.Surname.Should().Be(updatedSut.Item1);
@@ -219,8 +219,8 @@ public class EmployeeTests
         var newResult = result.Value.UpdateFields(updatedSut.Item1, updatedSut.Item2, updatedSut.Item3, updatedSut.Item4, "");
 
         //Assert
-        newResult.Count.Should().Be(1);
-        newResult.First().Should().Contain("The information has been updated");
+        newResult.IsSuccess.Should().BeTrue();
+        newResult.Errors.Should().BeEmpty();
         var copy = result.Value;
         copy.IdOffice.Should().Be(sut.Item1);
         copy.Surname.Should().Be(updatedSut.Item1);
@@ -243,8 +243,8 @@ public class EmployeeTests
         var newResult = result.Value.UpdateFields(updatedSut.Item1, updatedSut.Item2, updatedSut.Item3, "9123", updatedSut.Item5);
 
         //Assert
-        newResult.Count.Should().Be(1);
-        newResult.First().Should().Contain("The telephone number is not valid");
+        newResult.IsFailure.Should().BeTrue();
+        newResult.Errors.Should().Contain("The telephone number is not valid");
         var copy = result.Value;
         copy.IdOffice.Should().Be(sut.Item1);
         copy.Surname.Should().Be(sut.Item2);
@@ -267,8 +267,8 @@ public class EmployeeTests
         var newResult = result.Value.UpdateFields(updatedSut.Item1, updatedSut.Item2, updatedSut.Item3, updatedSut.Item4, "gunoi_test");
 
         //Assert
-        newResult.Count.Should().Be(1);
-        newResult.First().Should().Contain("The email is not valid");
+        newResult.IsFailure.Should().BeTrue();
+        newResult.Errors.Should().Contain("The email is not valid");
         var copy = result.Value;
         copy.IdOffice.Should().Be(sut.Item1);
         copy.Surname.Should().Be(sut.Item2);
@@ -291,8 +291,8 @@ public class EmployeeTests
         var newResult = result.Value.UpdateFields("", "", "", "", "");
 
         //Assert
-        newResult.Count.Should().Be(1);
-        newResult.First().Should().Contain("You need to add at least one value");
+        newResult.IsFailure.Should().BeTrue();
+        newResult.Errors.Should().Contain("You need to add at least one value");
         
         var copy = result.Value;
         copy.IdOffice.Should().Be(sut.Item1);

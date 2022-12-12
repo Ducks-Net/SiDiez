@@ -1,6 +1,10 @@
 ﻿using DucksNet.API.DTO;
+using DucksNet.API.Validators;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
+using DucksNet.SharedKernel.Utils;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +16,12 @@ public class EmployeesController : ControllerBase
 {
     private readonly IRepositoryAsync<Employee> _employeesRepository;
     private readonly IRepositoryAsync<Office> _officeRepository;
+    private readonly IValidator<EmployeeDTO> _createValidator;
 
-    public EmployeesController(IRepositoryAsync<Employee> employeeRepository, IRepositoryAsync<Office> officeRepository)
+    public EmployeesController(IValidator<EmployeeDTO> validator, IRepositoryAsync<Employee> employeeRepository, IRepositoryAsync<Office> officeRepository)
     {
-       _employeesRepository = employeeRepository;
+        _createValidator = validator;
+        _employeesRepository = employeeRepository;
         _officeRepository = officeRepository;
     }
     [HttpGet]
@@ -42,22 +48,29 @@ public class EmployeesController : ControllerBase
         {
             return BadRequest(office.Errors);
         }
-        var employeePost = Employee.Create(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
-        if (employeePost.IsFailure)
+        ValidationResult resultValidate = await _createValidator.ValidateAsync(dto, 
+            options => options.IncludeRuleSets("CreateEmployee"));
+        if (!resultValidate.IsValid)
         {
-            return BadRequest(employeePost.Errors);
+            List<string> errorsList = new List<string>();
+            foreach(var error in resultValidate.Errors)
+            {
+                errorsList.Add(error.ErrorMessage);
+            }
+            return BadRequest(errorsList);
         }
+        var employeePost = Employee.Create(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
         employeePost.Value!.AssignToOffice(office.Value!.ID);
         var employees = await _employeesRepository.GetAllAsync();
         foreach (var employee in employees)
         {
-            if(employee.OwnerEmail == dto.OwnerEmail)
+            if (employee.OwnerEmail == dto.OwnerEmail)
             {
-                return BadRequest("The email already exists");
+                return BadRequest(new List<string> { "The email already exists" });
             }
             if (employee.OwnerPhone == dto.OwnerPhone)
             {
-                return BadRequest("The telephone number already exists");
+                return BadRequest(new List<string> { "The telephone number already exists" });
             }
         }
         await _employeesRepository.AddAsync(employeePost.Value);
@@ -77,20 +90,26 @@ public class EmployeesController : ControllerBase
         {
             if (employee.OwnerEmail == dto.OwnerEmail)
             {
-                return BadRequest("The updated email already exists");
+                return BadRequest(new List<string> { "The updated email already exists" });
             }
             if (employee.OwnerPhone == dto.OwnerPhone)
             {
-                return BadRequest("The updated telephone number already exists");
+                return BadRequest(new List<string> { "The updated telephone number already exists" });
             }
         }
-        var resultUpdated = oldEmployee.Value!.UpdateFields(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
-        if(resultUpdated.First() != "The information has been updated")
+        ValidationResult resultValidate = await _createValidator.ValidateAsync(dto,
+            options => options.IncludeRuleSets("UpdateEmployee"));
+        if (!resultValidate.IsValid)
         {
-            return BadRequest(resultUpdated.First());
+            List<string> errorsList = new List<string>();
+            foreach (var error in resultValidate.Errors)
+            {
+                errorsList.Add(error.ErrorMessage);
+            }
+            return BadRequest(errorsList);
         }
-        await _employeesRepository.UpdateAsync(oldEmployee.Value);
-        return Ok(resultUpdated.First());
+        await _employeesRepository.UpdateAsync(oldEmployee.Value!);
+        return Ok("The information has been updated");
     }
     [HttpPut("{employeeId:guid}/{newOfficeId:guid}")]
     public async Task<IActionResult> UpdateOfficeEmployee(Guid employeeId, Guid newOfficeId)
