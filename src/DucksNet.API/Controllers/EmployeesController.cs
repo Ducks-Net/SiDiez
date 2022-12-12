@@ -14,26 +14,26 @@ namespace DucksNet.API.Controllers;
 [ApiController]
 public class EmployeesController : ControllerBase
 {
+    private readonly IRepositoryAsync<Employee> _employeesRepository;
+    private readonly IRepositoryAsync<Office> _officeRepository;
     private readonly IValidator<EmployeeDTO> _createValidator;
-    private readonly IRepository<Employee> _employeesRepository;
-    private readonly IRepository<Office> _officeRepository;
 
-    public EmployeesController(IValidator<EmployeeDTO> validator, IRepository<Employee> employeeRepository, IRepository<Office> officeRepository)
+    public EmployeesController(IValidator<EmployeeDTO> validator, IRepositoryAsync<Employee> employeeRepository, IRepositoryAsync<Office> officeRepository)
     {
         _createValidator = validator;
         _employeesRepository = employeeRepository;
         _officeRepository = officeRepository;
     }
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var employees = _employeesRepository.GetAll();
+        var employees = await _employeesRepository.GetAllAsync();
         return Ok(employees);
     }
     [HttpGet("{employeeId:guid}")]
-    public IActionResult GetByEmployeeID(Guid employeeId)
+    public async Task<IActionResult> GetByEmployeeID(Guid employeeId)
     {
-        var employee = _employeesRepository.Get(employeeId);
+        var employee = await _employeesRepository.GetAsync(employeeId);
         if (employee.IsFailure)
         {
             return NotFound(employee.Errors);
@@ -43,7 +43,7 @@ public class EmployeesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] EmployeeDTO dto)
     {
-        var office = _officeRepository.Get(dto.IdOffice);
+        var office = await _officeRepository.GetAsync(dto.IdOffice);
         if (office.IsFailure)
         {
             return BadRequest(office.Errors);
@@ -61,7 +61,7 @@ public class EmployeesController : ControllerBase
         }
         var employeePost = Employee.Create(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
         employeePost.Value!.AssignToOffice(office.Value!.ID);
-        var employees = _employeesRepository.GetAll();
+        var employees = await _employeesRepository.GetAllAsync();
         foreach (var employee in employees)
         {
             if (employee.OwnerEmail == dto.OwnerEmail)
@@ -73,19 +73,19 @@ public class EmployeesController : ControllerBase
                 return BadRequest(new List<string> { "The telephone number already exists" });
             }
         }
-        _employeesRepository.Add(employeePost.Value);
+        await _employeesRepository.AddAsync(employeePost.Value);
         return Ok(employeePost.Value);
     }
     [HttpPut("{employeeId:guid}")]
     public async Task<IActionResult> UpdatePersonalInformationEmployee(Guid employeeId, [FromBody] EmployeeDTO dto)
     {
-        var oldEmployee = _employeesRepository.Get(employeeId);
+        var oldEmployee = await _employeesRepository.GetAsync(employeeId);
  
         if (oldEmployee.IsFailure)
         {
             return BadRequest(oldEmployee.Errors);
         }
-        var employees = _employeesRepository.GetAll();
+        var employees = await _employeesRepository.GetAllAsync();
         foreach (var employee in employees)
         {
             if (employee.OwnerEmail == dto.OwnerEmail)
@@ -108,36 +108,35 @@ public class EmployeesController : ControllerBase
             }
             return BadRequest(errorsList);
         }
-        oldEmployee.Value!.UpdateFields(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
-        _employeesRepository.Update(oldEmployee.Value);
+        await _employeesRepository.UpdateAsync(oldEmployee!.Value);
         return Ok("The information has been updated");
     }
     [HttpPut("{employeeId:guid}/{newOfficeId:guid}")]
-    public IActionResult UpdateOfficeEmployee(Guid employeeId, Guid newOfficeId)
+    public async Task<IActionResult> UpdateOfficeEmployee(Guid employeeId, Guid newOfficeId)
     {
-        var oldEmployee = _employeesRepository.Get(employeeId);
+        var oldEmployee = await _employeesRepository.GetAsync(employeeId);
         if (oldEmployee.IsFailure)
         {
             return BadRequest(oldEmployee.Errors);
         }
-        var newOffice = _officeRepository.Get(newOfficeId);
+        var newOffice = await _officeRepository.GetAsync(newOfficeId);
         if (newOffice.IsFailure)
         {
             return BadRequest(newOffice.Errors);
         }
         oldEmployee.Value!.AssignToOffice(newOfficeId);
-        _employeesRepository.Update(oldEmployee.Value);
+        await _employeesRepository.UpdateAsync(oldEmployee.Value);
         return Ok(oldEmployee.Value);
     }
     [HttpDelete("{employeeId:guid}")]
-    public IActionResult Delete(Guid employeeId)
+    public async Task<IActionResult> Delete(Guid employeeId)
     {
-        var employee = _employeesRepository.Get(employeeId);
+        var employee = await _employeesRepository.GetAsync(employeeId);
         if (employee.IsFailure)
         {
             return BadRequest(employee.Errors);
         }
-        _employeesRepository.Delete(employee.Value!);
+        await _employeesRepository.DeleteAsync(employee.Value!);
         return Ok();
     }
 }

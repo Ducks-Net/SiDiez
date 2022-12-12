@@ -11,11 +11,11 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class UsersController : ControllerBase
 {
+    private readonly IRepositoryAsync<User> _usersRepository;
+    private readonly IRepositoryAsync<Pet> _petsRepository;
     private readonly IValidator<UserDTO> _userValidator;
-    private readonly IRepository<User> _usersRepository;
-    private readonly IRepository<Pet> _petsRepository;
 
-    public UsersController(IValidator<UserDTO> userValidator, IRepository<User> users, IRepository<Pet> pets)
+    public UsersController(IValidator<UserDTO> userValidator, IRepositoryAsync<User> users, IRepositoryAsync<Pet> pets)
     {
         _userValidator = userValidator;
         _usersRepository = users;
@@ -23,16 +23,16 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var users = _usersRepository.GetAll();
+        var users = await _usersRepository.GetAllAsync();
         return Ok(users);
     }
 
     [HttpGet("{id}")]
-    public IActionResult Get(Guid id)
+    public async Task<IActionResult> Get(Guid id)
     {
-        var user = _usersRepository.Get(id);
+        var user = await _usersRepository.GetAsync(id);
         if(user.IsFailure)
         {
             return NotFound(user.Errors);
@@ -55,7 +55,7 @@ public class UsersController : ControllerBase
             return BadRequest(errorsList);
         }
         var user = Domain.Model.User.Create(dto.FirstName, dto.LastName, dto.Address, dto.PhoneNumber!, dto.Email!, dto.Password);
-        var result = _usersRepository.Add(user.Value!);
+        var result = await _usersRepository.AddAsync(user.Value!);
         if(result.IsFailure)
         {
             return BadRequest(result.Errors);
@@ -64,10 +64,10 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(Guid id, [FromBody] UserDTO dto)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UserDTO dto)
     {
         // Check if user exists
-        var user = _usersRepository.Get(id);
+        var user = await _usersRepository.GetAsync(id);
         if(user.IsFailure || user.Value is null)
         {
             return NotFound(user.Errors);
@@ -76,7 +76,7 @@ public class UsersController : ControllerBase
         // Update user
         user.Value.UpdateFields(dto.FirstName, dto.LastName, dto.Address, dto.PhoneNumber!, dto.Email!, dto.Password);
 
-        var result = _usersRepository.Update(user.Value);
+        var result = await _usersRepository.UpdateAsync(user.Value);
         if(result.IsFailure)
         {
             return BadRequest(result.Errors);
@@ -85,17 +85,17 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         // Check if user exists
-        var user = _usersRepository.Get(id);
+        var user = await _usersRepository.GetAsync(id);
         if(user.IsFailure || user.Value is null)
         {
             return NotFound(user.Errors);
         }
 
         // Delete user
-        var result = _usersRepository.Delete(user.Value);
+        var result = await _usersRepository.DeleteAsync(user.Value);
         if(result.IsFailure)
         {
             return BadRequest(result.Errors);

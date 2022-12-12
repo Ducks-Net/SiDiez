@@ -11,26 +11,26 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class PetsController : ControllerBase
 {
+    private readonly IRepositoryAsync<Pet> _petsRepository;
     private readonly IValidator<PetDTO> _petValidator;
-    private readonly IRepository<Pet> _petsRepository;
 
-    public PetsController(IValidator<PetDTO> petValidator, IRepository<Pet> pets)
+    public PetsController(IValidator<PetDTO> petValidator, IRepositoryAsync<Pet> pets)
     {
         _petValidator = petValidator;
         _petsRepository = pets;
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var pets = _petsRepository.GetAll();
+        var pets = await _petsRepository.GetAllAsync();
         return Ok(pets);
     }
 
     [HttpGet("{id}")]
-    public IActionResult Get(Guid id)
+    public async Task<IActionResult> Get(Guid id)
     {
-        var pet = _petsRepository.Get(id);
+        var pet = await _petsRepository.GetAsync(id);
         if (pet.IsFailure)
         {
             return NotFound(pet.Errors);
@@ -62,7 +62,7 @@ public class PetsController : ControllerBase
             return BadRequest("Owner ID is required.");
         }
 
-        var result = _petsRepository.Add(pet.Value!);
+        var result = await _petsRepository.AddAsync(pet.Value!);
         if (result.IsFailure)
         {
             return BadRequest(result.Errors);
@@ -71,10 +71,10 @@ public class PetsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(Guid id, [FromBody] PetDTO dto)
+    public async Task<IActionResult> Update(Guid id, [FromBody] PetDTO dto)
     {
         // Check if pet exists
-        var pet = _petsRepository.Get(id);
+        var pet = await _petsRepository.GetAsync(id);
         if (pet.IsFailure)
         {
             return NotFound(pet.Errors);
@@ -82,7 +82,7 @@ public class PetsController : ControllerBase
         // Update pet
         pet.Value!.UpdateFields(dto.Name, dto.DateOfBirth, dto.Species!, dto.Breed!, dto.OwnerId, dto.Size);
 
-        var result = _petsRepository.Update(pet.Value!);
+        var result = await _petsRepository.UpdateAsync(pet.Value!);
         if (result.IsFailure)
         {
             return BadRequest(result.Errors);
@@ -91,14 +91,14 @@ public class PetsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var pet = _petsRepository.Get(id);
+        var pet = await _petsRepository.GetAsync(id);
         if (pet.IsFailure)
         {
             return NotFound(pet.Errors);
         }
-        var result = _petsRepository.Delete(pet.Value!);
+        var result = await _petsRepository.DeleteAsync(pet.Value!);
         if (result.IsFailure)
         {
             return BadRequest(result.Errors);
