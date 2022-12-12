@@ -32,24 +32,6 @@ public class Business
         OwnerPhone = ownerPhone;
         OwnerEmail = ownerEmail;
     }
-    private static bool checkValidEmail(string email)
-    {
-        bool isValid = true;
-        bool hasAt = false;
-        bool hasDot = false;
-        for(int i = 0; i < email.Length; i++)
-        {
-            if(email[i] == '@')
-                hasAt = true;
-            if(email[i] == '.')
-                hasDot = true;
-            if(!char.IsLetterOrDigit(email[i]) && email[i] != '@' && email[i] != '.')
-                isValid = false;
-        }
-        if(!hasAt || !hasDot)
-            isValid = false;
-        return isValid;
-    }
     public static Result<Business> Create(string businessName, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
         if(string.IsNullOrWhiteSpace(businessName))
@@ -71,7 +53,7 @@ public class Business
 
         if(ownerEmail == null || ownerEmail == string.Empty)  
             return Result<Business>.Error("Owner email is required");
-        if(!checkValidEmail(ownerEmail))
+        if(!Validation.IsEmailValid(ownerEmail))
             return Result<Business>.Error("Owner email is invalid");
             
         return Result<Business>.Ok(new Business(businessName, surname, firstName, address, ownerPhone, ownerEmail));
