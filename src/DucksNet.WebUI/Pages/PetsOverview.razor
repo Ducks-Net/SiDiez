@@ -1,6 +1,7 @@
 ﻿@page "/petsoverview"
 @using DucksNet.Domain.Model
-@using DucksNet.WebUI.Pages.Models;
+@using DucksNet.SharedKernel.Utils
+@using DucksNet.WebUI.Pages.Models
 @inject HttpClient Http
 <h3>PetsOverview</h3>
 
@@ -9,7 +10,7 @@
 		<div class="card-header" id="headingOne">
 			<h5 class="mb-0">
 				<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-					GetAllPets
+					Overview
 				</button>
 				<button class="btn btn-primary" onclick="@ReloadAllPets">
 					Reload
@@ -31,22 +32,99 @@
 							<th>Pet Breed</th>
 							<th>Pet OwnerId</th>
 							<th>Pet Size</th>
+                            <th>Actions</th>
 						</tr>
 						<tbody>
 							@foreach (var pet in Pets)
 							{
 								<tr>
-									<td>@pet.Id</td>
-									<td>@pet.Name</td>
-									<td>@pet.DateOfBirth</td>
-									<td>@pet.Species</td>
-									<td>@pet.Breed</td>
-									<td>@pet.OwnerId</td>
-									<td>@pet.Size</td>
-								</tr>
-							}
-						</tbody>
-					</table>
+                                    @if(_petUpdateModel.PetId != pet.Id.ToString()) {
+                                        <td>@pet.Id</td>
+                                        <td>@pet.Name</td>
+                                        <td>@pet.DateOfBirth</td>
+                                        <td>@pet.Species</td>
+                                        <td>@pet.Breed</td>
+                                        <td>@pet.OwnerId</td>
+                                        <td>@pet.Size</td>
+                                        <td>
+                                            <!-- Space out the buttons -->
+                                            <div class="w-75 btn-group" role="group">
+                                                <button class="btn btn-primary mx-2" onclick="@(() => OnUpdatePet(pet))">
+                                                    Edit
+                                                </button>
+                                                <button class="btn btn-danger mx-2" onclick="@(() => OnDeletePet(pet.Id.ToString()))">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </td>
+                                    } else {
+                                        <td>@pet.Id</td>
+                                        <td><InputText class="form-control" @bind-Value="_petUpdateModel.Name" /></td>
+                                        <td><InputDate class="form-control" @bind-Value="_petUpdateModel.DateOfBirth" /></td>
+                                        <td><InputText class="form-control" @bind-Value="_petUpdateModel.Species" /></td>
+                                        <td><InputText class="form-control" @bind-Value="_petUpdateModel.Breed" /></td>
+                                        <td><InputText class="form-control" @bind-Value="_petUpdateModel.OwnerId" /></td>
+                                        <td><InputText class="form-control" @bind-Value="_petUpdateModel.Size" /></td>
+                                        <td>
+                                            <!-- Space out the buttons -->
+                                            <div class="w-75 btn-group" role="group">
+                                                <button type="submit" class="btn btn-primary mx-2" onclick="@(() => OnSavePet())">
+                                                    Save
+                                                </button>
+                                                <button type="submit" class="btn btn-danger mx-2" onclick="@(() => OnCancelUpdate())">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    @code {
+                        private UpdatePetModel _petUpdateModel = new();
+                        private Result? resultOfUpdate = null;
+
+                        private async Task OnDeletePet(string id)
+                        {
+                            var response = await DeletePet(id);
+                            if (response.IsSuccess)
+                            {
+                                await ReloadAllPets();
+                                StateHasChanged();
+                            }
+                        }
+
+                        private void OnUpdatePet(Pet pet)
+                        {
+                            _petUpdateModel.PetId = pet.Id.ToString();
+                            _petUpdateModel.Name = pet.Name;
+                            _petUpdateModel.DateOfBirth = pet.DateOfBirth;
+                            _petUpdateModel.Species = pet.Species;
+                            _petUpdateModel.Breed = pet.Breed;
+                            _petUpdateModel.OwnerId = pet.OwnerId.ToString();
+                            _petUpdateModel.Size = pet.Size.Name;
+                            StateHasChanged();
+                        }
+
+                        private async void OnSavePet()
+                        {
+                            var resultOfUpdate = await UpdatePet(_petUpdateModel.PetId, _petUpdateModel);
+                            if (resultOfUpdate.IsSuccess)
+                            {
+                                _petUpdateModel = new();
+                                await ReloadAllPets();
+                                StateHasChanged();
+                            }
+                        }
+
+                        private void OnCancelUpdate()
+                        {
+                            _petUpdateModel = new();
+                            StateHasChanged();
+                        }
+                    }
 				}
 				else
 				{
@@ -66,7 +144,7 @@
 		</div>
 		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
 			<div class="card-body">
-				<EditForm Model="@petCreateModel" OnValidSubmit="@HandleValidSubmit">
+				<EditForm Model="@petCreateModel" OnValidSubmit="@HandleValidSubmitCreate">
 					<DataAnnotationsValidator />
 					<ValidationSummary />
 
@@ -99,18 +177,32 @@
 							<option value="Large">Large</option>
 						</InputSelect>
 					</div>
-
-					<br><br>
-
+					<br>
 					<button type="submit" class="btn btn-primary">Submit</button>
+                    <br><br><br>
+                    @if(result != null) {
+                        if (result.IsSuccess) {
+                            <div class="alert alert-success" role="alert">
+                                Pet created successfully!
+                            </div>
+                        } else {
+                            <div class="alert alert-danger" role="alert">
+                                @result.Errors[0]
+                            </div>
+                        }
+                    }
 				</EditForm>
 
 				@code {
 					private CreatePetModel petCreateModel = new();
+                    private Result? result = null;
 
-					private void HandleValidSubmit()
+					private async void HandleValidSubmitCreate()
 					{
-						CreatePet(petCreateModel);
+                        Console.WriteLine("Create pet called");
+						result = await CreatePet(petCreateModel);
+                        Console.WriteLine($"Create pet after await {result.IsSuccess}");
+                        StateHasChanged();
 					}
 				}
 			</div>

@@ -1,5 +1,7 @@
 ﻿using DucksNet.Domain.Model;
+using DucksNet.SharedKernel.Utils;
 using DucksNet.WebUI.Pages.Models;
+using System.Diagnostics.Tracing;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -17,24 +19,57 @@ public class PetDataService : IPetDataService
         this.httpClient = httpClient;
     }
 
-    public async Task<IEnumerable<Pet>> GetAllPets()
+    public async Task<Result<IEnumerable<Pet>>> GetAllPets()
     {
-        var pets = await httpClient.GetFromJsonAsync<IEnumerable<Pet>>(ApiURL);
-        return pets!;
+        var petsResult = await httpClient.GetAsync(ApiURL);
+        if(petsResult.IsSuccessStatusCode) {
+            var pets = await petsResult.Content.ReadFromJsonAsync<IEnumerable<Pet>>();
+            return Result<IEnumerable<Pet>>.Ok(pets!);
+        } else {
+            var errors = await petsResult.Content.ReadFromJsonAsync<IEnumerable<string>>();
+            return Result<IEnumerable<Pet>>.ErrorList(errors!.ToList());
+        }
     }
-    public async Task CreatePet(CreatePetModel petCreateModel)
+    public async Task<Result> CreatePet(CreatePetModel petCreateModel)
     {
         var result = await httpClient.PostAsJsonAsync(ApiURL, petCreateModel);
-        await result.Content.ReadFromJsonAsync<Pet>();
+        if (result.IsSuccessStatusCode)
+        {
+            return Result.Ok();
+        }
+        else
+        {
+            var errors = await result.Content.ReadFromJsonAsync<IEnumerable<string>>();
+            return Result.ErrorList(errors!.ToList());
+        }
     }
 
-    public async Task UpdatePet(string petId, UpdatePetModel updatePetModel)
+    public async Task<Result> UpdatePet(string petId, UpdatePetModel updatePetModel)
     {
-        await httpClient.PutAsJsonAsync($"{ApiURL}/{petId}", updatePetModel);
+        Console.WriteLine($"PDS UpdatePet: {petId} | {updatePetModel.Name} | {updatePetModel.Breed} | {updatePetModel.DateOfBirth}");
+        var result = await httpClient.PutAsJsonAsync($"{ApiURL}/{petId}", updatePetModel);
+        if (result.IsSuccessStatusCode)
+        {
+            return Result.Ok();
+        }
+        else
+        {
+            var errors = await result.Content.ReadAsStringAsync();
+            return Result.Error(errors);
+        }
     }
 
-    public async Task DeletePet(string petId)
+    public async Task<Result> DeletePet(string petId)
     {
-        await httpClient.DeleteAsync($"{ApiURL}/{petId}");
+        var result = await httpClient.DeleteAsync($"{ApiURL}/{petId}");
+        if (result.IsSuccessStatusCode)
+        {
+            return Result.Ok();
+        }
+        else
+        {
+            var errors = await result.Content.ReadFromJsonAsync<IEnumerable<string>>();
+            return Result.ErrorList(errors!.ToList());
+        }
     }
 }

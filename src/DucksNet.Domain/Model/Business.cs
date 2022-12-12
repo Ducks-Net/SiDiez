@@ -11,6 +11,17 @@ public class Business
     public string OwnerPhone {get; private set;}
     public string OwnerEmail {get; private set;}
 
+    public Business(Guid id, string businessName, string surname, string firstName, string address, string ownerPhone, string ownerEmail) 
+    {
+        ID = id;
+        BusinessName = businessName;
+        Surname = surname;
+        FirstName = firstName;
+        Address = address;
+        OwnerPhone = ownerPhone;
+        OwnerEmail = ownerEmail;
+    }
+
     private Business(string businessName, string surname, string firstName, string address, string ownerPhone, string ownerEmail) 
     {
         ID = new Guid();
@@ -23,18 +34,28 @@ public class Business
     }
     public static Result<Business> Create(string businessName, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
-        if(businessName == null || businessName == string.Empty)
+        if(string.IsNullOrWhiteSpace(businessName))
             return Result<Business>.Error("Business name is required");
-        if(surname == null || surname == string.Empty)
+        if(string.IsNullOrWhiteSpace(surname))
             return Result<Business>.Error("Surname is required");
-        if(firstName == null || firstName == string.Empty)
+        if(string.IsNullOrWhiteSpace(firstName))
             return Result<Business>.Error("First name is required");
-        if(address == null || address == string.Empty)
+        if(string.IsNullOrWhiteSpace(address))
             return Result<Business>.Error("Address is required");
-        if(ownerPhone == null || ownerPhone == string.Empty)  
+        if(string.IsNullOrWhiteSpace(ownerPhone))  
             return Result<Business>.Error("Owner phone is required");
+
+        for(int i = 0; i < ownerPhone.Length; i++)
+            if(!char.IsDigit(ownerPhone[i]))
+                return Result<Business>.Error("Phone number must be numeric");
+        if(ownerPhone.Length != 10)
+            return Result<Business>.Error("Phone number must be 10 digits");
+
         if(ownerEmail == null || ownerEmail == string.Empty)  
             return Result<Business>.Error("Owner email is required");
+        if(!Validation.IsEmailValid(ownerEmail))
+            return Result<Business>.Error("Owner email is invalid");
+            
         return Result<Business>.Ok(new Business(businessName, surname, firstName, address, ownerPhone, ownerEmail));
     }
 }
