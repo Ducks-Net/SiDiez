@@ -1,4 +1,4 @@
-using DucksNet.Domain.Model.Enums;
+﻿using DucksNet.Domain.Model.Enums;
 using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Domain.Model;
@@ -26,7 +26,7 @@ public class Office
     }
     public static Result<Office> Create(Guid businessId, string address, int animalCapacity)
     {
-        if(businessId == null)
+        if(businessId == Guid.Empty)
             return Result<Office>.Error("Business ID is required");
         if(address == null || address == string.Empty)
             return Result<Office>.Error("Address is required");
