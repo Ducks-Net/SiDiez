@@ -53,14 +53,12 @@ public class OfficeTests
     [Fact]
     public void When_OfficeCreatedWithEmptyBusinessId_Should_Fail()
     {
-        Guid dummyGUID = Guid.NewGuid();
+        Guid dummyGUID = Guid.Empty;
         var result = Office.Create(dummyGUID, "Adresa", 10);
 
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().NotBeNull();
-        result.Value!.BusinessId.Should().Be(dummyGUID);
-        result.Value!.Address.Should().Be("Adresa");
-        result.Value!.AnimalCapacity.Should().Be(10);
+        result.IsFailure.Should().BeTrue();
+        result.Errors.Should().NotBeEmpty();
+        result.Errors.Should().Contain("Business ID is required");
     }
     
 }
