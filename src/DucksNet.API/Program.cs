@@ -25,6 +25,19 @@ builder.Services.AddScoped<IRepositoryAsync<Employee>, RepositoryAsync<Employee>
 builder.Services.AddScoped<IRepositoryAsync<Business>, RepositoryAsync<Business>>();
 builder.Services.AddScoped<IRepositoryAsync<Office>, RepositoryAsync<Office>>();
 
+builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
+builder.Services.AddScoped<IRepository<Cage>, CagesRepository>();
+builder.Services.AddScoped<IRepository<CageTimeBlock>, CageTimeBlocksRepository>();
+builder.Services.AddScoped<IRepository<Appointment>, AppointmentsRepository>();
+builder.Services.AddScoped<IRepository<Pet>, PetsRepository>();
+builder.Services.AddScoped<IRepository<User>, UsersRepository>();
+builder.Services.AddScoped<IRepository<Treatment>, TreatmentsRepository>();
+builder.Services.AddScoped<IRepository<Medicine>, MedicinesRepository>();
+builder.Services.AddScoped<IRepository<MedicalRecord>, MedicalRecordRepository>();
+builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
+builder.Services.AddScoped<IRepository<Business>, BusinessesRepository>();
+builder.Services.AddScoped<IRepository<Office>, OfficesRepository>();
+
 builder.Services.AddValidatorsFromAssemblyContaining<EmployeeValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<PetValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<MedicineValidator>();
