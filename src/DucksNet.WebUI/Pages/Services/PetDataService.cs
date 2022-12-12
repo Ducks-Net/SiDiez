@@ -7,7 +7,9 @@ namespace DucksNet.WebUI.Pages.Services;
 
 public class PetDataService : IPetDataService
 {
+#pragma warning disable S1075 // URIs should not be hardcoded  
     private const string ApiURL = "https://localhost:7115/api/v1/pets";
+#pragma warning disable S1075 // URIs should not be hardcoded  
     private readonly HttpClient httpClient;
 
     public PetDataService(HttpClient httpClient)
@@ -23,7 +25,7 @@ public class PetDataService : IPetDataService
     public async Task CreatePet(CreatePetModel petCreateModel)
     {
         var result = await httpClient.PostAsJsonAsync(ApiURL, petCreateModel);
-        var pet = await result.Content.ReadFromJsonAsync<Pet>();
+        await result.Content.ReadFromJsonAsync<Pet>();
     }
 
     public async Task UpdatePet(string petId, UpdatePetModel updatePetModel)

@@ -7,7 +7,9 @@ namespace DucksNet.WebUI.Pages.Services;
 
 public class MedicalRecordDataService : IMedicalRecordDataService
 {
+#pragma warning disable S1075 // URIs should not be hardcoded  
     private const string ApiURL = "https://localhost:7115/api/v1/MedicalRecords";
+#pragma warning disable S1075 // URIs should not be hardcoded  
     private readonly HttpClient httpClient;
 
     public MedicalRecordDataService(HttpClient httpClient)
@@ -26,7 +28,7 @@ public class MedicalRecordDataService : IMedicalRecordDataService
     public async Task CreateMedicalRecord(CreateMedicalRecord createMedicalRecord)
     {
         var result = await httpClient.PostAsJsonAsync(ApiURL, createMedicalRecord);
-        var medicalRecord = await result.Content.ReadFromJsonAsync<MedicalRecord>();
+        await result.Content.ReadFromJsonAsync<MedicalRecord>();
     }
 
     public async Task DeleteMedicalRecord(string medicalRecordId)

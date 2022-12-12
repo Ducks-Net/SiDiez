@@ -7,7 +7,9 @@ namespace DucksNet.WebUI.Pages.Services;
 
 public class UserDataService : IUserDataService
 {
+#pragma warning disable S1075 // URIs should not be hardcoded    
     private const string ApiURL = "https://localhost:7115/api/v1/users";
+#pragma warning restore S1075 // URIs should not be hardcoded
     private readonly HttpClient httpClient;
 
     public UserDataService(HttpClient httpClient)
@@ -23,7 +25,7 @@ public class UserDataService : IUserDataService
     public async Task CreateUser(CreateUserModel userCreateModel)
     {
         var result = await httpClient.PostAsJsonAsync(ApiURL, userCreateModel);
-        var user = await result.Content.ReadFromJsonAsync<User>();
+        await result.Content.ReadFromJsonAsync<User>();
     }
 
     public async Task UpdateUser(string userId, UpdateUserModel updateUserModel)

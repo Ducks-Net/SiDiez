@@ -1,4 +1,4 @@
-using DucksNet.Domain.Model;
+﻿using DucksNet.Domain.Model;
 using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Infrastructure.Prelude;
@@ -68,7 +68,7 @@ public class  CageScheduleService
                                        .Where(t => t.CageId != null)
                                        .Where(t => t.CageId == c.ID)
                                        .Where(t => t.StartTime <= startTime && t.EndTime >= endTime)
-                                       .Count() == 0)
+                                       .Any())
                            .Where(c => c.Size == pet.Value!.Size)
                            .ToList();
 

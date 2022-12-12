@@ -108,7 +108,7 @@ public class EmployeesController : ControllerBase
             }
             return BadRequest(errorsList);
         }
-        await _employeesRepository.UpdateAsync(oldEmployee!.Value);
+        await _employeesRepository.UpdateAsync(oldEmployee.Value!);
         return Ok("The information has been updated");
     }
     [HttpPut("{employeeId:guid}/{newOfficeId:guid}")]

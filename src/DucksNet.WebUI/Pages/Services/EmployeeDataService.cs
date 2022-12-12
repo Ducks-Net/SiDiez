@@ -7,7 +7,9 @@ namespace DucksNet.WebUI.Pages.Services;
 
 public class EmployeeDataService : IEmployeeDataService
 {
+#pragma warning disable S1075 // URIs should not be hardcoded  
     private const string ApiURL = "https://localhost:7115/api/v1/employees";
+#pragma warning disable S1075 // URIs should not be hardcoded  
     private readonly HttpClient httpClient;
 
     public EmployeeDataService(HttpClient httpClient)
@@ -17,7 +19,7 @@ public class EmployeeDataService : IEmployeeDataService
     public async Task CreateEmployee(CreateEmployeeModel createEmployeeModel)
     {
         var result = await httpClient.PostAsJsonAsync(ApiURL, createEmployeeModel);
-        var employee = await result.Content.ReadFromJsonAsync<Employee>();
+        await result.Content.ReadFromJsonAsync<Employee>();
     }
     public async Task<IEnumerable<Employee>> GetAllPersons()
     {

@@ -7,8 +7,10 @@ namespace DucksNet.WebUI.Pages.Services;
 
 public class TreatmentDataService : ITreatmentDataService
 {
+#pragma warning disable S1075 // URIs should not be hardcoded  
     private const string ApiURL = "https://localhost:7115/api/v1/treatment";
     private readonly HttpClient httpClient;
+#pragma warning disable S1075 // URIs should not be hardcoded  
 
     public TreatmentDataService(HttpClient httpClient)
     {
@@ -17,7 +19,7 @@ public class TreatmentDataService : ITreatmentDataService
     public async Task CreateTreatment(CreateTreatmentModel createTreatmentModel)
     {
         var result = await httpClient.PostAsJsonAsync(ApiURL, createTreatmentModel);
-        var treatment = await result.Content.ReadFromJsonAsync<Treatment>();
+        await result.Content.ReadFromJsonAsync<Treatment>();
     }
     public async Task<IEnumerable<Treatment>> GetAllTreatment()
     {
