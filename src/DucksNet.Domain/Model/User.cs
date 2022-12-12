@@ -25,18 +25,6 @@ public class User
         Password = password;
     }
 
-    public User(Guid id, string firstName, string lastName, string address, string phoneNumber, string email, string password, List<Pet> pets)
-    {
-        Id = id;
-        FirstName = firstName;
-        LastName = lastName;
-        Address = address;
-        PhoneNumber = phoneNumber;
-        Email = email;
-        Password = password;
-        Pets = pets;
-    }
-
     public static Result<User> Create(string? firstName, string? lastName, string? address, string phoneNumber, string email, string? password)
     {
         if (string.IsNullOrWhiteSpace(firstName))
