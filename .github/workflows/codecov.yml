@@ -32,6 +32,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: run tests
-      run: make test
+      run: dotnet test --no-restore
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
