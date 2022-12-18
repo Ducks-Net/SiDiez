@@ -28,23 +28,26 @@ public class MedicineController : ControllerBase
     }
 
     [HttpGet("byName/{name}")]
-    public IActionResult GetByName(string name)
+    public async Task<IActionResult> GetByName(string name)
     {
-        var medicine = _medicineRepository.GetAllAsync().Result.Where(m => m.Name == name).ToList();
+        var medicine = await _medicineRepository.GetAllAsync();
+        medicine = medicine.Where(m => m.Name == name).ToList();
         return Ok(medicine);
     }
 
     [HttpGet("byDescription/{description}")]
-    public IActionResult GetByDescription(string description)
+    public async Task<IActionResult> GetByDescription(string description)
     {
-        var medicine = _medicineRepository.GetAllAsync().Result.Where(m => m.Description == description).ToList();
+        var medicine = await _medicineRepository.GetAllAsync();
+        medicine = medicine.Where(m => m.Description == description).ToList();
         return Ok(medicine);
     }
 
     [HttpGet("byDrugAdministration/{drugAdministration}")]
-    public IActionResult GetByClinicID(string drugAdministration)
+    public async Task<IActionResult> GetByClinicId(string drugAdministration)
     {
-        var medicine = _medicineRepository.GetAllAsync().Result.Where(m => m.DrugAdministration.Name == drugAdministration).ToList();
+        var medicine = await _medicineRepository.GetAllAsync();
+        medicine = medicine.Where(m => m.DrugAdministration.Name == drugAdministration).ToList();
         return Ok(medicine);
     }
 

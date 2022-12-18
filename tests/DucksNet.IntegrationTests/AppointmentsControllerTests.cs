@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
@@ -17,10 +18,10 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     private const string AppointmentsUrl = "api/v1/appointments";
 
     [Fact]
-    public void When_Post_WithValidDta_Should_ReturnAppointment()
+    public async Task When_Post_WithValidDta_Should_ReturnAppointment()
     {
-        var officeId = SetupOffice();
-        var petId = SetupPet(Guid.NewGuid(), Size.Medium.Name);
+        var officeId = await SetupOffice();
+        var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
         var appointment = new ScheduleAppointmentDTO
         {
@@ -31,10 +32,10 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
             EndTime = DateTime.Now.AddDays(1).AddHours(1)
         };
 
-        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+        var response = await TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment);
         response.EnsureSuccessStatusCode();
 
-        var result = response.Content.ReadFromJsonAsync<Appointment>().Result;
+        var result = await response.Content.ReadFromJsonAsync<Appointment>();
         Assert.NotNull(result);
         result!.LocationId.Should().Be(officeId);
         result.PetId.Should().Be(petId);
@@ -43,7 +44,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     }
 
     [Fact]
-    public void When_Post_WithInvalidData_Should_ReturnBadRequest()
+    public async Task When_Post_WithInvalidData_Should_ReturnBadRequest()
     {
         var appointment = new ScheduleAppointmentDTO
         {
@@ -54,15 +55,15 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
             EndTime = DateTime.Now.AddDays(1).AddHours(1)
         };
 
-        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+        var response = await TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
-    public void When_GetAll_Should_ReturnAllAppointments()
+    public async Task When_GetAll_Should_ReturnAllAppointments()
     {
-        var officeId = SetupOffice();
-        var petId = SetupPet(Guid.NewGuid(), Size.Medium.Name);
+        var officeId = await SetupOffice();
+        var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
         var appointment = new ScheduleAppointmentDTO
         {
@@ -73,22 +74,22 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
             EndTime = DateTime.Now.AddDays(1).AddHours(1)
         };
 
-        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+        var response = await TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment);
         response.EnsureSuccessStatusCode();
 
-        var result = TestingClient.GetAsync(AppointmentsUrl).Result;
+        var result = await TestingClient.GetAsync(AppointmentsUrl);
         result.EnsureSuccessStatusCode();
 
-        var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
+        var appointments = await result.Content.ReadFromJsonAsync<List<Appointment>>();
         Assert.NotNull(appointments);
         appointments!.Count.Should().Be(1);
     }
 
     [Fact]
-    public void When_GetByOffice_Should_ReturnAppointments()
+    public async Task When_GetByOffice_Should_ReturnAppointments()
     {
-        var officeId = SetupOffice();
-        var petId = SetupPet(Guid.NewGuid(), Size.Medium.Name);
+        var officeId = await SetupOffice();
+        var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
         var appointment = new ScheduleAppointmentDTO
         {
@@ -99,22 +100,22 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
             EndTime = DateTime.Now.AddDays(1).AddHours(1)
         };
 
-        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+        var response = await TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment);
         response.EnsureSuccessStatusCode();
 
-        var result = TestingClient.GetAsync($"{AppointmentsUrl}/byOffice/{officeId}").Result;
+        var result = await TestingClient.GetAsync($"{AppointmentsUrl}/byOffice/{officeId}");
         result.EnsureSuccessStatusCode();
 
-        var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
+        var appointments = await result.Content.ReadFromJsonAsync<List<Appointment>>();
         Assert.NotNull(appointments);
         appointments!.Count.Should().Be(1);
     }
 
     [Fact]
-    public void When_Get_ByPet_Should_ReturnAppointments()
+    public async Task When_Get_ByPet_Should_ReturnAppointments()
     {
-        var officeId = SetupOffice();
-        var petId = SetupPet(Guid.NewGuid(), Size.Medium.Name);
+        var officeId = await SetupOffice();
+        var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
         var appointment = new ScheduleAppointmentDTO
         {
@@ -125,20 +126,20 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
             EndTime = DateTime.Now.AddDays(1).AddHours(1)
         };
 
-        var response = TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment).Result;
+        var response = await TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment);
         response.EnsureSuccessStatusCode();
 
-        var result = TestingClient.GetAsync($"{AppointmentsUrl}/byPet/{petId}").Result;
+        var result = await TestingClient.GetAsync($"{AppointmentsUrl}/byPet/{petId}");
         result.EnsureSuccessStatusCode();
 
-        var appointments = result.Content.ReadFromJsonAsync<List<Appointment>>().Result;
+        var appointments = await result.Content.ReadFromJsonAsync<List<Appointment>>();
         Assert.NotNull(appointments);
         appointments!.Count.Should().Be(1);
     }
 
-    private Guid SetupPet(Guid ownerId ,string petSizeString)
+    private async Task<Guid> SetupPet(Guid ownerId ,string petSizeString)
     {
-        var petDTO = new PetDTO
+        var petDto = new PetDTO
         {
             Name = "Test Pet",    
             DateOfBirth = DateTime.Now.AddYears(-1),
@@ -148,13 +149,13 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
             Size = petSizeString
         };
 
-        var petResponse = TestingClient.PostAsJsonAsync(PetsUrl, petDTO).Result;
+        var petResponse = await TestingClient.PostAsJsonAsync(PetsUrl, petDto);
         petResponse.EnsureSuccessStatusCode();
-        var pet = petResponse.Content.ReadFromJsonAsync<Pet>().Result;
+        var pet = await petResponse.Content.ReadFromJsonAsync<Pet>();
         return pet!.Id;
     }
 
-    private Guid SetupCage(Guid officeId, string size)
+    private async Task<Guid> SetupCage(Guid officeId, string size)
     {        
         var sut = new CreateCageDTO {
             LocationId = officeId,
@@ -162,26 +163,26 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         };
 
         //Act
-        var cageResponse = TestingClient.PostAsJsonAsync(CagesUrl, sut).Result;
+        var cageResponse = await TestingClient.PostAsJsonAsync(CagesUrl, sut);
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cage = cageResponse.Content.ReadFromJsonAsync<Cage>().Result;
+        var cage = await cageResponse.Content.ReadFromJsonAsync<Cage>();
         return cage!.ID;
     }
 
-    private Guid SetupOffice()
+    private async Task<Guid> SetupOffice()
     {
-        var officeDTO = new OfficeDTO
+        var officeDto = new OfficeDTO
         {
             BusinessId = Guid.NewGuid(),
             Address = "123 Main St",
             AnimalCapacity = 10
         };
 
-        var officeResponse = TestingClient.PostAsJsonAsync(OfficesUrl, officeDTO).Result;
+        var officeResponse = await TestingClient.PostAsJsonAsync(OfficesUrl, officeDto);
         officeResponse.EnsureSuccessStatusCode();
-        var office = officeResponse.Content.ReadFromJsonAsync<Office>().Result;
+        var office = await officeResponse.Content.ReadFromJsonAsync<Office>();
         office.Should().NotBeNull();
         return office!.ID;
     }

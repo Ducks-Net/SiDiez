@@ -16,7 +16,6 @@ public class User
     private User(string firstName, string lastName, string address, string phoneNumber, string email, string password) 
     {
         Id = Guid.NewGuid();
-        Console.WriteLine($"Create user id: {Id}");
         FirstName = firstName;
         LastName = lastName;
         Address = address;

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
-using FluentValidation.Results;
 
 namespace DucksNet.IntegrationTests;
 public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController>
@@ -16,11 +15,11 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
     private const string OfficeUrl = "api/v1/office";
 
     [Fact]
-    public async void When_CreatedEmployee_Then_ShouldReturnEmployeeInTheGetRequest()
+    public async Task When_CreatedEmployee_Then_ShouldReturnEmployeeInTheGetRequest()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         var officeResult = await TestingClient.GetAsync(OfficeUrl);
         var offices = await officeResult.Content.ReadFromJsonAsync<List<Office>>();
         //Act 
@@ -45,18 +44,18 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         }
     }
     [Fact]
-    public async void When_CreateEmployeeWithNoOffice_Then_ShouldFail()
+    public async Task When_CreateEmployeeWithNoOffice_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         var officeResult = await TestingClient.GetAsync(OfficeUrl);
         sut.IdOffice = Guid.NewGuid();
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         //Assert
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await employeeResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors.Should().Contain("Entity of type Office was not found.");
     }
@@ -64,113 +63,113 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
     public async void When_CreateEmployeeWithEmptySurname_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         sut.Surname = "";
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         //Assert
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await employeeResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors.Should().Contain("Surname can not be empty");
     }
     [Fact]
-    public async void When_CreateEmployeeWithEmptyFirstName_Then_ShouldFail()
+    public async Task When_CreateEmployeeWithEmptyFirstName_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         sut.FirstName = "";
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         //Assert
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await employeeResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors!.First().Should().Contain("First name can not be empty");
     }
     [Fact]
-    public async void When_CreateEmployeeWithEmptyAddress_Then_ShouldFail()
+    public async Task When_CreateEmployeeWithEmptyAddress_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         sut.Address = "";
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         //Assert
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await employeeResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors!.First().Should().Contain("Address can not be empty");
     }
     [Fact]
-    public async void When_CreateEmployeeWithEmptyEmail_Then_ShouldFail()
+    public async Task When_CreateEmployeeWithEmptyEmail_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         sut.OwnerEmail = "";
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         //Assert
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await employeeResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors!.First().Should().Contain("Email can not be empty");
     }
     [Fact]
-    public async void When_CreateEmployeeWithEmptyTelephone_Then_ShouldFail()
+    public async Task When_CreateEmployeeWithEmptyTelephone_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         sut.OwnerPhone = "";
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         //Assert
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await employeeResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors!.First().Should().Contain("Telephone can not be empty");
     }
     [Fact]
-    public async void When_CreateEmployeeWithInvalidTelephone_Then_ShouldFail()
+    public async Task When_CreateEmployeeWithInvalidTelephone_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         sut.OwnerPhone = "0123";
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         //Assert
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await employeeResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors!.First().Should().Contain("The telephone number is not valid");
     }
     [Fact]
-    public async void When_CreateEmployeeWithInvalidEmail_Then_ShouldFail()
+    public async Task When_CreateEmployeeWithInvalidEmail_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         sut.OwnerEmail = "gunoi_test";
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         //Assert
         employeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = employeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await employeeResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors!.First().Should().Contain("The email is not valid");
     }
     [Fact]
-    public async void When_CreateTwoEmployeeWithSameEmail_Then_ShouldFail()
+    public async Task When_CreateTwoEmployeeWithSameEmail_Then_ShouldFail()
     {
         //Arrange
-        var sut1 = GetEmployeeDTO(0).Result;
-        var sut2 = GetEmployeeDTO(1).Result;
+        var sut1 = await GetEmployeeDTO(0);
+        var sut2 = await GetEmployeeDTO(1);
         sut2.OwnerEmail = sut1.OwnerEmail;
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut1);
@@ -178,16 +177,16 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         //Assert
         employeeResponse.EnsureSuccessStatusCode();
         duplicateEmployeeEmail.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = duplicateEmployeeEmail.Content.ReadAsStringAsync().Result;
+        var errors = await duplicateEmployeeEmail.Content.ReadAsStringAsync();
         errors.Should().NotBeEmpty();
         errors.Should().Contain("The email already exists");
     }
     [Fact]
-    public async void When_CreateTwoEmployeeWithSameTelephoneNumber_Then_ShouldFail()
+    public async Task When_CreateTwoEmployeeWithSameTelephoneNumber_Then_ShouldFail()
     {
         //Arrange
-        var sut1 = GetEmployeeDTO(0).Result;
-        var sut2 = GetEmployeeDTO(1).Result;
+        var sut1 = await GetEmployeeDTO(0);
+        var sut2 = await GetEmployeeDTO(1);
         sut2.OwnerPhone = sut1.OwnerPhone;
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut1);
@@ -195,16 +194,16 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         //Assert
         employeeResponse.EnsureSuccessStatusCode();
         duplicateEmployeeEmail.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = duplicateEmployeeEmail.Content.ReadAsStringAsync().Result;
+        var errors = await duplicateEmployeeEmail.Content.ReadAsStringAsync();
         errors.Should().NotBeEmpty();
         errors.Should().Contain("The telephone number already exists");
     }
     [Fact]
-    public async void When_CreatedEmployee_Then_ShouldReturnEmployeeByIdInTheGetRequest()
+    public async Task When_CreatedEmployee_Then_ShouldReturnEmployeeByIdInTheGetRequest()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         var officeResult = await TestingClient.GetAsync(OfficeUrl);
         var offices = await officeResult.Content.ReadFromJsonAsync<List<Office>>();
         //Act 
@@ -225,7 +224,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeePost.OwnerPhone.Should().Be(sut.OwnerPhone);
     }
     [Fact]
-    public async void When_GetEmployeeWithInvalidGuid_Then_ShouldFail()
+    public async Task When_GetEmployeeWithInvalidGuid_Then_ShouldFail()
     {
         //Arrange
         var idEmployee = Guid.NewGuid();
@@ -233,16 +232,16 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         var getEmployeeResult = await TestingClient.GetAsync(EmployeesUrl + $"/{idEmployee}");
         //Assert
         getEmployeeResult.StatusCode.Should().Be(HttpStatusCode.NotFound);
-        var errors = getEmployeeResult.Content.ReadAsStringAsync().Result;
+        var errors = await getEmployeeResult.Content.ReadAsStringAsync();
         errors.Should().NotBeEmpty();
         errors.Should().Contain("Entity of type Employee was not found.");
     }
     [Fact]
-    public async void When_CreatedEmployeeAndDeleteIt_Then_ShouldReturnSucces()
+    public async Task When_CreatedEmployeeAndDeleteIt_Then_ShouldReturnSuccess()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
    
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
@@ -253,156 +252,161 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         //getById ->
         employeeResponse.EnsureSuccessStatusCode();
         getEmployeeResult.Content.Headers.ContentLength.Should().Be(0);
-        var employees = TestingClient.GetAsync(EmployeesUrl).Result.Content.ReadFromJsonAsync<List<Employee>>().Result;
+        var employeesResponse = await TestingClient.GetAsync(EmployeesUrl);
+        var employees = await employeesResponse.Content.ReadFromJsonAsync<List<Employee>>();
         employees.Should().BeEmpty();
     }
     [Fact]
-    public async void When_CreatedEmployeeAndDeleteOtherGuid_Then_ShouldFail()
+    public async Task When_CreatedEmployeeAndDeleteOtherGuid_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         //Act 
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         var getEmployeeResult = await TestingClient.DeleteAsync(EmployeesUrl + $"/{Guid.NewGuid()}");
         //Assert
         employeeResponse.EnsureSuccessStatusCode();
         getEmployeeResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = getEmployeeResult.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await getEmployeeResult.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors.Should().Contain("Entity of type Employee was not found.");
     }
     [Fact]
-    public async void When_CreatedEmployeeAndUpdateThePersonalInformation_Then_ShouldReturnModifiedEmployee()
+    public async Task When_CreatedEmployeeAndUpdateThePersonalInformation_Then_ShouldReturnModifiedEmployee()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         var employee = await employeeResponse.Content.ReadFromJsonAsync<Employee>();
         employeeResponse.EnsureSuccessStatusCode();
         //Act
-        var updatedEmployeeDTO = CreateSUT2();
-        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDTO);
-        var updates = updatedEmployeeResponse.Content.ReadAsStringAsync().Result;
+        var updatedEmployeeDto = CreateSUT2();
+        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDto);
+        var updates = await updatedEmployeeResponse.Content.ReadAsStringAsync();
         //Assert
         updatedEmployeeResponse.EnsureSuccessStatusCode();
 
         updates.Should().Contain("The information has been updated");
     }
     [Fact]
-    public async void When_CreatedEmployeeAndGetInvalidGuid_Then_ShouldFail()
+    public async Task When_CreatedEmployeeAndGetInvalidGuid_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         var employee = await employeeResponse.Content.ReadFromJsonAsync<Employee>();
         employeeResponse.EnsureSuccessStatusCode();
         //Act
-        var updatedEmployeeDTO = CreateSUT2();
-        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{Guid.NewGuid()}", updatedEmployeeDTO);
-        var errors = updatedEmployeeResponse.Content.ReadAsStringAsync().Result;
+        var updatedEmployeeDto = CreateSUT2();
+        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{Guid.NewGuid()}", updatedEmployeeDto);
+        var errors = await updatedEmployeeResponse.Content.ReadAsStringAsync();
         //Assert
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         errors.Should().Contain("Entity of type Employee was not found.");
     }
     [Fact]
-    public async void When_CreatedEmployeeAndUpdateDuplicateEmail_Then_ShouldFail()
+    public async Task When_CreatedEmployeeAndUpdateDuplicateEmail_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         var employee = await employeeResponse.Content.ReadFromJsonAsync<Employee>();
         employeeResponse.EnsureSuccessStatusCode();
         //Act
-        var updatedEmployeeDTO = CreateSUT2();
-        updatedEmployeeDTO.OwnerEmail = sut.OwnerEmail;
-        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDTO);
-        var errors = updatedEmployeeResponse.Content.ReadAsStringAsync().Result;
+        var updatedEmployeeDto = CreateSUT2();
+        updatedEmployeeDto.OwnerEmail = sut.OwnerEmail;
+        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDto);
+        var errors = await updatedEmployeeResponse.Content.ReadAsStringAsync();
         //Assert
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         errors.Should().Contain("The updated email already exists");
     }
     [Fact]
-    public async void When_CreatedEmployeeAndUpdateDuplicatePhoneNumber_Then_ShouldFail()
+    public async Task When_CreatedEmployeeAndUpdateDuplicatePhoneNumber_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        EmployeeDTO sut;
+        using (var taskEmployeeDto = GetEmployeeDTO(0))
+        {
+            sut = await taskEmployeeDto;
+        }
+
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         var employee = await employeeResponse.Content.ReadFromJsonAsync<Employee>();
         employeeResponse.EnsureSuccessStatusCode();
         //Act
-        var updatedEmployeeDTO = CreateSUT2();
-        updatedEmployeeDTO.OwnerPhone = sut.OwnerPhone;
-        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDTO);
-        var errors = updatedEmployeeResponse.Content.ReadAsStringAsync().Result;
+        var updatedEmployeeDto = CreateSUT2();
+        updatedEmployeeDto.OwnerPhone = sut.OwnerPhone;
+        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDto);
+        var errors = await updatedEmployeeResponse.Content.ReadAsStringAsync();
         //Assert
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         errors.Should().Contain("The updated telephone number already exists");
     }
     [Fact]
-    public async void When_CreatedEmployeeAndUpdateInvalidPhoneNumber_Then_ShouldFail()
+    public async Task When_CreatedEmployeeAndUpdateInvalidPhoneNumber_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         var employee = await employeeResponse.Content.ReadFromJsonAsync<Employee>();
         employeeResponse.EnsureSuccessStatusCode();
         //Act
-        var updatedEmployeeDTO = CreateSUT2();
-        updatedEmployeeDTO.OwnerPhone = "0123";
-        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDTO);
-        var errors = updatedEmployeeResponse.Content.ReadAsStringAsync().Result;
+        var updatedEmployeeDto = CreateSUT2();
+        updatedEmployeeDto.OwnerPhone = "0123";
+        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDto);
+        var errors = await updatedEmployeeResponse.Content.ReadAsStringAsync();
         //Assert
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         errors.Should().Contain("The telephone number is not valid");
     }
     [Fact]
-    public async void When_CreatedEmployeeAndUpdateInvalidEmail_Then_ShouldFail()
+    public async Task When_CreatedEmployeeAndUpdateInvalidEmail_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         var employee = await employeeResponse.Content.ReadFromJsonAsync<Employee>();
         employeeResponse.EnsureSuccessStatusCode();
         //Act
-        var updatedEmployeeDTO = CreateSUT2();
-        updatedEmployeeDTO.OwnerEmail = "gunoi_test";
-        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDTO);
-        var errors = updatedEmployeeResponse.Content.ReadAsStringAsync().Result;
+        var updatedEmployeeDto = CreateSUT2();
+        updatedEmployeeDto.OwnerEmail = "gunoi_test";
+        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDto);
+        var errors = await updatedEmployeeResponse.Content.ReadAsStringAsync();
         //Assert
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         errors.Should().Contain("The email is not valid");
     }
     [Fact]
-    public async void When_CreatedEmployeeAndUpdateWithNoValues_Then_ShouldFail()
+    public async Task When_CreatedEmployeeAndUpdateWithNoValues_Then_ShouldFail()
     {
         //Arrange
-        var taskEmployeeDTO = GetEmployeeDTO(0);
-        var sut = taskEmployeeDTO.Result;
+        var taskEmployeeDto = GetEmployeeDTO(0);
+        var sut = await taskEmployeeDto;
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         var employee = await employeeResponse.Content.ReadFromJsonAsync<Employee>();
         employeeResponse.EnsureSuccessStatusCode();
         //Act
-        var updatedEmployeeDTO = new EmployeeDTO(Guid.NewGuid(), "", "", "", "", "");
+        var updatedEmployeeDto = new EmployeeDTO(Guid.NewGuid(), "", "", "", "", "");
 
-        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDTO);
-        var errors = updatedEmployeeResponse.Content.ReadAsStringAsync().Result;
+        var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDto);
+        var errors = await updatedEmployeeResponse.Content.ReadAsStringAsync();
         //Assert
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         errors.Should().Contain("You need to add at least one value");
     }
     [Fact]
-    public async void When_CreatedEmployeeAndUpdateIdNewOffice_Then_ShouldReturnModifiedEmployee()
+    public async Task When_CreatedEmployeeAndUpdateIdNewOffice_Then_ShouldReturnModifiedEmployee()
     {
         //Arrange
-        var sut = GetEmployeeDTO(0).Result;
-        var sut2 = GetEmployeeDTO(1).Result;
+        var sut = await GetEmployeeDTO(0);
+        var sut2 = await GetEmployeeDTO(1);
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         var employeeResponse2 = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut2);
 
@@ -423,11 +427,11 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeUpdate.OwnerPhone.Should().Be(sut.OwnerPhone);
     }
     [Fact]
-    public async void When_CreatedEmployeeAndGetEmployeeWithInvalidGuid_Then_ShouldReturnModifiedEmployee()
+    public async Task When_CreatedEmployeeAndGetEmployeeWithInvalidGuid_Then_ShouldReturnModifiedEmployee()
     {
         //Arrange
-        var sut = GetEmployeeDTO(0).Result;
-        var sut2 = GetEmployeeDTO(1).Result;
+        var sut = await GetEmployeeDTO(0);
+        var sut2 = await GetEmployeeDTO(1);
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         var employeeResponse2 = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut2);
 
@@ -439,16 +443,16 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}/{Guid.NewGuid()}", employee2!.IdOffice);
         //Assert
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = updatedEmployeeResponse.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await updatedEmployeeResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors.Should().Contain("Entity of type Office was not found.");
     }
     [Fact]
-    public async void When_CreatedEmployeeAndUpdateOfficeWithInvalidGuid_Then_ShouldReturnModifiedEmployee()
+    public async Task When_CreatedEmployeeAndUpdateOfficeWithInvalidGuid_Then_ShouldReturnModifiedEmployee()
     {
         //Arrange
-        var sut = GetEmployeeDTO(0).Result;
-        var sut2 = GetEmployeeDTO(1).Result;
+        var sut = await GetEmployeeDTO(0);
+        var sut2 = await GetEmployeeDTO(1);
         var employeeResponse = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut);
         var employeeResponse2 = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut2);
 
@@ -460,7 +464,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{Guid.NewGuid()}/{employee2!.IdOffice}", employee2.IdOffice);
         //Assert
         updatedEmployeeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = updatedEmployeeResponse.Content.ReadAsStringAsync().Result;
+        var errors = await updatedEmployeeResponse.Content.ReadAsStringAsync();
         errors.Should().NotBeEmpty();
         errors.Should().Contain("Entity of type Employee was not found.");
     }
@@ -494,9 +498,9 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
     {
 
         var sut = numberSut == 0 ? CreateSUT() : CreateSUT2();
-        var officeDTO = numberSut == 0 ? CreateSUTOffice() : CreateSUTOffice2();
+        var officeDto = numberSut == 0 ? CreateSUTOffice() : CreateSUTOffice2();
 
-        var officeResponse = await TestingClient.PostAsJsonAsync(OfficeUrl, officeDTO);
+        var officeResponse = await TestingClient.PostAsJsonAsync(OfficeUrl, officeDto);
         var officeResult = await TestingClient.GetAsync(OfficeUrl);
         officeResponse.EnsureSuccessStatusCode();
         var offices = await officeResult.Content.ReadFromJsonAsync<List<Office>>();

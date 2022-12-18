@@ -11,9 +11,9 @@ using DucksNet.Domain.Model.Enums;
 namespace DucksNet.IntegrationTests;
 public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecordsController>
 {
-    private const string MedicalRecordURL = "api/v1/medicalrecords";
-    private const string AppointmentURL = "api/v1/appointments";
-    private const string ClientURL = "api/v1/pets";
+    private const string MedicalRecordUrl = "api/v1/medicalrecords";
+    private const string AppointmentUrl = "api/v1/appointments";
+    private const string ClientUrl = "api/v1/pets";
     private const string OfficesUrl = "api/v1/office";
     private const string PetsUrl = "api/v1/pets";
 
@@ -21,16 +21,15 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
     public async Task When_CreatedMedicalRecord_Then_ShouldReturnMedicalRecordInTheGetRequest()
     {
         //Arrange
-        var petId = SetupPet(Guid.NewGuid(), Size.Medium.Name);
-        var officeId = SetupOffice();
-        var idAppointment = SetupAppointment(petId, officeId);
+        var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
+        var officeId = await SetupOffice();
+        var idAppointment = await SetupAppointment(petId, officeId);
 
-        MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, petId);
+        MedicalRecordDTO medicalRecordDto = new MedicalRecordDTO(idAppointment, petId);
         //Act
-        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordURL, medicalRecordDTO);
-        var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordURL);
+        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordUrl, medicalRecordDto);
+        var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordUrl);
 
-        Console.WriteLine(medicalRecordResponse.Content.ReadAsStringAsync().Result);
         //Assert
         medicalRecordResponse.EnsureSuccessStatusCode();
         var medicalRecords = await medicalRecordResult.Content.ReadFromJsonAsync<List<MedicalRecordDTO>>();
@@ -50,10 +49,10 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         var idAppointment = Guid.Empty;
         var idClient = Guid.NewGuid();
 
-        MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, idClient);
+        MedicalRecordDTO medicalRecordDto = new MedicalRecordDTO(idAppointment, idClient);
         //Act
-        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordURL, medicalRecordDTO);
-        var _ = await TestingClient.GetAsync(MedicalRecordURL);
+        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordUrl, medicalRecordDto);
+        var _ = await TestingClient.GetAsync(MedicalRecordUrl);
         //Assert
         medicalRecordResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -64,19 +63,19 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         var idAppointment = Guid.NewGuid();
         var idClient = Guid.Empty;
 
-        MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO(idAppointment, idClient);
+        MedicalRecordDTO medicalRecordDto = new MedicalRecordDTO(idAppointment, idClient);
         //Act
-        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordURL, medicalRecordDTO);
-        var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordURL);
+        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordUrl, medicalRecordDto);
+        var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordUrl);
         //Assert
         medicalRecordResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     // TODO(RO) : after push of pet, can start here
 
-    private Guid SetupAppointment(Guid petId, Guid officeId)
+    private async Task<Guid> SetupAppointment(Guid petId, Guid officeId)
     {
-        var DTO = new ScheduleAppointmentDTO
+        var dto = new ScheduleAppointmentDTO
         {
             TypeString = AppointmentType.Consultation.Name,
             PetID = petId,
@@ -84,14 +83,14 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
             StartTime = DateTime.Now.AddDays(1),
             EndTime = DateTime.Now.AddDays(1).AddHours(1)
         };
-        var response = TestingClient.PostAsJsonAsync(AppointmentURL, DTO).Result;
+        var response = await TestingClient.PostAsJsonAsync(AppointmentUrl, dto);
         response.EnsureSuccessStatusCode();
-        var result = response.Content.ReadFromJsonAsync<Appointment>().Result;
+        var result = await response.Content.ReadFromJsonAsync<Appointment>();
         return result!.ID;
     }
-    private Guid SetupPet(Guid ownerId, string petSizeString)
+    private async Task<Guid> SetupPet(Guid ownerId, string petSizeString)
     {
-        var petDTO = new PetDTO
+        var petDto = new PetDTO
         {
             Name = "Test Pet",
             DateOfBirth = DateTime.Now.AddYears(-1),
@@ -101,23 +100,23 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
             Size = petSizeString
         };
 
-        var petResponse = TestingClient.PostAsJsonAsync(PetsUrl, petDTO).Result;
+        var petResponse = await TestingClient.PostAsJsonAsync(PetsUrl, petDto);
         petResponse.EnsureSuccessStatusCode();
-        var pet = petResponse.Content.ReadFromJsonAsync<Pet>().Result;
+        var pet = await petResponse.Content.ReadFromJsonAsync<Pet>();
         return pet!.Id;
     }
-    private Guid SetupOffice()
+    private async Task<Guid> SetupOffice()
     {
-        var officeDTO = new OfficeDTO
+        var officeDto = new OfficeDTO
         {
             BusinessId = Guid.NewGuid(),
             Address = "123 Main St",
             AnimalCapacity = 10
         };
 
-        var officeResponse = TestingClient.PostAsJsonAsync(OfficesUrl, officeDTO).Result;
+        var officeResponse = await TestingClient.PostAsJsonAsync(OfficesUrl, officeDto);
         officeResponse.EnsureSuccessStatusCode();
-        var office = officeResponse.Content.ReadFromJsonAsync<Office>().Result;
+        var office = await officeResponse.Content.ReadFromJsonAsync<Office>();
         office.Should().NotBeNull();
         return office!.ID;
     }

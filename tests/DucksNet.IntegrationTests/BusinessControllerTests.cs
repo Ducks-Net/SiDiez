@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
-using DucksNet.Domain.Model.Enums;
 
 namespace  DucksNet.IntegrationTests;
 
 public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 {
-    private const string businessUrl = "api/v1/business";
+    private const string BusinessUrl = "api/v1/business";
 
     [Fact]
-    public void When_BusinessCreated_Should_Succeed()
+    public async Task When_BusinessCreated_Should_Succeed()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -27,10 +27,10 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "ion@e.com",
         };
         
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+        var result = await response.Content.ReadFromJsonAsync<Business>();
         result.Should().NotBeNull();
         result!.BusinessName.Should().Be(business.BusinessName);
         result!.Surname.Should().Be(business.Surname);
@@ -40,7 +40,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
         result!.OwnerEmail.Should().Be(business.OwnerEmail);
     }
     [Fact]
-    public void When_Post_WithBadBusinessName_Should_Fail()
+    public async Task When_Post_WithBadBusinessName_Should_Fail()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -53,16 +53,16 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "ion@e.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var errors = response.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await response.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeNull();
         errors![0].Should().Be("Business name is required");
     }
     [Fact]
-    public void When_Post_WithBadSurname_Should_Fail()
+    public async Task When_Post_WithBadSurname_Should_Fail()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -75,18 +75,17 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "ion@e.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var errors = response.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await response.Content.ReadFromJsonAsync<List<string>>();
 
         errors.Should().NotBeNull();
         errors![0].Should().Be("Surname is required");
-
     } 
     [Fact]
-    public void When_Post_WithBadFirstName_Should_Fail()
+    public async Task When_Post_WithBadFirstName_Should_Fail()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -99,18 +98,18 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "ion@e.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var errors = response.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await response.Content.ReadFromJsonAsync<List<string>>();
 
         errors.Should().NotBeNull();
 
         errors![0].Should().Be("First name is required");
     }
     [Fact] 
-    public void When_Post_WithBadAddress_Should_Fail()
+    public async Task When_Post_WithBadAddress_Should_Fail()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -123,19 +122,18 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "ion@e.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var errors = response.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await response.Content.ReadFromJsonAsync<List<string>>();
 
         errors.Should().NotBeNull();
 
         errors![0].Should().Be("Address is required");
-
     }
     [Fact]
-    public void When_Post_WithBadOwnerPhone_Should_Fail()
+    public async Task When_Post_WithBadOwnerPhone_Should_Fail()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -148,18 +146,18 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "ion@e.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var errors = response.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await response.Content.ReadFromJsonAsync<List<string>>();
 
         errors.Should().NotBeNull();
 
         errors![0].Should().Be("Owner phone is required");
     }
     [Fact]
-    public void When_Post_WithBadOwnerEmail_Should_Fail()
+    public async Task When_Post_WithBadOwnerEmail_Should_Fail()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -172,18 +170,18 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var errors = response.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await response.Content.ReadFromJsonAsync<List<string>>();
 
         errors.Should().NotBeNull();
 
         errors![0].Should().Be("Owner email is required");
     }
     [Fact]
-    public void When_Post_WithBadOwnerEmail_Should_Fail2()
+    public async Task When_Post_WithBadOwnerEmail_Should_Fail2()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -196,18 +194,18 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "ion@e",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var errors = response.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await response.Content.ReadFromJsonAsync<List<string>>();
 
         errors.Should().NotBeNull();
 
         errors![0].Should().Be("Owner email is invalid");
     }
     [Fact]
-    public void When_Get_Should_ReturnBusiness()
+    public async Task When_Get_Should_ReturnBusiness()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -220,11 +218,11 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "ion@e.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+        var result = await response.Content.ReadFromJsonAsync<Business>();
 
         result.Should().NotBeNull();
         result!.BusinessName.Should().Be(business.BusinessName);
@@ -235,7 +233,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
         result.OwnerEmail.Should().Be(business.OwnerEmail);
     }
     [Fact] 
-    public void When_GetAll_Should_ReturnAllValues()
+    public async Task When_GetAll_Should_ReturnAllValues()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -248,11 +246,11 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "ion@e.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+        var result = await response.Content.ReadFromJsonAsync<Business>();
 
         result.Should().NotBeNull();
         result!.BusinessName.Should().Be(business.BusinessName);
@@ -263,7 +261,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
         result.OwnerEmail.Should().Be(business.OwnerEmail);
     }
     [Fact]
-    public void When_GetAll_Should_ReturnAllValues2()
+    public async Task When_GetAll_Should_ReturnAllValues2()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -276,11 +274,11 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "ion@e.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+        var result = await response.Content.ReadFromJsonAsync<Business>();
 
         result.Should().NotBeNull();
 
@@ -294,18 +292,18 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "aaasd@i.com",
         };
 
-        var response2 =  TestingClient.PostAsJsonAsync(businessUrl, business2).Result;
+        var response2 = await TestingClient.PostAsJsonAsync(BusinessUrl, business2);
 
         response2.StatusCode.Should().Be(HttpStatusCode.OK);
-        var result2 = response2.Content.ReadFromJsonAsync<Business>().Result;
+        var result2 = await response2.Content.ReadFromJsonAsync<Business>();
 
         result2.Should().NotBeNull();
 
-        var response3 =  TestingClient.GetAsync(businessUrl).Result;
+        var response3 = await TestingClient.GetAsync(BusinessUrl);
 
         response3.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result3 = response3.Content.ReadFromJsonAsync<List<Business>>().Result;
+        var result3 = await response3.Content.ReadFromJsonAsync<List<Business>>();
 
         result3.Should().NotBeNull();
         result3!.Count.Should().Be(2);
@@ -323,7 +321,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
         result3[1].OwnerEmail.Should().Be(business2.OwnerEmail);
     }
     [Fact]
-    public void When_GetAll_Should_ReturnAllValues3()
+    public async Task When_GetAll_Should_ReturnAllValues3()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -336,11 +334,11 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "asd@asd.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+        var result = await response.Content.ReadFromJsonAsync<Business>();
 
         result.Should().NotBeNull();
 
@@ -355,11 +353,11 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
         
         };
 
-        var response2 =  TestingClient.PostAsJsonAsync(businessUrl, business2).Result;
+        var response2 = await TestingClient.PostAsJsonAsync(BusinessUrl, business2);
 
         response2.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var errors = response2.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await response2.Content.ReadFromJsonAsync<List<string>>();
 
         errors.Should().NotBeNull();
 
@@ -367,7 +365,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
         errors![0].Should().Be("Owner email is required");
     }
     [Fact]
-    public void When_GetAll_Should_ReturnAllValues4()
+    public async Task When_GetAll_Should_ReturnAllValues4()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -380,11 +378,11 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "asd@a.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
         
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+        var result = await response.Content.ReadFromJsonAsync<Business>();
 
         result.Should().NotBeNull();
 
@@ -398,11 +396,11 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "asedasd",
         };
 
-        var response2 =  TestingClient.PostAsJsonAsync(businessUrl, business2).Result;
+        var response2 = await TestingClient.PostAsJsonAsync(BusinessUrl, business2);
 
         response2.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var errors = response2.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await response2.Content.ReadFromJsonAsync<List<string>>();
 
         errors.Should().NotBeNull();
 
@@ -411,7 +409,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
         errors[0].Should().Be("Owner email is invalid");
     }
     [Fact]
-    public void When_GetAll_Should_ReturnAllValues6()
+    public async Task When_GetAll_Should_ReturnAllValues6()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -424,11 +422,11 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "a@a.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+        var result = await response.Content.ReadFromJsonAsync<Business>();
 
         result.Should().NotBeNull();
 
@@ -442,11 +440,11 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "asd@asd",
         };
 
-        var response2 =  TestingClient.PostAsJsonAsync(businessUrl, business2).Result;
+        var response2 = await TestingClient.PostAsJsonAsync(BusinessUrl, business2);
 
         response2.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var errors = response2.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await response2.Content.ReadFromJsonAsync<List<string>>();
 
         errors.Should().NotBeNull();
 
@@ -454,7 +452,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         errors[0].Should().Be("Owner email is invalid");
     }
-    private Guid GetBusinessId()
+    private async Task<Guid> GetBusinessId()
     {
         var business = new BusinessDTO
         {
@@ -466,78 +464,77 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "asd@asd.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-    
-        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+        
+        var result = await response.Content.ReadFromJsonAsync<Business>();
 
         result.Should().NotBeNull();
 
         return result!.ID;
     }
     [Fact]
-    public void When_Delete_ShouldOnlyDeleteSelected()
+    public async Task When_Delete_ShouldOnlyDeleteSelected()
     {
         ClearDatabase();
-        var businessId = GetBusinessId();
-        var businessId2 = GetBusinessId();
-        var businessId3 = GetBusinessId();
+        var businessId  = await GetBusinessId();
+        var businessId2 = await GetBusinessId();
+        var businessId3 = await GetBusinessId();
 
-        var response =  TestingClient.DeleteAsync($"{businessUrl}/{businessId}").Result;
+        var response = await TestingClient.DeleteAsync($"{BusinessUrl}/{businessId}");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var response2 =  TestingClient.GetAsync($"{businessUrl}/{businessId}").Result;
+        var response2 = await TestingClient.GetAsync($"{BusinessUrl}/{businessId}");
 
         response2.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-        var response3 =  TestingClient.GetAsync($"{businessUrl}/{businessId2}").Result;
+        var response3 = await TestingClient.GetAsync($"{BusinessUrl}/{businessId2}");
 
         response3.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var response4 =  TestingClient.GetAsync($"{businessUrl}/{businessId3}").Result;
+        var response4 = await TestingClient.GetAsync($"{BusinessUrl}/{businessId3}");
 
         response4.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var response5 =  TestingClient.DeleteAsync($"{businessUrl}/{businessId2}").Result;
+        var response5 = await TestingClient.DeleteAsync($"{BusinessUrl}/{businessId2}");
 
         response5.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var response6 =  TestingClient.GetAsync($"{businessUrl}/{businessId2}").Result;
+        var response6 = await TestingClient.GetAsync($"{BusinessUrl}/{businessId2}");
 
         response6.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-        var response7 =  TestingClient.GetAsync($"{businessUrl}/{businessId3}").Result;
+        var response7 = await TestingClient.GetAsync($"{BusinessUrl}/{businessId3}");
 
         response7.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var response8 =  TestingClient.DeleteAsync($"{businessUrl}/{businessId3}").Result;
+        var response8 = await TestingClient.DeleteAsync($"{BusinessUrl}/{businessId3}");
 
         response8.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var response9 =  TestingClient.GetAsync($"{businessUrl}/{businessId3}").Result;
+        var response9 = await TestingClient.GetAsync($"{BusinessUrl}/{businessId3}");
 
         response9.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-        var response10 =  TestingClient.GetAsync($"{businessUrl}/{businessId}").Result;
+        var response10 = await TestingClient.GetAsync($"{BusinessUrl}/{businessId}");
 
         response10.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-        var response11 =  TestingClient.GetAsync($"{businessUrl}/{businessId2}").Result;
+        var response11 = await TestingClient.GetAsync($"{BusinessUrl}/{businessId2}");
 
         response11.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-        var response12 =  TestingClient.GetAsync($"{businessUrl}/{businessId3}").Result;
+        var response12 = await TestingClient.GetAsync($"{BusinessUrl}/{businessId3}");
 
         response12.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-        var response13 =  TestingClient.GetAsync(businessUrl).Result;
+        var response13 = await TestingClient.GetAsync(BusinessUrl);
 
         response13.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = response13.Content.ReadFromJsonAsync<List<Business>>().Result;
+        var result = await response13.Content.ReadFromJsonAsync<List<Business>>();
 
         result.Should().NotBeNull();
 
@@ -545,22 +542,22 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     }
 
     [Fact]
-    public void When_Get_Should_ReturnValue()
+    public async Task When_Get_Should_ReturnValue()
     {
         ClearDatabase();
-        var businessId = GetBusinessId();
-        var response =  TestingClient.GetAsync($"{businessUrl}/{businessId}").Result;
+        var businessId = await GetBusinessId();
+        var response = await TestingClient.GetAsync($"{BusinessUrl}/{businessId}");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+        var result = await response.Content.ReadFromJsonAsync<Business>();
 
         result.Should().NotBeNull();
 
         result!.ID.Should().Be(businessId);
     }
     [Fact]
-    public void When_Create_Should_Fail()
+    public async Task When_Create_Should_Fail()
     {
         ClearDatabase();
         var business = new BusinessDTO
@@ -573,11 +570,11 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
             OwnerEmail = "asd@asd.com",
         };
 
-        var response =  TestingClient.PostAsJsonAsync(businessUrl, business).Result;
+        var response = await TestingClient.PostAsJsonAsync(BusinessUrl, business);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        var errors = response.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await response.Content.ReadFromJsonAsync<List<string>>();
 
         errors.Should().NotBeNull();
 
@@ -587,10 +584,10 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
     }
     [Fact]
-    public void When_Delete_Should_Fail()
+    public async Task When_Delete_Should_Fail()
     {
         ClearDatabase();
-        var response =  TestingClient.DeleteAsync($"{businessUrl}/00000000-0000-0000-0000-000000000000").Result;
+        var response = await TestingClient.DeleteAsync($"{BusinessUrl}/00000000-0000-0000-0000-000000000000");
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }

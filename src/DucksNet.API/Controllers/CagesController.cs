@@ -95,9 +95,9 @@ public class CagesController : ControllerBase
     }
     
     [HttpPost("schedule")]
-    public IActionResult ScheduleCage([FromBody] ScheduleCageDTO dto)
+    public async Task<IActionResult> ScheduleCage([FromBody] ScheduleCageDTO dto)
     {
-        var result = _cageScheduleService.ScheduleCage(dto.PetId, dto.LocationId, dto.StartTime, dto.EndTime);
+        var result = await _cageScheduleService.ScheduleCage(dto.PetId, dto.LocationId, dto.StartTime, dto.EndTime);
         if(result.IsFailure)
         {
             return BadRequest(result.Errors);
@@ -105,18 +105,18 @@ public class CagesController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpGet("schedule/byLocation/{locationId}")]
-    public IActionResult GetCageSchedule(Guid locationId)
+    [HttpGet("schedule/byLocation/{locationId:guid}")]
+    public async Task<IActionResult> GetCageSchedule(Guid locationId)
     {
-        var result = _cageScheduleService.GetLocationSchedule(locationId);
+        var result = await _cageScheduleService.GetLocationSchedule(locationId);
         
         return Ok(result);
     }
 
-    [HttpGet("schedule/byPet/{petId}")]
-    public IActionResult GetPetSchedule(Guid petId)
+    [HttpGet("schedule/byPet/{petId:guid}")]
+    public async Task<IActionResult> GetPetSchedule(Guid petId)
     {
-        var result = _cageScheduleService.GetPetSchedule(petId);
+        var result = await _cageScheduleService.GetPetSchedule(petId);
         
         return Ok(result);
     }
