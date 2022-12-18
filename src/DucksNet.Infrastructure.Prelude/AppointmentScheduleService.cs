@@ -48,7 +48,7 @@ public class AppointmentScheduleService
         appointment.Value.AssignToLocation(locationId);
         appointment.Value.AssignToPet(petId);
 
-        _appointmentsRepository.AddAsync(appointment.Value!);
+        await _appointmentsRepository.AddAsync(appointment.Value!);
         return Result<Appointment>.Ok(appointment.Value!);
     }
 }
