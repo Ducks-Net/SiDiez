@@ -58,7 +58,7 @@ public class CagesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateCageDTO dto)
+    public async Task<IActionResult> Create([FromBody] CreateCageDto dto)
     {
         var cage = _mapper.Map<Result<Cage>>(dto);
         if(cage.IsFailure || cage.Value == null)
@@ -91,7 +91,7 @@ public class CagesController : ControllerBase
     }
     
     [HttpPost("schedule")]
-    public async Task<IActionResult> ScheduleCage([FromBody] ScheduleCageDTO dto)
+    public async Task<IActionResult> ScheduleCage([FromBody] ScheduleCageDto dto)
     {
         var result = await _cageScheduleService.ScheduleCage(dto.PetId, dto.LocationId, dto.StartTime, dto.EndTime);
         if(result.IsFailure)

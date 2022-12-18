@@ -16,7 +16,7 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
     [Fact]
     public async Task When_Office_Create_Should_ReturnOk()
     {
-        var office = new OfficeDTO
+        var office = new OfficeDto
         {
             BusinessId = Guid.NewGuid(),
             Address = "Adresa",
@@ -28,7 +28,7 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
     [Fact]
     public async Task When_Office_CreateWithEmptyAddress_Should_ReturnBadRequest()
     {
-        var office = new OfficeDTO
+        var office = new OfficeDto
         {
             BusinessId = Guid.NewGuid(),
             Address = string.Empty,
@@ -40,7 +40,7 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
     [Fact]
     public async Task When_Office_Get_Should_ReturnOk()
     {
-        var office = new OfficeDTO
+        var office = new OfficeDto
         {
             BusinessId = Guid.NewGuid(),
             Address = "Adresa",
@@ -63,7 +63,7 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
     [Fact]
     public async Task When_Office_GetAll_Should_ReturnOk()
     {
-        var office = new OfficeDTO
+        var office = new OfficeDto
         {
             BusinessId = Guid.NewGuid(),
             Address = "Adresa",
@@ -77,7 +77,7 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
     [Fact]
     public async Task When_Office_Delete_Should_ReturnOk()
     {
-        var office = new OfficeDTO
+        var office = new OfficeDto
         {
             BusinessId = Guid.NewGuid(),
             Address = "Adresa",

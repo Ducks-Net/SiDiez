@@ -16,9 +16,9 @@ public class EmployeesController : ControllerBase
 {
     private readonly IRepositoryAsync<Employee> _employeesRepository;
     private readonly IRepositoryAsync<Office> _officeRepository;
-    private readonly IValidator<EmployeeDTO> _createValidator;
+    private readonly IValidator<EmployeeDto> _createValidator;
 
-    public EmployeesController(IValidator<EmployeeDTO> validator, IRepositoryAsync<Employee> employeeRepository, IRepositoryAsync<Office> officeRepository)
+    public EmployeesController(IValidator<EmployeeDto> validator, IRepositoryAsync<Employee> employeeRepository, IRepositoryAsync<Office> officeRepository)
     {
         _createValidator = validator;
         _employeesRepository = employeeRepository;
@@ -41,7 +41,7 @@ public class EmployeesController : ControllerBase
         return Ok(employee.Value);
     }
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] EmployeeDTO dto)
+    public async Task<IActionResult> Create([FromBody] EmployeeDto dto)
     {
         var office = await _officeRepository.GetAsync(dto.IdOffice);
         if (office.IsFailure)
@@ -77,7 +77,7 @@ public class EmployeesController : ControllerBase
         return Ok(employeePost.Value);
     }
     [HttpPut("{employeeId:guid}")]
-    public async Task<IActionResult> UpdatePersonalInformationEmployee(Guid employeeId, [FromBody] EmployeeDTO dto)
+    public async Task<IActionResult> UpdatePersonalInformationEmployee(Guid employeeId, [FromBody] EmployeeDto dto)
     {
         var oldEmployee = await _employeesRepository.GetAsync(employeeId);
  

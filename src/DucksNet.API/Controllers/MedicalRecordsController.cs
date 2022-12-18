@@ -38,7 +38,7 @@ public class MedicalRecordsController : ControllerBase
         return Ok(medicalRecord.Value);
     }
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] MedicalRecordDTO dto)
+    public async Task<IActionResult> Create([FromBody] MedicalRecordDto dto)
     {
 
         var appointment = await _appointmentRepository.GetAsync(dto.IdAppointment);

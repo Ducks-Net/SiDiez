@@ -1,6 +1,6 @@
 ﻿namespace DucksNet.API.DTO;
 
-public class UserDTO
+public class UserDto
 {
     public string? FirstName { get; set; }
     public string? LastName { get; set; }

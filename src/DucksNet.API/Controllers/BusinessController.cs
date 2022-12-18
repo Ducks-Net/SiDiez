@@ -22,7 +22,7 @@ public class BusinessController : ControllerBase
         return Ok(businesses);
     }
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] BusinessDTO dto)
+    public async Task<IActionResult> Create([FromBody] BusinessDto dto)
     {
         var business = Business.Create(dto.BusinessName, dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
         if(business.IsFailure)

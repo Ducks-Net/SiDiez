@@ -1,6 +1,6 @@
-namespace DucksNet.API.DTO;
+﻿namespace DucksNet.API.DTO;
 
-public class BusinessDTO
+public class BusinessDto
 {
     public string BusinessName { get; set; } = string.Empty;
     public string Surname {get; set;} = string.Empty;

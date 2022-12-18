@@ -78,7 +78,7 @@ public class MedicalRecordTests
         result.Value.IdClient.Should().Be(newIdClient);
         result.Value.Id.Should().NotBeEmpty();
     }
-    private Tuple<Guid, Guid> CreateSUT()
+    private static Tuple<Guid, Guid> CreateSUT()
     {
         Tuple<Guid, Guid> sut = new(Guid.NewGuid(), Guid.NewGuid());
         return sut;

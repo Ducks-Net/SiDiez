@@ -19,7 +19,7 @@ public class Office
 
     private Office(Guid businessId, string address, int animalCapacity) 
     {
-        ID = new Guid();
+        ID = Guid.NewGuid();
         BusinessId = businessId;
         Address = address;
         AnimalCapacity = animalCapacity;

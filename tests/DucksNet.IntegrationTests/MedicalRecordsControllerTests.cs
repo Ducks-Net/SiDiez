@@ -25,14 +25,14 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         var officeId = await SetupOffice();
         var idAppointment = await SetupAppointment(petId, officeId);
 
-        MedicalRecordDTO medicalRecordDto = new MedicalRecordDTO(idAppointment, petId);
+        MedicalRecordDto medicalRecordDto = new MedicalRecordDto(idAppointment, petId);
         //Act
         var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordUrl, medicalRecordDto);
         var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordUrl);
 
         //Assert
         medicalRecordResponse.EnsureSuccessStatusCode();
-        var medicalRecords = await medicalRecordResult.Content.ReadFromJsonAsync<List<MedicalRecordDTO>>();
+        var medicalRecords = await medicalRecordResult.Content.ReadFromJsonAsync<List<MedicalRecordDto>>();
         medicalRecords.Should().NotBeNull();
         medicalRecords!.Count.Should().Be(1);
         foreach (var medicalRecord in medicalRecords!)
@@ -49,7 +49,7 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         var idAppointment = Guid.Empty;
         var idClient = Guid.NewGuid();
 
-        MedicalRecordDTO medicalRecordDto = new MedicalRecordDTO(idAppointment, idClient);
+        MedicalRecordDto medicalRecordDto = new MedicalRecordDto(idAppointment, idClient);
         //Act
         var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordUrl, medicalRecordDto);
         var _ = await TestingClient.GetAsync(MedicalRecordUrl);
@@ -63,7 +63,7 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         var idAppointment = Guid.NewGuid();
         var idClient = Guid.Empty;
 
-        MedicalRecordDTO medicalRecordDto = new MedicalRecordDTO(idAppointment, idClient);
+        MedicalRecordDto medicalRecordDto = new MedicalRecordDto(idAppointment, idClient);
         //Act
         var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordUrl, medicalRecordDto);
         var medicalRecordResult = await TestingClient.GetAsync(MedicalRecordUrl);
@@ -75,7 +75,7 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
 
     private async Task<Guid> SetupAppointment(Guid petId, Guid officeId)
     {
-        var dto = new ScheduleAppointmentDTO
+        var dto = new ScheduleAppointmentDto
         {
             TypeString = AppointmentType.Consultation.Name,
             PetID = petId,
@@ -90,7 +90,7 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
     }
     private async Task<Guid> SetupPet(Guid ownerId, string petSizeString)
     {
-        var petDto = new PetDTO
+        var petDto = new PetDto
         {
             Name = "Test Pet",
             DateOfBirth = DateTime.Now.AddYears(-1),
@@ -107,7 +107,7 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
     }
     private async Task<Guid> SetupOffice()
     {
-        var officeDto = new OfficeDTO
+        var officeDto = new OfficeDto
         {
             BusinessId = Guid.NewGuid(),
             Address = "123 Main St",

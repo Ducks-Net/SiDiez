@@ -13,9 +13,9 @@ public class UsersController : ControllerBase
 {
     private readonly IRepositoryAsync<User> _usersRepository;
     private readonly IRepositoryAsync<Pet> _petsRepository;
-    private readonly IValidator<UserDTO> _userValidator;
+    private readonly IValidator<UserDto> _userValidator;
 
-    public UsersController(IValidator<UserDTO> userValidator, IRepositoryAsync<User> users, IRepositoryAsync<Pet> pets)
+    public UsersController(IValidator<UserDto> userValidator, IRepositoryAsync<User> users, IRepositoryAsync<Pet> pets)
     {
         _userValidator = userValidator;
         _usersRepository = users;
@@ -41,7 +41,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register([FromBody] UserDTO dto)
+    public async Task<IActionResult> Register([FromBody] UserDto dto)
     {
         ValidationResult resultValidate = await _userValidator.ValidateAsync(dto,
             options => options.IncludeRuleSets("CreateUser"));
@@ -64,7 +64,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UserDTO dto)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UserDto dto)
     {
         // Check if user exists
         var user = await _usersRepository.GetAsync(id);

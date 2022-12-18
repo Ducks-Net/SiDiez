@@ -22,7 +22,7 @@ public class OfficeController : ControllerBase
         return Ok(offices);
     }
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] OfficeDTO dto)
+    public async Task<IActionResult> Create([FromBody] OfficeDto dto)
     {
         var office = DucksNet.Domain.Model.Office.Create(dto.BusinessId, dto.Address, dto.AnimalCapacity);
         if(office.IsFailure)

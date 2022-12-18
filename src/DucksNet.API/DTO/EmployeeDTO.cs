@@ -1,8 +1,8 @@
 ﻿namespace DucksNet.API.DTO;
 
-public class EmployeeDTO
+public class EmployeeDto
 {
-    public EmployeeDTO(Guid idOffice, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
+    public EmployeeDto(Guid idOffice, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
         IdOffice = idOffice;    
         Surname = surname;

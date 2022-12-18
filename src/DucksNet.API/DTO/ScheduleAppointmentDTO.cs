@@ -1,4 +1,5 @@
-public class ScheduleAppointmentDTO
+﻿namespace DucksNet.API.DTO;
+public class ScheduleAppointmentDto
 {
     public Guid LocationID { get; set; }
     public Guid PetID { get; set; }

@@ -1,4 +1,5 @@
-﻿using DucksNet.Domain.Model;
+﻿using DucksNet.API.DTO;
+using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,7 +47,7 @@ public class AppointmentsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> ScheduleAppointment([FromBody] ScheduleAppointmentDTO appointment)
+    public async Task<IActionResult> ScheduleAppointment([FromBody] ScheduleAppointmentDto appointment)
     {
         var res = await _appointmentScheduleService.ScheduleAppointment(appointment.TypeString, appointment.PetID, appointment.LocationID, appointment.StartTime, appointment.EndTime);
         if (res.IsFailure)

@@ -53,7 +53,7 @@ public class  CageScheduleService
                                      .ToList();
 
         // check if the pet is already scheduled at that time
-        // TODO (AL) : Also check the pet isn't at an appointment at that time
+        // NOTE (AL) : Also check the pet isn't at an appointment at that time
         var petTimeBlocksCollisions = await _cageTimeBlocksRepository.GetAllAsync();
         var petTimeBlocksCollisionsList = petTimeBlocksCollisions.Where(t => t.OccupantId != null)
             .Where(t => t.OccupantId == petId)

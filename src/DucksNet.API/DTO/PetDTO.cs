@@ -1,6 +1,6 @@
 ﻿namespace DucksNet.API.DTO;
 
-public class PetDTO
+public class PetDto
 {
     public string? Name { get; set; }
     public DateTime DateOfBirth { get; set; }

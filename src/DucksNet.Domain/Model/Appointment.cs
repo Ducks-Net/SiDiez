@@ -28,7 +28,7 @@ public class Appointment
 
     private Appointment(AppointmentType type, DateTime startTime, DateTime endTime)
     {
-        ID = new Guid();
+        ID = Guid.NewGuid();
         Type = type;
         StartTime = startTime;
         EndTime = endTime;

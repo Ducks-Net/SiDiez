@@ -1,4 +1,4 @@
-using DucksNet.Domain.Model.Enums;
+﻿using DucksNet.Domain.Model.Enums;
 using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Domain.Model;
@@ -18,7 +18,7 @@ public class Cage
 
     private Cage(Size size)
     {
-        ID = new Guid();
+        ID = Guid.NewGuid();
         Size = size;
         LocationId = null;
     }

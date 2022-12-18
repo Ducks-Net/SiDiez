@@ -1,6 +1,6 @@
-namespace DucksNet.API.DTO;
+﻿namespace DucksNet.API.DTO;
 
-public class ScheduleCageDTO
+public class ScheduleCageDto
 {
     public Guid PetId { get; set; }
     public Guid LocationId { get; set; }

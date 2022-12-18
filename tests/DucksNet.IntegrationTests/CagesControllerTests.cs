@@ -23,7 +23,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         //Arrange
         var officeId = await SetupOffice();
         
-        var sut = new CreateCageDTO {
+        var sut = new CreateCageDto {
             LocationId = officeId,
             SizeString = "Small"
         };
@@ -44,7 +44,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     {
         ClearDatabase();
         //Arrange
-        var sut = new CreateCageDTO {
+        var sut = new CreateCageDto {
             LocationId = Guid.NewGuid(),
             SizeString = "Small"
         };
@@ -66,7 +66,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         //Arrange
         var officeId = await SetupOffice();
         
-        var sut = new CreateCageDTO {
+        var sut = new CreateCageDto {
             LocationId = officeId,
             SizeString = "Invalid"
         };
@@ -265,7 +265,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         var cageId = await SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
         DateTime end = DateTime.Now.AddDays(1).AddHours(1);
-        var scheduleDto = new ScheduleCageDTO
+        var scheduleDto = new ScheduleCageDto
         {
             PetId = petId,
             LocationId = officeId,
@@ -296,7 +296,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         var cageId = await SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
         DateTime end = DateTime.Now.AddDays(1).AddHours(1);
-        var scheduleDto = new ScheduleCageDTO
+        var scheduleDto = new ScheduleCageDto
         {
             PetId = Guid.NewGuid(),
             LocationId = officeId,
@@ -319,7 +319,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         var petId = await SetupPet(Guid.NewGuid(), Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
         DateTime end = DateTime.Now.AddDays(1).AddHours(1);
-        var scheduleDto = new ScheduleCageDTO
+        var scheduleDto = new ScheduleCageDto
         {
             PetId = petId,
             LocationId = Guid.NewGuid(),
@@ -344,7 +344,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         var cageId = await SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
         DateTime end = DateTime.Now.AddDays(1).AddHours(-1);
-        var scheduleDto = new ScheduleCageDTO
+        var scheduleDto = new ScheduleCageDto
         {
             PetId = petId,
             LocationId = officeId,
@@ -431,7 +431,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
 
     private async Task<Guid> SetupSchedule(Guid petId, Guid officeId, DateTime start, DateTime end)
     {
-        var scheduleDto = new ScheduleCageDTO
+        var scheduleDto = new ScheduleCageDto
         {
             PetId = petId,
             LocationId = officeId,
@@ -445,7 +445,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
 
     private async Task<Guid> SetupPet(Guid ownerId,string petSizeString)
     {
-        var petDto = new PetDTO
+        var petDto = new PetDto
         {
             Name = "Test Pet",    
             DateOfBirth = DateTime.Now.AddYears(-1),
@@ -463,7 +463,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
 
     private async Task<Guid> SetupCage(Guid officeId, string size)
     {        
-        var sut = new CreateCageDTO {
+        var sut = new CreateCageDto {
             LocationId = officeId,
             SizeString = size
         };
@@ -479,7 +479,7 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
 
     private async Task<Guid> SetupOffice()
     {
-        var officeDto = new OfficeDTO
+        var officeDto = new OfficeDto
         {
             BusinessId = Guid.NewGuid(),
             Address = "123 Main St",

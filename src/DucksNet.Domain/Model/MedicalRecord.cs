@@ -14,7 +14,7 @@ public class MedicalRecord
     public Guid IdAppointment { get; private set; }
     public Guid IdClient { get; private set; }
 
-    //TODO (RO): to add other values (in the future) 
+    //NOTE (RO): to add other values (in the future) 
     
     public static Result<MedicalRecord> Create(Guid idAppointment, Guid idClient)
     {

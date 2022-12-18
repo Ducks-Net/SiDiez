@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 
 namespace DucksNet.SharedKernel.Utils;
-public class Validation
+public static class Validation
 {
     public static bool IsTelephoneNumberValid(string phone)
     {

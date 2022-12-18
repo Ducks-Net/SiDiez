@@ -1,8 +1,8 @@
 ﻿namespace DucksNet.API.DTO;
 
-public class MedicalRecordDTO
+public class MedicalRecordDto
 {
-    public MedicalRecordDTO(Guid idAppointment, Guid idClient)
+    public MedicalRecordDto(Guid idAppointment, Guid idClient)
     {
         IdAppointment = idAppointment;
         IdClient = idClient;

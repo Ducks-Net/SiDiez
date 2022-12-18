@@ -13,8 +13,8 @@ namespace DucksNet.API.Controllers;
 public class MedicineController : ControllerBase
 {
     private readonly IRepositoryAsync<Medicine> _medicineRepository;
-    private readonly IValidator<MedicineDTO> _validatorMedicine;
-    public MedicineController(IValidator<MedicineDTO> validatorMedicine, IRepositoryAsync<Medicine> repository)
+    private readonly IValidator<MedicineDto> _validatorMedicine;
+    public MedicineController(IValidator<MedicineDto> validatorMedicine, IRepositoryAsync<Medicine> repository)
     {
         _validatorMedicine = validatorMedicine;
         _medicineRepository = repository;
@@ -52,7 +52,7 @@ public class MedicineController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] MedicineDTO dto)
+    public async Task<IActionResult> Create([FromBody] MedicineDto dto)
     {
         ValidationResult resultValidate = await _validatorMedicine.ValidateAsync(dto,
             options => options.IncludeRuleSets("CreateMedicine"));
@@ -97,7 +97,7 @@ public class MedicineController : ControllerBase
     }
 
     [HttpPut("{token:guid}")]
-    public async Task<IActionResult> UpdateMedicine(Guid token, [FromBody] MedicineDTO dto)
+    public async Task<IActionResult> UpdateMedicine(Guid token, [FromBody] MedicineDto dto)
     {
         var oldMedicine = await _medicineRepository.GetAsync(token);
         if (oldMedicine.IsFailure)
