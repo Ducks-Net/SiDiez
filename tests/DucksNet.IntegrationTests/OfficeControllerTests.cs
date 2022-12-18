@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
@@ -13,7 +14,7 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
 {
     private const string OfficesUrl = "api/v1/office";
     [Fact]
-    public void When_Office_Create_Should_ReturnOk()
+    public async Task When_Office_Create_Should_ReturnOk()
     {
         var office = new OfficeDTO
         {
@@ -21,11 +22,11 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
             Address = "Adresa",
             AnimalCapacity = 10
         };
-        var response = TestingClient.PostAsJsonAsync(OfficesUrl, office).Result;
+        var response = await TestingClient.PostAsJsonAsync(OfficesUrl, office);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
     [Fact]
-    public void When_Office_CreateWithEmptyAddress_Should_ReturnBadRequest()
+    public async Task When_Office_CreateWithEmptyAddress_Should_ReturnBadRequest()
     {
         var office = new OfficeDTO
         {
@@ -33,11 +34,11 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
             Address = string.Empty,
             AnimalCapacity = 10
         };
-        var response = TestingClient.PostAsJsonAsync(OfficesUrl, office).Result;
+        var response = await TestingClient.PostAsJsonAsync(OfficesUrl, office);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
     [Fact]
-    public void When_Office_Get_Should_ReturnOk()
+    public async Task When_Office_Get_Should_ReturnOk()
     {
         var office = new OfficeDTO
         {
@@ -45,21 +46,22 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
             Address = "Adresa",
             AnimalCapacity = 10
         };
-        var response = TestingClient.PostAsJsonAsync(OfficesUrl, office).Result;
+        var response = await TestingClient.PostAsJsonAsync(OfficesUrl, office);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var officeId = response.Content.ReadFromJsonAsync<Office>().Result!.ID;
-        var getResponse = TestingClient.GetAsync($"{OfficesUrl}/{officeId}").Result;
+        var officeJson = await response.Content.ReadFromJsonAsync<Office>();
+        var officeId = officeJson.ID;
+        var getResponse = await TestingClient.GetAsync($"{OfficesUrl}/{officeId}");
         getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
     }
     [Fact]
-    public void When_Office_Get_Should_ReturnNotFound()
+    public async Task When_Office_Get_Should_ReturnNotFound()
     {
         var officeId = Guid.NewGuid();
-        var getResponse = TestingClient.GetAsync($"{OfficesUrl}/{officeId}").Result;
+        var getResponse = await TestingClient.GetAsync($"{OfficesUrl}/{officeId}");
         getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
     [Fact]
-    public void When_Office_GetAll_Should_ReturnOk()
+    public async Task When_Office_GetAll_Should_ReturnOk()
     {
         var office = new OfficeDTO
         {
@@ -67,13 +69,13 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
             Address = "Adresa",
             AnimalCapacity = 10
         };
-        var response = TestingClient.PostAsJsonAsync(OfficesUrl, office).Result;
+        var response = await TestingClient.PostAsJsonAsync(OfficesUrl, office);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var getResponse = TestingClient.GetAsync(OfficesUrl).Result;
+        var getResponse = await TestingClient.GetAsync(OfficesUrl);
         getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
     }
     [Fact]
-    public void When_Office_Delete_Should_ReturnOk()
+    public async Task When_Office_Delete_Should_ReturnOk()
     {
         var office = new OfficeDTO
         {
@@ -81,17 +83,18 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
             Address = "Adresa",
             AnimalCapacity = 10
         };
-        var response = TestingClient.PostAsJsonAsync(OfficesUrl, office).Result;
+        var response = await TestingClient.PostAsJsonAsync(OfficesUrl, office);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var officeId = response.Content.ReadFromJsonAsync<Office>().Result!.ID;
-        var deleteResponse = TestingClient.DeleteAsync($"{OfficesUrl}/{officeId}").Result;
+        var officeJson = await response.Content.ReadFromJsonAsync<Office>();
+        var officeId = officeJson.ID;
+        var deleteResponse = await TestingClient.DeleteAsync($"{OfficesUrl}/{officeId}");
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
     }
     [Fact]
-    public void When_Office_Delete_Should_ReturnNotFound()
+    public async Task When_Office_Delete_Should_ReturnNotFound()
     {
         var officeId = Guid.NewGuid();
-        var deleteResponse = TestingClient.DeleteAsync($"{OfficesUrl}/{officeId}").Result;
+        var deleteResponse = await TestingClient.DeleteAsync($"{OfficesUrl}/{officeId}");
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 }
