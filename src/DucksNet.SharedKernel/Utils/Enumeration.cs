@@ -31,15 +31,50 @@ public abstract class Enumeration : IComparable
         return typeMatches && valueMatches;
     }
 
-    public int CompareTo(object? other) {
-        if(other == null)
+    public int CompareTo(object? obj) {
+        if(obj == null)
             return 1;
         
-        return Id.CompareTo(((Enumeration)other).Id);
+        return Id.CompareTo(((Enumeration)obj).Id);
     }
 
     public override int GetHashCode()
     {
         return Id.GetHashCode();
+    }
+
+    public static bool operator ==(Enumeration left, Enumeration right)
+    {
+        if (ReferenceEquals(left, null))
+        {
+            return ReferenceEquals(right, null);
+        }
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Enumeration left, Enumeration right)
+    {
+        return !(left == right);
+    }
+
+    public static bool operator <(Enumeration left, Enumeration right)
+    {
+        return ReferenceEquals(left, null) ? !ReferenceEquals(right, null) : left.CompareTo(right) < 0;
+    }
+
+    public static bool operator <=(Enumeration left, Enumeration right)
+    {
+        return ReferenceEquals(left, null) || left.CompareTo(right) <= 0;
+    }
+
+    public static bool operator >(Enumeration left, Enumeration right)
+    {
+        return !ReferenceEquals(left, null) && left.CompareTo(right) > 0;
+    }
+
+    public static bool operator >=(Enumeration left, Enumeration right)
+    {
+        return ReferenceEquals(left, null) ? ReferenceEquals(right, null) : left.CompareTo(right) >= 0;
     }
 }

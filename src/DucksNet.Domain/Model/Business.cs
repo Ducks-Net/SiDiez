@@ -24,7 +24,7 @@ public class Business
 
     private Business(string businessName, string surname, string firstName, string address, string ownerPhone, string ownerEmail) 
     {
-        ID = new Guid();
+        ID = Guid.NewGuid();
         BusinessName = businessName;
         Surname = surname;
         FirstName = firstName;

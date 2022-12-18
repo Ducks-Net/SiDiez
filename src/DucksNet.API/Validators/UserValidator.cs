@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace DucksNet.API.Validators;
 
-public class UserValidator : AbstractValidator<UserDTO>
+public class UserValidator : AbstractValidator<UserDto>
 {
     public UserValidator()
     {

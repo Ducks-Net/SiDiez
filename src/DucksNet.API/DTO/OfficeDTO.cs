@@ -1,6 +1,6 @@
 ﻿namespace DucksNet.API.DTO;
 
-public class OfficeDTO
+public class OfficeDto
 {
     public Guid BusinessId { get; set; }
     public string Address {get; set;} = string.Empty;

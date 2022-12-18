@@ -17,7 +17,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_BusinessCreated_Should_Succeed()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -43,7 +43,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_Post_WithBadBusinessName_Should_Fail()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "",
             Surname = "Surname",
@@ -65,7 +65,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_Post_WithBadSurname_Should_Fail()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "",
@@ -88,7 +88,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_Post_WithBadFirstName_Should_Fail()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -112,7 +112,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_Post_WithBadAddress_Should_Fail()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -136,7 +136,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_Post_WithBadOwnerPhone_Should_Fail()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -160,7 +160,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_Post_WithBadOwnerEmail_Should_Fail()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -184,7 +184,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_Post_WithBadOwnerEmail_Should_Fail2()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -208,7 +208,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_Get_Should_ReturnBusiness()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -236,7 +236,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_GetAll_Should_ReturnAllValues()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -264,7 +264,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_GetAll_Should_ReturnAllValues2()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -282,7 +282,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         result.Should().NotBeNull();
 
-        var business2 = new BusinessDTO
+        var business2 = new BusinessDto
         {
             BusinessName = "BusinessName2",
             Surname = "Surname2",
@@ -324,7 +324,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_GetAll_Should_ReturnAllValues3()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -342,7 +342,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         result.Should().NotBeNull();
 
-        var business2 = new BusinessDTO
+        var business2 = new BusinessDto
         {
             BusinessName = "BusinessName2",
             Surname = "Surname2",
@@ -368,7 +368,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_GetAll_Should_ReturnAllValues4()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -386,7 +386,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         result.Should().NotBeNull();
 
-        var business2 = new BusinessDTO
+        var business2 = new BusinessDto
         {
             BusinessName = "BusinessName2",
             Surname = "Surname2",
@@ -412,7 +412,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_GetAll_Should_ReturnAllValues6()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -430,7 +430,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         result.Should().NotBeNull();
 
-        var business2 = new BusinessDTO
+        var business2 = new BusinessDto
         {
             BusinessName = "BusinessName2",
             Surname = "Surname2",
@@ -454,7 +454,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     }
     private async Task<Guid> GetBusinessId()
     {
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "Surname",
@@ -560,7 +560,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
     public async Task When_Create_Should_Fail()
     {
         ClearDatabase();
-        var business = new BusinessDTO
+        var business = new BusinessDto
         {
             BusinessName = "BusinessName",
             Surname = "",

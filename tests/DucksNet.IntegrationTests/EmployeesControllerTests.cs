@@ -29,7 +29,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         employeeResponse.EnsureSuccessStatusCode();
 
         //TODO (RO): resolve problem for employee idOffice
-        var employees = await getEmployeeResult.Content.ReadFromJsonAsync<List<EmployeeDTO>>();
+        var employees = await getEmployeeResult.Content.ReadFromJsonAsync<List<EmployeeDto>>();
         employees.Should().NotBeNull();
         employees!.Count.Should().Be(1);
         foreach (var employee in employees!)
@@ -214,7 +214,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         //Assert
         employeeResponse.EnsureSuccessStatusCode();
 
-        var employeePost = await getEmployeeResult.Content.ReadFromJsonAsync<EmployeeDTO>();
+        var employeePost = await getEmployeeResult.Content.ReadFromJsonAsync<EmployeeDto>();
         foreach (var office in offices!)
             employeePost!.IdOffice.Should().Be(office.ID);
         employeePost!.Surname.Should().Be(sut.Surname);
@@ -329,7 +329,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
     public async Task When_CreatedEmployeeAndUpdateDuplicatePhoneNumber_Then_ShouldFail()
     {
         //Arrange
-        EmployeeDTO sut;
+        EmployeeDto sut;
         using (var taskEmployeeDto = GetEmployeeDTO(0))
         {
             sut = await taskEmployeeDto;
@@ -393,7 +393,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         var employee = await employeeResponse.Content.ReadFromJsonAsync<Employee>();
         employeeResponse.EnsureSuccessStatusCode();
         //Act
-        var updatedEmployeeDto = new EmployeeDTO(Guid.NewGuid(), "", "", "", "", "");
+        var updatedEmployeeDto = new EmployeeDto(Guid.NewGuid(), "", "", "", "", "");
 
         var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}", updatedEmployeeDto);
         var errors = await updatedEmployeeResponse.Content.ReadAsStringAsync();
@@ -411,12 +411,12 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         var employeeResponse2 = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut2);
 
         var employee = await employeeResponse.Content.ReadFromJsonAsync<Employee>();
-        var employee2 = await employeeResponse2.Content.ReadFromJsonAsync<EmployeeDTO>();
+        var employee2 = await employeeResponse2.Content.ReadFromJsonAsync<EmployeeDto>();
         employeeResponse.EnsureSuccessStatusCode();
         employeeResponse2.EnsureSuccessStatusCode();
         //Act
         var updatedEmployeeResponse = await TestingClient.PutAsJsonAsync(EmployeesUrl + $"/{employee!.Id}/{employee2!.IdOffice}", employee2.IdOffice);
-        var employeeUpdate = await updatedEmployeeResponse.Content.ReadFromJsonAsync<EmployeeDTO>();
+        var employeeUpdate = await updatedEmployeeResponse.Content.ReadFromJsonAsync<EmployeeDto>();
         //Assert
         updatedEmployeeResponse.EnsureSuccessStatusCode();
         employeeUpdate!.IdOffice.Should().Be(sut2.IdOffice);
@@ -436,7 +436,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         var employeeResponse2 = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut2);
 
         var employee = await employeeResponse.Content.ReadFromJsonAsync<Employee>();
-        var employee2 = await employeeResponse2.Content.ReadFromJsonAsync<EmployeeDTO>();
+        var employee2 = await employeeResponse2.Content.ReadFromJsonAsync<EmployeeDto>();
         employeeResponse.EnsureSuccessStatusCode();
         employeeResponse2.EnsureSuccessStatusCode();
         //Act
@@ -457,7 +457,7 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         var employeeResponse2 = await TestingClient.PostAsJsonAsync(EmployeesUrl, sut2);
 
         var employee = await employeeResponse.Content.ReadFromJsonAsync<Employee>();
-        var employee2 = await employeeResponse2.Content.ReadFromJsonAsync<EmployeeDTO>();
+        var employee2 = await employeeResponse2.Content.ReadFromJsonAsync<EmployeeDto>();
         employeeResponse.EnsureSuccessStatusCode();
         employeeResponse2.EnsureSuccessStatusCode();
         //Act
@@ -468,33 +468,33 @@ public class EmployeesControllerTests : BaseIntegrationTests<EmployeesController
         errors.Should().NotBeEmpty();
         errors.Should().Contain("Entity of type Employee was not found.");
     }
-    private static EmployeeDTO CreateSUT()
+    private static EmployeeDto CreateSUT()
     {
-        return new EmployeeDTO(Guid.NewGuid(), "Mike", "Oxlong", "Blvd. Independentei", "0712123123", "ceva@mail.com");
+        return new EmployeeDto(Guid.NewGuid(), "Mike", "Oxlong", "Blvd. Independentei", "0712123123", "ceva@mail.com");
     }
-    private static EmployeeDTO CreateSUT2()
+    private static EmployeeDto CreateSUT2()
     {
-        return new EmployeeDTO(Guid.NewGuid(), "Ben", "Dova", "Blvd. Soarelui", "0769420666", "update@mail.com");
+        return new EmployeeDto(Guid.NewGuid(), "Ben", "Dova", "Blvd. Soarelui", "0769420666", "update@mail.com");
     }
-    private static OfficeDTO CreateSUTOffice()
+    private static OfficeDto CreateSUTOffice()
     {
-        return new OfficeDTO
+        return new OfficeDto
         {
             BusinessId = Guid.NewGuid(),
             Address = "123 Main St",
             AnimalCapacity = 10
         };
     }
-    private static OfficeDTO CreateSUTOffice2()
+    private static OfficeDto CreateSUTOffice2()
     {
-        return new OfficeDTO
+        return new OfficeDto
         {
             BusinessId = Guid.NewGuid(),
             Address = "Bld. Socola",
             AnimalCapacity = 10
         };
     }
-    private async Task<EmployeeDTO> GetEmployeeDTO(int numberSut)
+    private async Task<EmployeeDto> GetEmployeeDTO(int numberSut)
     {
 
         var sut = numberSut == 0 ? CreateSUT() : CreateSUT2();

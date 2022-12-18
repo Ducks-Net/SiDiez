@@ -10,7 +10,7 @@ namespace DucksNet.API.Controllers;
 [Route("api/v1/[controller]")]
 public class TreatmentController : ControllerBase
 {
-    //TODO(MG): Redo everything using List<Medicine> when it's fixed
+    //NOTE(MG): Redo everything using List<Medicine> when it's fixed
     private readonly IRepositoryAsync<Treatment> _treatmentRepository;
     public TreatmentController(IRepositoryAsync<Treatment> treatmentRepository) // + IRepository<Medicine> medicineRepository
     {
@@ -49,7 +49,7 @@ public class TreatmentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] TreatmentDTO dto)
+    public async Task<IActionResult> Create([FromBody] TreatmentDto dto)
     {
         var treatmentPost = Treatment.CreateTreatment(dto.OwnerID, dto.ClientID, dto.ClinicID);
         if (treatmentPost.IsFailure)

@@ -3,14 +3,14 @@ using DucksNet.Domain.Model.Enums;
 using DucksNet.Infrastructure.Prelude;
 
 using Microsoft.EntityFrameworkCore;
-namespace DucksNet.Infrastructure.Sqlite;
+namespace DucksNet.Infrastructure.SqliteAsync;
 
 public class DatabaseContext : DbContext, IDatabaseContext
 {
     public DatabaseContext()
     {
         // NOTE (Al): Make sure the database is created. 
-        this.Database.EnsureCreated(); 
+        Database.EnsureCreated();
     }
     public DbSet<Cage> Cages => Set<Cage>();
     public DbSet<CageTimeBlock> CageTimeBlocks => Set<CageTimeBlock>();
@@ -36,7 +36,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
             .HasConversion(
                 value => value.Id,
                 id => Size.CreateFromInt(id).Value!);
-        
+
         modelBuilder.Entity<Pet>()
             .Property(p => p.Size)
             .HasConversion(

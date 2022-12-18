@@ -12,9 +12,9 @@ namespace DucksNet.API.Controllers;
 public class PetsController : ControllerBase
 {
     private readonly IRepositoryAsync<Pet> _petsRepository;
-    private readonly IValidator<PetDTO> _petValidator;
+    private readonly IValidator<PetDto> _petValidator;
 
-    public PetsController(IValidator<PetDTO> petValidator, IRepositoryAsync<Pet> pets)
+    public PetsController(IValidator<PetDto> petValidator, IRepositoryAsync<Pet> pets)
     {
         _petValidator = petValidator;
         _petsRepository = pets;
@@ -39,7 +39,7 @@ public class PetsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register([FromBody] PetDTO dto)
+    public async Task<IActionResult> Register([FromBody] PetDto dto)
     {
         ValidationResult resultValidate = await _petValidator.ValidateAsync(dto,
             options => options.IncludeRuleSets("CreatePet"));
@@ -71,7 +71,7 @@ public class PetsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] PetDTO dto)
+    public async Task<IActionResult> Update(Guid id, [FromBody] PetDto dto)
     {
         // Check if pet exists
         var pet = await _petsRepository.GetAsync(id);

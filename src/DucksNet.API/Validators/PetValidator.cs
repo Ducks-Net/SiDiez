@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace DucksNet.API.Validators;
 
-public class PetValidator : AbstractValidator<PetDTO>
+public class PetValidator : AbstractValidator<PetDto>
 {
     public PetValidator()
     {

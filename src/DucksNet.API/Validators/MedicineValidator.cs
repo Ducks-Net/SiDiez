@@ -7,7 +7,7 @@ using FluentValidation;
 
 namespace DucksNet.API.Validators;
 
-public class MedicineValidator : AbstractValidator<MedicineDTO>
+public class MedicineValidator : AbstractValidator<MedicineDto>
 {
     public MedicineValidator()
     {

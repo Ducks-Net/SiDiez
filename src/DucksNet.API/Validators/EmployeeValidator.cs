@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace DucksNet.API.Validators;
 
-public class EmployeeValidator : AbstractValidator<EmployeeDTO>
+public class EmployeeValidator : AbstractValidator<EmployeeDto>
 {
     public EmployeeValidator()
     {

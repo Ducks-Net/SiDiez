@@ -1,4 +1,4 @@
-using DucksNet.SharedKernel.Utils;
+﻿using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.Domain.Model;
 
@@ -10,7 +10,7 @@ public class CageTimeBlock
     public DateTime StartTime { get; private set; }
     public DateTime EndTime { get; private set; }
     
-    public CageTimeBlock(Guid id, Guid? cageId, Guid? occupantId, DateTime startTime, DateTime endTime) // TODO (Al): just for json parsing. to remove
+    public CageTimeBlock(Guid id, Guid? cageId, Guid? occupantId, DateTime startTime, DateTime endTime) // NOTE (Al): just for json parsing. to remove
     {
         Id = id;
         CageId = cageId;
@@ -21,7 +21,7 @@ public class CageTimeBlock
 
     private CageTimeBlock(DateTime startTime, DateTime endTime)
     {
-        Id = new Guid();
+        Id = Guid.NewGuid();
         StartTime = startTime;
         EndTime = endTime;
     }

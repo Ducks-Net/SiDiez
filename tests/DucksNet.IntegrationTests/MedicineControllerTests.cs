@@ -151,8 +151,8 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
         getMedicineResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-    private static MedicineDTO CreateSut()
+    private static MedicineDto CreateSut()
     {
-        return new MedicineDTO("Nurofen", "Flu", 30, "Oral");
+        return new MedicineDto("Nurofen", "Flu", 30, "Oral");
     }
 }

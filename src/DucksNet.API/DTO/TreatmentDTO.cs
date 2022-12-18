@@ -2,14 +2,14 @@
 
 namespace DucksNet.API.DTO;
 
-public class TreatmentDTO
+public class TreatmentDto
 {
-    //TODO(MG): Redo everyhting with List<Medicine> when it's fixed
+    //NOTE(MG): Redo everyhting with List<Medicine> when it's fixed
     public Guid OwnerID { get; set; }
     public Guid ClientID { get; set; }
     public Guid ClinicID { get; set; }
 
-    public TreatmentDTO(Guid ownerID, Guid clientID, Guid clinicID)
+    public TreatmentDto(Guid ownerID, Guid clientID, Guid clinicID)
     {
         OwnerID = ownerID;
         ClientID = clientID;

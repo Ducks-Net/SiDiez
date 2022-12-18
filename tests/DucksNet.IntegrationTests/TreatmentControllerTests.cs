@@ -111,8 +111,8 @@ public class TreatmentControllerTests : BaseIntegrationTests<TreatmentController
         getTreatmentResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-    private static TreatmentDTO CreateSUT()
+    private static TreatmentDto CreateSUT()
     {
-        return new TreatmentDTO(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+        return new TreatmentDto(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
     }
 }

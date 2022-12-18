@@ -23,7 +23,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         var officeId = await SetupOffice();
         var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
-        var appointment = new ScheduleAppointmentDTO
+        var appointment = new ScheduleAppointmentDto
         {
             TypeString = AppointmentType.Consultation.Name,
             PetID = petId,
@@ -46,7 +46,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
     [Fact]
     public async Task When_Post_WithInvalidData_Should_ReturnBadRequest()
     {
-        var appointment = new ScheduleAppointmentDTO
+        var appointment = new ScheduleAppointmentDto
         {
             TypeString = AppointmentType.Consultation.Name,
             PetID = Guid.NewGuid(),
@@ -65,7 +65,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         var officeId = await SetupOffice();
         var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
-        var appointment = new ScheduleAppointmentDTO
+        var appointment = new ScheduleAppointmentDto
         {
             TypeString = AppointmentType.Consultation.Name,
             PetID = petId,
@@ -91,7 +91,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         var officeId = await SetupOffice();
         var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
-        var appointment = new ScheduleAppointmentDTO
+        var appointment = new ScheduleAppointmentDto
         {
             TypeString = AppointmentType.Consultation.Name,
             PetID = petId,
@@ -117,7 +117,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         var officeId = await SetupOffice();
         var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
 
-        var appointment = new ScheduleAppointmentDTO
+        var appointment = new ScheduleAppointmentDto
         {
             TypeString = AppointmentType.Consultation.Name,
             PetID = petId,
@@ -139,7 +139,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
 
     private async Task<Guid> SetupPet(Guid ownerId ,string petSizeString)
     {
-        var petDto = new PetDTO
+        var petDto = new PetDto
         {
             Name = "Test Pet",    
             DateOfBirth = DateTime.Now.AddYears(-1),
@@ -157,7 +157,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
 
     private async Task<Guid> SetupCage(Guid officeId, string size)
     {        
-        var sut = new CreateCageDTO {
+        var sut = new CreateCageDto {
             LocationId = officeId,
             SizeString = size
         };
@@ -173,7 +173,7 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
 
     private async Task<Guid> SetupOffice()
     {
-        var officeDto = new OfficeDTO
+        var officeDto = new OfficeDto
         {
             BusinessId = Guid.NewGuid(),
             Address = "123 Main St",

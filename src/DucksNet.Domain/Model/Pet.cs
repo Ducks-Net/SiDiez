@@ -59,7 +59,7 @@ public class Pet
         }
 
         Result<Size> sizeResult = Size.CreateFromString(size);
-        if (sizeResult.IsFailure || sizeResult.Value == null)
+        if (sizeResult.IsFailure || sizeResult.Value is null)
         {
             return Result<Pet>.FromError(sizeResult, "Failed to parse pet size.");
         }
@@ -92,7 +92,7 @@ public class Pet
         }
 
         Result<Size> sizeResult = Size.CreateFromString(size);
-        if (!(sizeResult.IsFailure || sizeResult.Value == null))
+        if (!(sizeResult.IsFailure || sizeResult.Value is null))
         {
             Size = sizeResult.Value;
         }
