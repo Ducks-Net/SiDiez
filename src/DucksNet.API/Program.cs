@@ -73,7 +73,8 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program
+public abstract partial class Program
 {
     // Expose the Program class for use with WebApplicationFactory<T>
+    protected Program() {}
 }

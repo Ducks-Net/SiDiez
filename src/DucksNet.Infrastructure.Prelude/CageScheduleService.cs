@@ -28,7 +28,6 @@ public class  CageScheduleService
 
     public async Task<List<CageTimeBlock>> GetPetSchedule(Guid petId)
     {
-        var pet = await _petsRepository.GetAsync(petId);
         var res = await _cageTimeBlocksRepository.GetAllAsync();
         var resList = res.Where(ctb => ctb.OccupantId == petId).ToList();
 
@@ -45,12 +44,12 @@ public class  CageScheduleService
             return Result<CageTimeBlock>.FromError(pet, "Pet not found in repository.");
         }
 
-        var locationCages = await _cagesRepository.GetAllAsync();
-        var locationCagesList = locationCages.Where(c => c.LocationId == locationId).ToList();
-        var locationTimeBlocks = await _cageTimeBlocksRepository.GetAllAsync();
-        var locationTimeBlocksList = locationTimeBlocks
+        var locationCagesEnum = await _cagesRepository.GetAllAsync();
+        var locationCages = locationCagesEnum.Where(c => c.LocationId == locationId).ToList();
+        var locationTimeBlocksEnum = await _cageTimeBlocksRepository.GetAllAsync();
+        var locationTimeBlocks = locationTimeBlocksEnum
                                      .Where(t => t.CageId != null)
-                                     .Where(c => locationCagesList.Select(c => c.ID).ToList().Contains(c.CageId!.Value))
+                                     .Where(c => locationCages.Select(c => c.ID).ToList().Contains(c.CageId!.Value))
                                      .ToList();
 
         // check if the pet is already scheduled at that time
@@ -67,10 +66,10 @@ public class  CageScheduleService
 
         // Check if there are appropriate cages available at that location
         List<Cage> cages = locationCages
-                           .Where(c => locationTimeBlocks
+                           .Where(c => !locationTimeBlocks
                                .Where(t => t.CageId != null)
                                .Where(t => t.CageId == c.ID)
-                               .Count(t => t.StartTime <= startTime && t.EndTime >= endTime) == 0)
+                               .Any(t => (t.StartTime <= startTime && t.EndTime >= endTime)))
                            .Where(c => c.Size == pet.Value!.Size)
                            .ToList();
 
@@ -88,7 +87,7 @@ public class  CageScheduleService
         timeBlock.Value.AssignToCage(cages[0].ID);
         timeBlock.Value.AssignToOccupant(petId);
 
-        _cageTimeBlocksRepository.AddAsync(timeBlock.Value);
+        await _cageTimeBlocksRepository.AddAsync(timeBlock.Value);
 
         return Result<CageTimeBlock>.Ok(timeBlock.Value);
     }
