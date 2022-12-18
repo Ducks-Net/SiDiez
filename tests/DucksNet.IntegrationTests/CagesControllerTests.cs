@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
@@ -16,11 +17,11 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     private const string PetsUrl = "api/v1/pets";
 
     [Fact]
-    public void When_Post_WithValidData_ShouldReturnCage()
+    public async Task When_Post_WithValidData_ShouldReturnCage()
     {
         ClearDatabase();
         //Arrange
-        var officeId = SetupOffice();
+        var officeId = await SetupOffice();
         
         var sut = new CreateCageDTO {
             LocationId = officeId,
@@ -28,18 +29,18 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
 
         //Act
-        var cageResponse = TestingClient.PostAsJsonAsync(CagesUrl, sut).Result;
+        var cageResponse = await TestingClient.PostAsJsonAsync(CagesUrl, sut);
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cage = cageResponse.Content.ReadFromJsonAsync<Cage>().Result;
+        var cage = await cageResponse.Content.ReadFromJsonAsync<Cage>();
         cage.Should().NotBeNull();
         cage!.LocationId.Should().Be(officeId);
         cage!.Size.Should().Be(Size.Small);
     }
 
     [Fact]
-    public void When_Post_WithBadLocation_ShouldReturnBadRequest()
+    public async Task When_Post_WithBadLocation_ShouldReturnBadRequest()
     {
         ClearDatabase();
         //Arrange
@@ -49,21 +50,21 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
 
         //Act
-        var cageResponse = TestingClient.PostAsJsonAsync(CagesUrl, sut).Result;
+        var cageResponse = await TestingClient.PostAsJsonAsync(CagesUrl, sut);
 
         //Assert
         cageResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = cageResponse.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await cageResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors.Should().Contain("Entity of type Office was not found.");
     }
 
     [Fact]
-    public void When_Post_WithBadSize_ShouldReturnBadRequest()
+    public async Task When_Post_WithBadSize_ShouldReturnBadRequest()
     {
         ClearDatabase();
         //Arrange
-        var officeId = SetupOffice();
+        var officeId = await SetupOffice();
         
         var sut = new CreateCageDTO {
             LocationId = officeId,
@@ -71,29 +72,29 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
 
         //Act
-        var cageResponse = TestingClient.PostAsJsonAsync(CagesUrl, sut).Result;
+        var cageResponse = await TestingClient.PostAsJsonAsync(CagesUrl, sut);
 
         //Assert
         cageResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var errors = cageResponse.Content.ReadFromJsonAsync<List<string>>().Result;
+        var errors = await cageResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
         errors.Should().Contain("Failed to parse cage size.");
     }
 
     [Fact]
-    public void When_Get_WithValidId_ShouldReturnCage()
+    public async Task When_Get_WithValidId_ShouldReturnCage()
     {
         ClearDatabase();
         //Arrange
-        var officeId = SetupOffice();
-        var cageId = SetupCage(officeId, Size.Small.Name);
+        var officeId = await SetupOffice();
+        var cageId = await SetupCage(officeId, Size.Small.Name);
         
         //Act
-        var cageResponse = TestingClient.GetAsync($"{CagesUrl}/{cageId}").Result;
+        var cageResponse = await TestingClient.GetAsync($"{CagesUrl}/{cageId}");
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cage = cageResponse.Content.ReadFromJsonAsync<Cage>().Result;
+        var cage = await cageResponse.Content.ReadFromJsonAsync<Cage>();
         cage.Should().NotBeNull();
         cage!.ID.Should().Be(cageId);
         cage!.LocationId.Should().Be(officeId);
@@ -101,85 +102,85 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     }
 
     [Fact]
-    public void When_Get_WithInvalidId_ShouldReturnNotFound()
+    public async Task When_Get_WithInvalidId_ShouldReturnNotFound()
     {
         //Arrange
         ClearDatabase();
         
         //Act
-        var cageResponse = TestingClient.GetAsync($"{CagesUrl}/{Guid.NewGuid()}").Result;
+        var cageResponse = await TestingClient.GetAsync($"{CagesUrl}/{Guid.NewGuid()}");
 
         //Assert
         cageResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]
-    public void When_GetByLocation_WithValidLocation_ShouldReturnCages()
+    public async Task When_GetByLocation_WithValidLocation_ShouldReturnCages()
     {
         ClearDatabase();
         //Arrange
-        var officeId = SetupOffice();
-        var cageId = SetupCage(officeId, Size.Small.Name);
+        var officeId = await SetupOffice();
+        var cageId = await SetupCage(officeId, Size.Small.Name);
         
         //Act
-        var cageResponse = TestingClient.GetAsync($"{CagesUrl}/byLocation/{officeId}").Result;
+        var cageResponse = await TestingClient.GetAsync($"{CagesUrl}/byLocation/{officeId}");
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cages = cageResponse.Content.ReadFromJsonAsync<List<Cage>>().Result;
+        var cages = await cageResponse.Content.ReadFromJsonAsync<List<Cage>>();
         cages.Should().NotBeEmpty();
         cages.Should().Contain(c => c.ID == cageId);
     }
 
     [Fact]
-    public void When_GetByLocation_SholdReturnOnlyFromThatLocation()
+    public async Task When_GetByLocation_ShouldReturnOnlyFromThatLocation()
     {
         ClearDatabase();
         //Arrange
-        var officeId = SetupOffice();
-        var cageId = SetupCage(officeId, Size.Small.Name);
-        var officeId2 = SetupOffice();
-        var cageId2 = SetupCage(officeId2, Size.Small.Name);
+        var officeId  = await SetupOffice();
+        var cageId    = await SetupCage(officeId, Size.Small.Name);
+        var officeId2 = await SetupOffice();
+        var cageId2   = await SetupCage(officeId2, Size.Small.Name);
         
         //Act
-        var cageResponse = TestingClient.GetAsync($"{CagesUrl}/byLocation/{officeId}").Result;
+        var cageResponse = await TestingClient.GetAsync($"{CagesUrl}/byLocation/{officeId}");
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cages = cageResponse.Content.ReadFromJsonAsync<List<Cage>>().Result;
+        var cages = await cageResponse.Content.ReadFromJsonAsync<List<Cage>>();
         cages.Should().NotBeEmpty();
         cages.Should().Contain(c => c.ID == cageId);
         cages.Should().NotContain(c => c.ID == cageId2);
     }
 
     [Fact]
-    public void When_GetByLocation_WithInvalidLocation_ShouldReturnNotFound()
+    public async Task When_GetByLocation_WithInvalidLocation_ShouldReturnNotFound()
     {
         //Arrange
         ClearDatabase();
         
         //Act
-        var cageResponse = TestingClient.GetAsync($"{CagesUrl}/byLocation/{Guid.NewGuid()}").Result;
+        var cageResponse = await TestingClient.GetAsync($"{CagesUrl}/byLocation/{Guid.NewGuid()}");
 
         //Assert
         cageResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]
-    public void When_GetAll_Should_ReturnAllValues()
+    public async Task When_GetAll_Should_ReturnAllValues()
     {
         ClearDatabase();
         //Arrange
-        var officeId = SetupOffice();
-        var cageId = SetupCage(officeId, Size.Small.Name);
-        var cageId2 = SetupCage(officeId, Size.Medium.Name);
+        var officeId = await SetupOffice();
+        var cageId = await SetupCage(officeId, Size.Small.Name);
+        var cageId2 = await SetupCage(officeId, Size.Medium.Name);
         
         //Act
-        var cageResponse = TestingClient.GetAsync(CagesUrl).Result;
+        var cageResponse = await TestingClient.GetAsync(CagesUrl);
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cages = cageResponse.Content.ReadFromJsonAsync<List<Cage>>().Result;
+        var cages = await cageResponse.Content.ReadFromJsonAsync<List<Cage>>();
         cages.Should().NotBeEmpty();
         cages.Should().HaveCount(2);
         cages.Should().Contain(c => c.ID == cageId);
@@ -187,65 +188,67 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     }
 
     [Fact]
-    public void When_GetAll_Should_ReturnEmptyList()
+    public async Task When_GetAll_Should_ReturnEmptyList()
     {
         ClearDatabase();
         //Arrange
         
         //Act
-        var cageResponse = TestingClient.GetAsync(CagesUrl).Result;
+        var cageResponse = await TestingClient.GetAsync(CagesUrl);
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cages = cageResponse.Content.ReadFromJsonAsync<List<Cage>>().Result;
+        var cages = await cageResponse.Content.ReadFromJsonAsync<List<Cage>>();
         cages.Should().BeEmpty();
     }
 
     [Fact]
-    public void When_Delete_WithValidId_ShouldDeleteCage()
+    public async Task When_Delete_WithValidId_ShouldDeleteCage()
     {
         ClearDatabase();
         //Arrange
-        var officeId = SetupOffice();
-        var cageId = SetupCage(officeId, Size.Small.Name);
+        var officeId = await SetupOffice();
+        var cageId = await SetupCage(officeId, Size.Small.Name);
         
         //Act
-        var cageResponse = TestingClient.DeleteAsync($"{CagesUrl}/{cageId}").Result;
+        var cageResponse = await TestingClient.DeleteAsync($"{CagesUrl}/{cageId}");
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cages = TestingClient.GetAsync(CagesUrl).Result.Content.ReadFromJsonAsync<List<Cage>>().Result;
+        var cagesR = await TestingClient.GetAsync(CagesUrl);
+        var cages = await cagesR.Content.ReadFromJsonAsync<List<Cage>>();
         cages.Should().BeEmpty();
     }
 
     [Fact]
-    public void When_Delete_WithInvalidId_ShouldReturnNotFound()
+    public async Task When_Delete_WithInvalidId_ShouldReturnNotFound()
     {
         //Arrange
         ClearDatabase();
         
         //Act
-        var cageResponse = TestingClient.DeleteAsync($"{CagesUrl}/{Guid.NewGuid()}").Result;
+        var cageResponse = await TestingClient.DeleteAsync($"{CagesUrl}/{Guid.NewGuid()}");
 
         //Assert
         cageResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]
-    public void When_Delete_ShouldOnlyDeleteSelected()
+    public async Task When_Delete_ShouldOnlyDeleteSelected()
     {
         ClearDatabase();
         //Arrange
-        var officeId = SetupOffice();
-        var cageId = SetupCage(officeId, Size.Small.Name);
-        var cageId2 = SetupCage(officeId, Size.Medium.Name);
+        var officeId = await SetupOffice();
+        var cageId = await SetupCage(officeId, Size.Small.Name);
+        var cageId2 = await SetupCage(officeId, Size.Medium.Name);
         
         //Act
-        var cageResponse = TestingClient.DeleteAsync($"{CagesUrl}/{cageId}").Result;
+        var cageResponse = await TestingClient.DeleteAsync($"{CagesUrl}/{cageId}");
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cages = TestingClient.GetAsync(CagesUrl).Result.Content.ReadFromJsonAsync<List<Cage>>().Result;
+        var cagesR = await TestingClient.GetAsync(CagesUrl); 
+        var cages = await cagesR.Content.ReadFromJsonAsync<List<Cage>>();
         cages.Should().NotBeEmpty();
         cages.Should().HaveCount(1);
         cages.Should().Contain(c => c.ID == cageId2);
@@ -253,16 +256,16 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
     }
 
     [Fact]
-    public void When_Schedule_WithValidValues_ShouldReturnCageTimeBlock()
+    public async Task When_Schedule_WithValidValues_ShouldReturnCageTimeBlock()
     {
         ClearDatabase();
         //Arrange
-        var petId = SetupPet(Guid.NewGuid(), Size.Small.Name);
-        var officeId = SetupOffice();
-        var cageId = SetupCage(officeId, Size.Small.Name);
+        var petId = await SetupPet(Guid.NewGuid(), Size.Small.Name);
+        var officeId = await SetupOffice();
+        var cageId = await SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
         DateTime end = DateTime.Now.AddDays(1).AddHours(1);
-        var scheduleDTO = new ScheduleCageDTO
+        var scheduleDto = new ScheduleCageDTO
         {
             PetId = petId,
             LocationId = officeId,
@@ -271,29 +274,29 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
         
         //Act
-        var cageTimeBlockResponse = TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDTO).Result;
+        var cageTimeBlockResponse = await TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDto);
 
-        var error = cageTimeBlockResponse.Content.ReadAsStringAsync().Result;
+        var error = await cageTimeBlockResponse.Content.ReadAsStringAsync();
         //Assert
         cageTimeBlockResponse.EnsureSuccessStatusCode();
-        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<CageTimeBlock>().Result;
+        var cageTimeBlock = await cageTimeBlockResponse.Content.ReadFromJsonAsync<CageTimeBlock>();
         cageTimeBlock.Should().NotBeNull();
         cageTimeBlock!.CageId.Should().Be(cageId);
         cageTimeBlock!.StartTime.Should().Be(start);
         cageTimeBlock!.EndTime.Should().Be(end);
-        cageTimeBlock!.OccupantId.Should().Be(scheduleDTO.PetId);
+        cageTimeBlock!.OccupantId.Should().Be(scheduleDto.PetId);
     }
 
     [Fact]
-    public void When_Schedule_WithBadPetId_ShouldFail()
+    public async Task When_Schedule_WithBadPetId_ShouldFail()
     {
         ClearDatabase();
         //Arrange
-        var officeId = SetupOffice();
-        var cageId = SetupCage(officeId, Size.Small.Name);
+        var officeId = await SetupOffice();
+        var cageId = await SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
         DateTime end = DateTime.Now.AddDays(1).AddHours(1);
-        var scheduleDTO = new ScheduleCageDTO
+        var scheduleDto = new ScheduleCageDTO
         {
             PetId = Guid.NewGuid(),
             LocationId = officeId,
@@ -302,21 +305,21 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
         
         //Act
-        var cageTimeBlockResponse = TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDTO).Result;
+        var cageTimeBlockResponse = await TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDto);
 
         //Assert
         cageTimeBlockResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
-    public void When_Schedule_WithBadLocationId_ShouldFail()
+    public async Task When_Schedule_WithBadLocationId_ShouldFail()
     {
         ClearDatabase();
         //Arrange
-        var petId = SetupPet(Guid.NewGuid(), Size.Small.Name);
+        var petId = await SetupPet(Guid.NewGuid(), Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
         DateTime end = DateTime.Now.AddDays(1).AddHours(1);
-        var scheduleDTO = new ScheduleCageDTO
+        var scheduleDto = new ScheduleCageDTO
         {
             PetId = petId,
             LocationId = Guid.NewGuid(),
@@ -325,23 +328,23 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
         
         //Act
-        var cageTimeBlockResponse = TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDTO).Result;
+        var cageTimeBlockResponse = await TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDto);
 
         //Assert
         cageTimeBlockResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
-    public void When_Schedule_WithBadTime_ShouldFail()
+    public async Task When_Schedule_WithBadTime_ShouldFail()
     {
         ClearDatabase();
         //Arrange
-        var petId = SetupPet(Guid.NewGuid(), Size.Small.Name);
-        var officeId = SetupOffice();
-        var cageId = SetupCage(officeId, Size.Small.Name);
+        var petId = await SetupPet(Guid.NewGuid(), Size.Small.Name);
+        var officeId = await SetupOffice();
+        var cageId = await SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
         DateTime end = DateTime.Now.AddDays(1).AddHours(-1);
-        var scheduleDTO = new ScheduleCageDTO
+        var scheduleDto = new ScheduleCageDTO
         {
             PetId = petId,
             LocationId = officeId,
@@ -350,99 +353,99 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
         
         //Act
-        var cageTimeBlockResponse = TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDTO).Result;
+        var cageTimeBlockResponse = await TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDto);
 
         //Assert
         cageTimeBlockResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
-    public void When_GetSheduleByLocation_WithValidId_ShouldReturnCageTimeBlock()
+    public async Task When_GetScheduleByLocation_WithValidId_ShouldReturnCageTimeBlock()
     {
         ClearDatabase();
         //Arrange
-        var petId = SetupPet(Guid.NewGuid(), Size.Small.Name);
-        var officeId = SetupOffice();
-        var cageId = SetupCage(officeId, Size.Small.Name);
+        var petId = await SetupPet(Guid.NewGuid(), Size.Small.Name);
+        var officeId = await SetupOffice();
+        var cageId = await SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
         DateTime end = DateTime.Now.AddDays(1).AddHours(1);
-        var cageTimeBlockId = SetupSchedule(petId, officeId, start, end);
+        var cageTimeBlockId = await SetupSchedule(petId, officeId, start, end);
 
         //Act
-        var cageTimeBlockResponse = TestingClient.GetAsync($"{CagesUrl}/schedule/byLocation/{officeId}").Result;
+        var cageTimeBlockResponse = await TestingClient.GetAsync($"{CagesUrl}/schedule/byLocation/{officeId}");
         cageTimeBlockResponse.EnsureSuccessStatusCode();
         //Assert
-        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>().Result;
+        var cageTimeBlock = await cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>();
         cageTimeBlock.Should().NotBeEmpty();
         cageTimeBlock.Should().HaveCount(1);
         cageTimeBlock.Should().Contain(c => c.Id == cageTimeBlockId);
     }
 
     [Fact]
-    public void When_GetScheduleByPet_WithValidId_ShouldReturnCageTimeBlock()
+    public async Task When_GetScheduleByPet_WithValidId_ShouldReturnCageTimeBlock()
     {
         ClearDatabase();
         //Arrange
-        var petId = SetupPet(Guid.NewGuid(), Size.Small.Name);
-        var officeId = SetupOffice();
-        var cageId = SetupCage(officeId, Size.Small.Name);
+        var petId = await SetupPet(Guid.NewGuid(), Size.Small.Name);
+        var officeId = await SetupOffice();
+        var cageId = await SetupCage(officeId, Size.Small.Name);
         DateTime start = DateTime.Now.AddDays(1);
         DateTime end = DateTime.Now.AddDays(1).AddHours(1);
-        var cageTimeBlockId = SetupSchedule(petId, officeId, start, end);
+        var cageTimeBlockId = await SetupSchedule(petId, officeId, start, end);
 
         //Act
-        var cageTimeBlockResponse = TestingClient.GetAsync($"{CagesUrl}/schedule/byPet/{petId}").Result;
+        var cageTimeBlockResponse = await TestingClient.GetAsync($"{CagesUrl}/schedule/byPet/{petId}");
         cageTimeBlockResponse.EnsureSuccessStatusCode();
         //Assert
-        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>().Result;
+        var cageTimeBlock = await cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>();
         cageTimeBlock.Should().NotBeEmpty();
         cageTimeBlock.Should().HaveCount(1);
         cageTimeBlock.Should().Contain(c => c.Id == cageTimeBlockId);
     }
 
     [Fact]
-    public void When_GetScheduleByLocation_WithInvalidId_ShouldReturnZeroCageTimeBlocks()
+    public async Task When_GetScheduleByLocation_WithInvalidId_ShouldReturnZeroCageTimeBlocks()
     {
         //Arrange
         ClearDatabase();
         //Act
-        var cageTimeBlockResponse = TestingClient.GetAsync($"{CagesUrl}/schedule/byLocation/{Guid.NewGuid()}").Result;
+        var cageTimeBlockResponse = await TestingClient.GetAsync($"{CagesUrl}/schedule/byLocation/{Guid.NewGuid()}");
         //Assert
         cageTimeBlockResponse.EnsureSuccessStatusCode();
-        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>().Result;
+        var cageTimeBlock = await cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>();
         cageTimeBlock.Should().BeEmpty();
     }
 
     [Fact]
-    public void When_GetScheduleByPet_WithInvalidId_ShouldReturnZeroCageTimeBlocks()
+    public async Task When_GetScheduleByPet_WithInvalidId_ShouldReturnZeroCageTimeBlocks()
     {
         //Arrange
         ClearDatabase();
         //Act
-        var cageTimeBlockResponse = TestingClient.GetAsync($"{CagesUrl}/schedule/byPet/{Guid.NewGuid()}").Result;
+        var cageTimeBlockResponse = await TestingClient.GetAsync($"{CagesUrl}/schedule/byPet/{Guid.NewGuid()}");
         //Assert
         cageTimeBlockResponse.EnsureSuccessStatusCode();
-        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>().Result;
+        var cageTimeBlock = await cageTimeBlockResponse.Content.ReadFromJsonAsync<List<CageTimeBlock>>();
         cageTimeBlock.Should().BeEmpty();
     }
 
-    private Guid SetupSchedule(Guid petId, Guid officeId, DateTime start, DateTime end)
+    private async Task<Guid> SetupSchedule(Guid petId, Guid officeId, DateTime start, DateTime end)
     {
-        var scheduleDTO = new ScheduleCageDTO
+        var scheduleDto = new ScheduleCageDTO
         {
             PetId = petId,
             LocationId = officeId,
             StartTime = start,
             EndTime = end
         };
-        var cageTimeBlockResponse = TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDTO).Result;
-        var cageTimeBlock = cageTimeBlockResponse.Content.ReadFromJsonAsync<CageTimeBlock>().Result;
+        var cageTimeBlockResponse = await TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDto);
+        var cageTimeBlock = await cageTimeBlockResponse.Content.ReadFromJsonAsync<CageTimeBlock>();
         return cageTimeBlock!.Id;
     }
 
-    private Guid SetupPet(Guid ownerId,string petSizeString)
+    private async Task<Guid> SetupPet(Guid ownerId,string petSizeString)
     {
-        var petDTO = new PetDTO
+        var petDto = new PetDTO
         {
             Name = "Test Pet",    
             DateOfBirth = DateTime.Now.AddYears(-1),
@@ -452,13 +455,13 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
             Size = petSizeString
         };
 
-        var petResponse = TestingClient.PostAsJsonAsync(PetsUrl, petDTO).Result;
+        var petResponse = await TestingClient.PostAsJsonAsync(PetsUrl, petDto);
         petResponse.EnsureSuccessStatusCode();
-        var pet = petResponse.Content.ReadFromJsonAsync<Pet>().Result;
+        var pet = await petResponse.Content.ReadFromJsonAsync<Pet>();
         return pet!.Id;
     }
 
-    private Guid SetupCage(Guid officeId, string size)
+    private async Task<Guid> SetupCage(Guid officeId, string size)
     {        
         var sut = new CreateCageDTO {
             LocationId = officeId,
@@ -466,26 +469,26 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         };
 
         //Act
-        var cageResponse = TestingClient.PostAsJsonAsync(CagesUrl, sut).Result;
+        var cageResponse = await TestingClient.PostAsJsonAsync(CagesUrl, sut);
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cage = cageResponse.Content.ReadFromJsonAsync<Cage>().Result;
+        var cage = await cageResponse.Content.ReadFromJsonAsync<Cage>();
         return cage!.ID;
     }
 
-    private Guid SetupOffice()
+    private async Task<Guid> SetupOffice()
     {
-        var officeDTO = new OfficeDTO
+        var officeDto = new OfficeDTO
         {
             BusinessId = Guid.NewGuid(),
             Address = "123 Main St",
             AnimalCapacity = 10
         };
 
-        var officeResponse = TestingClient.PostAsJsonAsync(OfficesUrl, officeDTO).Result;
+        var officeResponse = await TestingClient.PostAsJsonAsync(OfficesUrl, officeDto);
         officeResponse.EnsureSuccessStatusCode();
-        var office = officeResponse.Content.ReadFromJsonAsync<Office>().Result;
+        var office = await officeResponse.Content.ReadFromJsonAsync<Office>();
         office.Should().NotBeNull();
         return office!.ID;
     }

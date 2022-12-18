@@ -18,7 +18,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
     {
         ClearDatabase();
         //Arrange
-        var sut = CreateSUT();
+        var sut = CreateSut();
         //Act 
         var medicineResponse = await TestingClient.PostAsJsonAsync(MedicineUrl, sut);
         medicineResponse.EnsureSuccessStatusCode();
@@ -42,7 +42,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
     {
         ClearDatabase();
         //Arrange
-        var sut = CreateSUT();
+        var sut = CreateSut();
         //Act 
         var medicineResponse = await TestingClient.PostAsJsonAsync(MedicineUrl, sut);
         var medicine = await medicineResponse.Content.ReadFromJsonAsync<Medicine>();
@@ -67,14 +67,13 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
     {
         ClearDatabase();
         //Arrange
-        var sut = CreateSUT();
+        var sut = CreateSut();
         //Act 
         var medicineResponse = await TestingClient.PostAsJsonAsync(MedicineUrl, sut);
         var medicine = await medicineResponse.Content.ReadFromJsonAsync<Medicine>();
         var getMedicineResult = await TestingClient.GetAsync(MedicineUrl + $"/byDescription/{medicine!.Description}");
         //Assert
         medicineResponse.EnsureSuccessStatusCode();
-        Console.WriteLine(medicineResponse.Content.ReadAsStringAsync().Result);
         var medicines = await getMedicineResult.Content.ReadFromJsonAsync<List<Medicine>>();
         medicines.Should().NotBeNull();
         medicines!.Count.Should().Be(1);
@@ -92,7 +91,7 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
     {
         ClearDatabase();
         //Arrange
-        var sut = CreateSUT();
+        var sut = CreateSut();
         //Act 
         var medicineResponse = await TestingClient.PostAsJsonAsync(MedicineUrl, sut);
         medicineResponse.EnsureSuccessStatusCode();
@@ -113,11 +112,11 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
     }
 
     [Fact]
-    public async void When_CreatedMedicineAndDeleteIt_Then_ShouldReturnSucces()
+    public async Task When_CreatedMedicineAndDeleteIt_Then_ShouldReturnSucces()
     {
         ClearDatabase();
         //Arrange
-        var sut = CreateSUT();
+        var sut = CreateSut();
         //Act 
         var medicineResponse = await TestingClient.PostAsJsonAsync(MedicineUrl, sut);
         var medicine = await medicineResponse.Content.ReadFromJsonAsync<Medicine>();
@@ -145,14 +144,14 @@ public class MedicineControllerTests : BaseIntegrationTests<MedicineController>
     {
         ClearDatabase();
         //Arrange
-        Guid randomID= Guid.NewGuid();
+        Guid randomId= Guid.NewGuid();
         //Act 
-        var getMedicineResult = await TestingClient.DeleteAsync(MedicineUrl + $"/{randomID}");
+        var getMedicineResult = await TestingClient.DeleteAsync(MedicineUrl + $"/{randomId}");
         //Assert
         getMedicineResult.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-    private static MedicineDTO CreateSUT()
+    private static MedicineDTO CreateSut()
     {
         return new MedicineDTO("Nurofen", "Flu", 30, "Oral");
     }
