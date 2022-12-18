@@ -468,7 +468,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         
-        var result = response.Content.ReadFromJsonAsync<Business>().Result;
+        var result = await response.Content.ReadFromJsonAsync<Business>();
 
         result.Should().NotBeNull();
 
@@ -534,7 +534,7 @@ public class BusinessControllerTests : BaseIntegrationTests<BusinessController>
 
         response13.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var result = response13.Content.ReadFromJsonAsync<List<Business>>().Result;
+        var result = await response13.Content.ReadFromJsonAsync<List<Business>>();
 
         result.Should().NotBeNull();
 

@@ -16,19 +16,20 @@ public class AppointmentScheduleService
         _petsRepository = petsRepository;
     }
 
-    public Result<List<Appointment>> GetLocationSchedule(Guid locationId)
+    public async Task<Result<List<Appointment>>> GetLocationSchedule(Guid locationId)
     {
-        var res = _appointmentsRepository.GetAllAsync().Result.Where(a => a.LocationId == locationId).ToList();
-        return Result<List<Appointment>>.Ok(res);
+        var res = await _appointmentsRepository.GetAllAsync();
+        var resList = res.Where(a => a.LocationId == locationId).ToList();
+        return Result<List<Appointment>>.Ok(resList);
     }
 
-    public Result<Appointment> ScheduleAppointment(string typeString, Guid petID, Guid locationID, DateTime startTime, DateTime endTime)
+    public async Task<Result<Appointment>> ScheduleAppointment(string typeString, Guid petId, Guid locationId, DateTime startTime, DateTime endTime)
     {
-        var pet = _petsRepository.GetAsync(petID).Result;
+        var pet = await _petsRepository.GetAsync(petId);
         if (pet.IsFailure || pet.Value == null)
             return Result<Appointment>.FromError(pet, "Pet not found.");
         
-        var location = _locationsRepository.GetAsync(locationID).Result;
+        var location = await _locationsRepository.GetAsync(locationId);
         if (location.IsFailure || location.Value == null)
             return Result<Appointment>.FromError(location, "Location not found.");
 
@@ -36,15 +37,16 @@ public class AppointmentScheduleService
         if (appointment.IsFailure || appointment.Value is null)
             return Result<Appointment>.ErrorList(appointment.Errors);
 
-        var overlappingAppointments = _appointmentsRepository.GetAllAsync().Result
-            .Where(a => a.StartTime < endTime && a.EndTime > startTime)
-            .Where(a => a.PetId == petID);
+        var overlappingAppointments = await _appointmentsRepository.GetAllAsync();
+            overlappingAppointments = overlappingAppointments
+                                        .Where(a => a.StartTime < endTime && a.EndTime > startTime)
+                                        .Where(a => a.PetId == petId);
 
         if (overlappingAppointments.Any())
             return Result<Appointment>.Error("There is already an appointment scheduled for this pet at this time.");
 
-        appointment.Value.AssignToLocation(locationID);
-        appointment.Value.AssignToPet(petID);
+        appointment.Value.AssignToLocation(locationId);
+        appointment.Value.AssignToPet(petId);
 
         _appointmentsRepository.AddAsync(appointment.Value!);
         return Result<Appointment>.Ok(appointment.Value!);

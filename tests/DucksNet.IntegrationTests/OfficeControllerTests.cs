@@ -49,7 +49,7 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
         var response = await TestingClient.PostAsJsonAsync(OfficesUrl, office);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var officeJson = await response.Content.ReadFromJsonAsync<Office>();
-        var officeId = officeJson.ID;
+        var officeId = officeJson!.ID;
         var getResponse = await TestingClient.GetAsync($"{OfficesUrl}/{officeId}");
         getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -86,7 +86,7 @@ public class OfficeControllerTests : BaseIntegrationTests<OfficeController>
         var response = await TestingClient.PostAsJsonAsync(OfficesUrl, office);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var officeJson = await response.Content.ReadFromJsonAsync<Office>();
-        var officeId = officeJson.ID;
+        var officeId = officeJson!.ID;
         var deleteResponse = await TestingClient.DeleteAsync($"{OfficesUrl}/{officeId}");
         deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
     }

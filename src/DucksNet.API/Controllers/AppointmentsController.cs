@@ -46,9 +46,9 @@ public class AppointmentsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult ScheduleAppointment([FromBody] ScheduleAppointmentDTO appointment)
+    public async Task<IActionResult> ScheduleAppointment([FromBody] ScheduleAppointmentDTO appointment)
     {
-        var res = _appointmentScheduleService.ScheduleAppointment(appointment.TypeString, appointment.PetID, appointment.LocationID, appointment.StartTime, appointment.EndTime);
+        var res = await _appointmentScheduleService.ScheduleAppointment(appointment.TypeString, appointment.PetID, appointment.LocationID, appointment.StartTime, appointment.EndTime);
         if (res.IsFailure)
             return BadRequest(res.Errors);
         return Created(nameof(GetAll), res.Value);

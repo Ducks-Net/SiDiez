@@ -215,7 +215,8 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cages = await TestingClient.GetAsync(CagesUrl).Result.Content.ReadFromJsonAsync<List<Cage>>();
+        var cagesR = await TestingClient.GetAsync(CagesUrl);
+        var cages = await cagesR.Content.ReadFromJsonAsync<List<Cage>>();
         cages.Should().BeEmpty();
     }
 
@@ -246,7 +247,8 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
 
         //Assert
         cageResponse.EnsureSuccessStatusCode();
-        var cages = await TestingClient.GetAsync(CagesUrl).Result.Content.ReadFromJsonAsync<List<Cage>>();
+        var cagesR = await TestingClient.GetAsync(CagesUrl); 
+        var cages = await cagesR.Content.ReadFromJsonAsync<List<Cage>>();
         cages.Should().NotBeEmpty();
         cages.Should().HaveCount(1);
         cages.Should().Contain(c => c.ID == cageId2);

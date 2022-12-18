@@ -46,7 +46,7 @@ public class BaseIntegrationTests<T> : WebApplicationFactory<Program> where T : 
         builder.ConfigureServices(services =>
         {
             services.AddHttpClient();
-            services.AddScoped<IDatabaseContext, TestDbContext>(_ => new TestDbContext(typeof(T).FullName));
+            services.AddScoped<IDatabaseContext, TestDbContext>(_ => new TestDbContext(typeof(T).FullName!));
         });
     }
     

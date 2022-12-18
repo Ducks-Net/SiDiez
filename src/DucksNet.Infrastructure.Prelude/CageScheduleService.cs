@@ -16,25 +16,28 @@ public class  CageScheduleService
         _petsRepository = pets;
     }
 
-    public List<CageTimeBlock> GetLocationSchedule(Guid locationId)
+    public async Task<List<CageTimeBlock>> GetLocationSchedule(Guid locationId)
     {
-        var cages = _cagesRepository.GetAllAsync().Result.Where(c => c.LocationId == locationId);
-        var res = _cageTimeBlocksRepository.GetAllAsync().Result.Join(cages, ct => ct.CageId, c => c.ID, (ct, c) => ct).ToList();
+        var cages = await _cagesRepository.GetAllAsync();
+        cages = cages.Where(c => c.LocationId == locationId);
+        var res = await _cageTimeBlocksRepository.GetAllAsync();
+        var resList = res.Join(cages, ct => ct.CageId, c => c.ID, (ct, c) => ct).ToList();
 
-        return res;
+        return resList;
     }
 
-    public List<CageTimeBlock> GetPetSchedule(Guid petId)
+    public async Task<List<CageTimeBlock>> GetPetSchedule(Guid petId)
     {
-        var pet = _petsRepository.GetAsync(petId).Result;
-        var res = _cageTimeBlocksRepository.GetAllAsync().Result.Where(ctb => ctb.OccupantId == petId).ToList();
+        var pet = await _petsRepository.GetAsync(petId);
+        var res = await _cageTimeBlocksRepository.GetAllAsync();
+        var resList = res.Where(ctb => ctb.OccupantId == petId).ToList();
 
-        return res;
+        return resList;
     }
 
-    public Result<CageTimeBlock> ScheduleCage(Guid petId, Guid locationId, DateTime startTime, DateTime endTime)
+    public async Task<Result<CageTimeBlock>> ScheduleCage(Guid petId, Guid locationId, DateTime startTime, DateTime endTime)
     {
-        Result<Pet> pet = _petsRepository.GetAsync(petId).Result;
+        Result<Pet> pet = await _petsRepository.GetAsync(petId);
 
         // check if pet exists
         if (pet.IsFailure)
@@ -42,22 +45,22 @@ public class  CageScheduleService
             return Result<CageTimeBlock>.FromError(pet, "Pet not found in repository.");
         }
 
-        List<Cage> locationCages = _cagesRepository.GetAllAsync().Result.Where(c => c.LocationId == locationId).ToList();
-        List<CageTimeBlock> locationTimeBlocks = _cageTimeBlocksRepository
-                                                 .GetAllAsync().Result
-                                                 .Where(t => t.CageId != null)
-                                                 .Where(c => locationCages.Select(c => c.ID).ToList().Contains(c.CageId!.Value))
-                                                 .ToList();
+        var locationCages = await _cagesRepository.GetAllAsync();
+        var locationCagesList = locationCages.Where(c => c.LocationId == locationId).ToList();
+        var locationTimeBlocks = await _cageTimeBlocksRepository.GetAllAsync();
+        var locationTimeBlocksList = locationTimeBlocks
+                                     .Where(t => t.CageId != null)
+                                     .Where(c => locationCagesList.Select(c => c.ID).ToList().Contains(c.CageId!.Value))
+                                     .ToList();
 
         // check if the pet is already scheduled at that time
         // TODO (AL) : Also check the pet isn't at an appointment at that time
-        List<CageTimeBlock> petTimeBlocksColisions = _cageTimeBlocksRepository
-                                                     .GetAllAsync().Result
-                                                     .Where(t => t.OccupantId != null)
-                                                     .Where(t => t.OccupantId == petId)
-                                                     .Where(t => t.StartTime <= startTime && t.EndTime >= endTime)
-                                                     .ToList(); 
-        if (petTimeBlocksColisions.Count > 0)
+        var petTimeBlocksCollisions = await _cageTimeBlocksRepository.GetAllAsync();
+        var petTimeBlocksCollisionsList = petTimeBlocksCollisions.Where(t => t.OccupantId != null)
+            .Where(t => t.OccupantId == petId)
+            .Where(t => t.StartTime <= startTime && t.EndTime >= endTime)
+            .ToList();
+        if (petTimeBlocksCollisionsList.Count > 0)
         {
             return Result<CageTimeBlock>.Error("Pet is already scheduled for that time.");
         }
@@ -65,10 +68,9 @@ public class  CageScheduleService
         // Check if there are appropriate cages available at that location
         List<Cage> cages = locationCages
                            .Where(c => locationTimeBlocks
-                                       .Where(t => t.CageId != null)
-                                       .Where(t => t.CageId == c.ID)
-                                       .Where(t => t.StartTime <= startTime && t.EndTime >= endTime)
-                                       .Count() == 0)
+                               .Where(t => t.CageId != null)
+                               .Where(t => t.CageId == c.ID)
+                               .Count(t => t.StartTime <= startTime && t.EndTime >= endTime) == 0)
                            .Where(c => c.Size == pet.Value!.Size)
                            .ToList();
 

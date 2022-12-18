@@ -24,24 +24,27 @@ public class TreatmentController : ControllerBase
         return Ok(treatments);
     }
 
-    [HttpGet("byOwnerId/{ownerId}")]
-    public IActionResult GetByOwnerID(Guid ownerId)
+    [HttpGet("byOwnerId/{ownerId:guid}")]
+    public async Task<IActionResult> GetByOwnerId(Guid ownerId)
     {
-        var treatment = _treatmentRepository.GetAllAsync().Result.Where(t => t.OwnerID == ownerId).ToList();
+        var treatment = await _treatmentRepository.GetAllAsync();
+        treatment = treatment.Where(t => t.OwnerID == ownerId).ToList();
         return Ok(treatment);
     }
 
-    [HttpGet("byClientId/{clientId}")]
-    public IActionResult GetByClientID(Guid clientId)
+    [HttpGet("byClientId/{clientId:guid}")]
+    public async Task<IActionResult> GetByClientId(Guid clientId)
     {
-        var treatment = _treatmentRepository.GetAllAsync().Result.Where(t => t.ClientID == clientId).ToList();
+        var treatment = await _treatmentRepository.GetAllAsync();
+        treatment = treatment.Where(t => t.ClientID == clientId).ToList();
         return Ok(treatment);
     }
 
-    [HttpGet("byClinicId/{clinicId}")]
-    public IActionResult GetByClinicID(Guid clinicId)
+    [HttpGet("byClinicId/{clinicId:guid}")]
+    public async Task<IActionResult> GetByClinicId(Guid clinicId)
     {
-        var treatment = _treatmentRepository.GetAllAsync().Result.Where(t => t.ClinicID == clinicId).ToList();
+        var treatment = await _treatmentRepository.GetAllAsync();
+        treatment = treatment.Where(t => t.ClinicID == clinicId).ToList();
         return Ok(treatment);
     }
 
