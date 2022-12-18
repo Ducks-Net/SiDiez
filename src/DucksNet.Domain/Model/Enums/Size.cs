@@ -13,7 +13,7 @@ public class Size : Enumeration
     public static Result<Size> CreateFromString(string str)
     {
         var size = GetAll<Size>().FirstOrDefault(x => x.Name == str);
-        if (size == null)
+        if (size is null)
         {
             return Result<Size>.Error("Invalid size string. Valid values are: Small, Medium, Large."); // NOTE (Ad): Hardcoded
         }
@@ -23,7 +23,7 @@ public class Size : Enumeration
     public static Result<Size> CreateFromInt(int id)
     {
         var size = GetAll<Size>().FirstOrDefault(x => x.Id == id);
-        if (size == null)
+        if (size is null)
         {
             return Result<Size>.Error("Invalid size id. Valid values are: 1, 2, 3."); // NOTE (Ad): Hardcoded
         }

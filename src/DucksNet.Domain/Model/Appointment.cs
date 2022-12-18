@@ -37,7 +37,7 @@ public class Appointment
     public static Result<Appointment> Create(string typeString, DateTime startTime, DateTime endTime)
     {
         var type = AppointmentType.CreateFromString(typeString);
-        if (type.IsFailure || type.Value == null)
+        if (type.IsFailure || type.Value is null)
             return Result<Appointment>.FromError(type, "Invalid appointment type.");
         if(startTime < DateTime.Now)
             return Result<Appointment>.Error("Start time cannot be in the past.");

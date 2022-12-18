@@ -14,7 +14,7 @@ public class AppointmentType : Enumeration
     {
         var at = GetAll<AppointmentType>().FirstOrDefault(x => x.Name == str);
         var validAppoitnmentTypes = string.Join(", ", GetAll<AppointmentType>().Select(x => x.Name));
-        if (at == null)
+        if (at is null)
             return Result<AppointmentType>.Error($"Invalid AppointmentType string. Valid values are: {validAppoitnmentTypes}."); 
 
         return Result<AppointmentType>.Ok(at);
@@ -24,7 +24,7 @@ public class AppointmentType : Enumeration
     {
         var at = GetAll<AppointmentType>().FirstOrDefault(x => x.Id == id);
         var validAppoitnmentTypes = string.Join(", ", GetAll<AppointmentType>().Select(x => x.Id));
-        if (at == null)
+        if (at is null)
             return Result<AppointmentType>.Error($"Invalid AppointmentType id. Valid values are: {validAppoitnmentTypes}."); 
 
         return Result<AppointmentType>.Ok(at);

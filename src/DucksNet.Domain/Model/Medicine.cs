@@ -41,7 +41,7 @@ public class Medicine
             return Result<Medicine>.Error("Invalid price");
         }       
         Result<DrugAdministration> typeOfDrugAdministrationByString = DrugAdministration.createMedicineByString(administration);
-        if (typeOfDrugAdministrationByString.Value == null || typeOfDrugAdministrationByString.IsFailure)
+        if (typeOfDrugAdministrationByString.Value is null || typeOfDrugAdministrationByString.IsFailure)
         {
             return Result<Medicine>.FromError(typeOfDrugAdministrationByString, "Failed to parse type of medicine administration by string.");
         }
@@ -77,7 +77,7 @@ public class Medicine
             return Result.Error("Invalid price.");
         }
         Result<DrugAdministration> drugAdministrationResult = DrugAdministration.createMedicineByString(drugAdministrationString);
-        if (!(drugAdministrationResult.IsFailure || drugAdministrationResult.Value == null))
+        if (!(drugAdministrationResult.IsFailure || drugAdministrationResult.Value is null))
         {
             DrugAdministration = drugAdministrationResult.Value;
         }

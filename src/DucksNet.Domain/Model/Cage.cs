@@ -26,7 +26,7 @@ public class Cage
     public static Result<Cage> Create(string size)
     {
         Result<Size> sizeResult = Size.CreateFromString(size);
-        if (sizeResult.IsFailure || sizeResult.Value == null)
+        if (sizeResult.IsFailure || sizeResult.Value is null)
             return Result<Cage>.FromError(sizeResult, "Failed to parse cage size.");
 
         return Result<Cage>.Ok(new Cage(sizeResult.Value));

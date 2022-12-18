@@ -16,14 +16,14 @@ public class DrugAdministration : Enumeration
     public static Result<DrugAdministration> createMedicineByString(string str)
     {
         var administrationByString = GetAll<DrugAdministration>().FirstOrDefault(x => x.Name == str);
-        if (administrationByString == null)
+        if (administrationByString is null)
             return Result<DrugAdministration>.Error("Wrong type of drug administration");
         return Result<DrugAdministration>.Ok(administrationByString);
     }
     public static Result<DrugAdministration> createMedicineByInt(int id)
     {
         var administrationByInt = GetAll<DrugAdministration>().FirstOrDefault(x => x.Id == id);
-        if (administrationByInt == null)
+        if (administrationByInt is null)
             return Result<DrugAdministration>.Error("Wrong type of drug administration");
         return Result<DrugAdministration>.Ok(administrationByInt);
     }
