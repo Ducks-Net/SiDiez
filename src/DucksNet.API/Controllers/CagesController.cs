@@ -73,11 +73,7 @@ public class CagesController : ControllerBase
         }
         cage.Value.AssignToLocation(dto.LocationId);
 
-        var result = await _cagesRepository.AddAsync(cage.Value!);
-        if(result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
+        await _cagesRepository.AddAsync(cage.Value!);
 
         return Created(nameof(GetAll),cage.Value!);
     }

@@ -1,4 +1,4 @@
-using DucksNet.Domain.Model;
+﻿using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 using Microsoft.AspNetCore.Mvc;
 using DucksNet.API.DTO;
@@ -24,16 +24,12 @@ public class BusinessController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] BusinessDTO dto)
     {
-        var business = DucksNet.Domain.Model.Business.Create(dto.BusinessName, dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
+        var business = Business.Create(dto.BusinessName, dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
         if(business.IsFailure)
         {
             return BadRequest(business.Errors);
         }
-        var result = await _repository.AddAsync(business.Value!);
-        if(result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
+        await _repository.AddAsync(business.Value!);
         return Ok(business.Value!);
     }
     [HttpGet("{id}")]
@@ -54,11 +50,7 @@ public class BusinessController : ControllerBase
         {
             return NotFound(business.Errors);
         }
-        var result = await _repository.DeleteAsync(business.Value!);
-        if(result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
+        await _repository.DeleteAsync(business.Value!);
         return Ok(business);
     }
 }

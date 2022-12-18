@@ -1,4 +1,4 @@
-using DucksNet.Domain.Model;
+﻿using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 using Microsoft.AspNetCore.Mvc;
 using DucksNet.API.DTO;
@@ -29,11 +29,7 @@ public class OfficeController : ControllerBase
         {
             return BadRequest(office.Errors);
         }
-        var result = await _repository.AddAsync(office.Value!);
-        if(result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
+        await _repository.AddAsync(office.Value!);
         return Ok(office.Value!);
     }
     [HttpGet("{id}")]
@@ -54,11 +50,7 @@ public class OfficeController : ControllerBase
         {
             return NotFound(office.Errors);
         }
-        var result = await _repository.DeleteAsync(office.Value!);
-        if(result.IsFailure)
-        {
-            return BadRequest(result.Errors);
-        }
+        await _repository.DeleteAsync(office.Value!);
         return Ok(office);
     }
 }
