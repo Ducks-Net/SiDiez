@@ -7,6 +7,7 @@ using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
 using DucksNet.Domain.Model.Enums;
+using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.IntegrationTests;
 
@@ -107,7 +108,6 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         result.EnsureSuccessStatusCode();
 
         var appointments = await result.Content.ReadFromJsonAsync<List<Appointment>>();
-        Assert.NotNull(appointments);
         appointments!.Count.Should().Be(1);
     }
 

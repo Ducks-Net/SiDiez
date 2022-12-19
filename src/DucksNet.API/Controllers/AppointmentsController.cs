@@ -31,19 +31,12 @@ public class AppointmentsController : ControllerBase
         var appointments = await _appointmentsRepository.GetAllAsync();
         return Ok(appointments.Where(a => a.PetId == petId));
     }
-
-    [HttpGet("byEmployee/{employeeId}")]
-    public async Task<IActionResult> GetByVetID(Guid vetId)
+    
+    [HttpGet("byOffice/{locationId:guid}")]
+    public async Task<IActionResult> GetByLocationId(Guid locationId)
     {
-        var appointments = await _appointmentsRepository.GetAllAsync();
-        return Ok(appointments.Where(a => a.VetId == vetId));
-    }
-
-    [HttpGet("byOffice/{locationId}")]
-    public async Task<IActionResult> GetByLocationID(Guid? locationId)
-    {
-        var appointments = await _appointmentsRepository.GetAllAsync();
-        return Ok(appointments.Where(a => a.LocationId == locationId));
+        var result = await _appointmentScheduleService.GetLocationSchedule(locationId); 
+        return Ok(result.Value);
     }
 
     [HttpPost]

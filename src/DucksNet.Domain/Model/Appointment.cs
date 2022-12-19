@@ -5,7 +5,7 @@ namespace DucksNet.Domain.Model;
 
 public class Appointment 
 {
-    public Guid ID { get; private set; }
+    public Guid Id { get; private set; }
     public Guid? LocationId { get; private set; }
     public Guid? PetId { get; private set; }
     public Guid? VetId { get; private set; }
@@ -14,9 +14,9 @@ public class Appointment
     public AppointmentType Type { get; private set; }
     public bool NeedsCage { get; private set; }
 
-    public Appointment(Guid ID, Guid? locationId, Guid? petId, Guid? vetId, DateTime startTime, DateTime endTime, AppointmentType type, bool needsCage)
+    public Appointment(Guid id, Guid? locationId, Guid? petId, Guid? vetId, DateTime startTime, DateTime endTime, AppointmentType type, bool needsCage)
     {
-        this.ID = ID;
+        this.Id = id;
         LocationId = locationId;
         PetId = petId;
         VetId = vetId;
@@ -28,7 +28,7 @@ public class Appointment
 
     private Appointment(AppointmentType type, DateTime startTime, DateTime endTime)
     {
-        ID = Guid.NewGuid();
+        Id = Guid.NewGuid();
         Type = type;
         StartTime = startTime;
         EndTime = endTime;

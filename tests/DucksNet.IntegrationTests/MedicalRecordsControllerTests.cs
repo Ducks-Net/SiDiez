@@ -86,7 +86,7 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         var response = await TestingClient.PostAsJsonAsync(AppointmentUrl, dto);
         response.EnsureSuccessStatusCode();
         var result = await response.Content.ReadFromJsonAsync<Appointment>();
-        return result!.ID;
+        return result!.Id;
     }
     private async Task<Guid> SetupPet(Guid ownerId, string petSizeString)
     {

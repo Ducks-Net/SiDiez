@@ -429,6 +429,29 @@ public class CagesControllerTests : BaseIntegrationTests<CagesController>
         cageTimeBlock.Should().BeEmpty();
     }
 
+    [Fact]
+    public async Task When_Schedule_WithBusyTime_ShouldReturnError()
+    {
+        ClearDatabase();
+        Guid petId1 = await SetupPet(Guid.NewGuid(), "Small");
+        Guid officeId = await SetupOffice();
+        Guid cageId = await SetupCage(officeId, "Small");
+        var startTime = DateTime.Now.AddDays(1).AddHours(1);
+        var endTime = DateTime.Now.AddDays(1).AddHours(2);
+        Guid alreadyScheduled = await SetupSchedule(petId1, officeId, startTime, endTime);
+        Guid petId2 = await SetupPet(Guid.NewGuid(), "Small");
+        // Try to schedule a new one at the same time
+        var scheduleDto = new ScheduleCageDto
+        {
+            PetId = petId2,
+            LocationId = officeId,
+            StartTime = startTime,
+            EndTime = endTime
+        };
+        var cageTimeBlockResponse = await TestingClient.PostAsJsonAsync($"{CagesUrl}/schedule", scheduleDto);
+        cageTimeBlockResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
     private async Task<Guid> SetupSchedule(Guid petId, Guid officeId, DateTime start, DateTime end)
     {
         var scheduleDto = new ScheduleCageDto
