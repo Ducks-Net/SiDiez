@@ -25,13 +25,11 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-    - name: Add altcov dep
-      run: dotnet add tests/DucksNet.UnitTests/ package AltCover
-    - name: Add altcov dep to integration tests
-      run: dotnet add tests/DucksNet.IntegrationTests/ package AltCover
+    - name: Add dotcov dep
+      run: dotnet tool install --global dotnet-coverage
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet build
     - name: run tests
-      run: dotnet test --no-restore
+      run: dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
