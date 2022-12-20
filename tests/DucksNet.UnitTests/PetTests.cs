@@ -61,6 +61,14 @@ public class PetTests
     }
 
     [Fact]
+    public void When_CreatePetWithNullOwnerId_Then_ShouldFail()
+    {
+        var result = Pet.Create("Cleo", new DateTime(2021, 06, 04), "Cat", "European", Guid.Empty, "Small");
+        result.IsFailure.Should().BeTrue();
+        result.Errors.Should().Contain("The onwer id can not be null.");
+    }
+
+    [Fact]
     public void When_AllInformationUpdatedInPet_Then_ShouldReturnUpdatedPet()
     {
         Tuple<string, DateTime, string, string, Guid, string> sut = CreateSUT();

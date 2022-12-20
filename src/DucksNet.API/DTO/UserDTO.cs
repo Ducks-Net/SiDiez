@@ -1,4 +1,6 @@
-﻿namespace DucksNet.API.DTO;
+﻿using System.Xml.Linq;
+
+namespace DucksNet.API.DTO;
 
 public class UserDto
 {

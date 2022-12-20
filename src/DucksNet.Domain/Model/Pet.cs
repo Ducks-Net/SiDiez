@@ -17,17 +17,6 @@ public class Pet
     public Guid OwnerId { get; private set; }
     public Size Size { get; private set; }
 
-    public Pet(Guid id, string name, DateTime dateOfBirth, string species, string breed, Guid ownerId, Size size) // NOTE(Al): constructor for json
-    {
-        Id = id;
-        Name = name;
-        DateOfBirth = dateOfBirth;
-        Species = species;
-        Breed = breed;
-        OwnerId = ownerId;
-        Size = size;
-    }
-
     private Pet(string name, DateTime dateOfBirth, string species, string breed, Guid ownerId, Size size)
     {
         Id = Guid.NewGuid();
@@ -56,6 +45,10 @@ public class Pet
         if (string.IsNullOrWhiteSpace(breed))
         {
             return Result<Pet>.Error("The breed field can not be empty.");
+        }
+        if (ownerId == Guid.Empty)
+        {
+            return Result<Pet>.Error("The onwer id can not be null.");
         }
 
         Result<Size> sizeResult = Size.CreateFromString(size);
