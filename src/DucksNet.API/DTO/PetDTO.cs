@@ -1,7 +1,4 @@
-﻿using DucksNet.Domain.Model;
-using System.Net;
-
-namespace DucksNet.API.DTO;
+﻿namespace DucksNet.API.DTO;
 
 public class PetDto
 {
