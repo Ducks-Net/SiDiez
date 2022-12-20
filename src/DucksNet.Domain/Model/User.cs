@@ -13,6 +13,18 @@ public class User
     public string Password { get; private set; }
     public virtual List<Pet> Pets { get; private set; } = new List<Pet>();
 
+    public User(Guid id, string firstName, string lastName, string address, string phoneNumber, string email, string password)
+    {
+        Id = id;
+        FirstName = firstName;
+        LastName = lastName;
+        Address = address;
+        PhoneNumber = phoneNumber;
+        Email = email;
+        Password = password;
+    }
+
+
     private User(string firstName, string lastName, string address, string phoneNumber, string email, string password) 
     {
         Id = Guid.NewGuid();

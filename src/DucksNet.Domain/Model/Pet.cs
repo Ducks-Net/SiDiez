@@ -17,6 +17,17 @@ public class Pet
     public Guid OwnerId { get; private set; }
     public Size Size { get; private set; }
 
+    public Pet(Guid id, string name, DateTime dateOfBirth, string species, string breed, Guid ownerId, Size size)
+    {
+        Id = id;
+        Name = name;
+        DateOfBirth = dateOfBirth;
+        Species = species;
+        Breed = breed;
+        OwnerId = ownerId;
+        Size = size;
+    }
+
     private Pet(string name, DateTime dateOfBirth, string species, string breed, Guid ownerId, Size size)
     {
         Id = Guid.NewGuid();
