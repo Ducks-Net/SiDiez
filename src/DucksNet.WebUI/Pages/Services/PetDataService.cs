@@ -1,9 +1,7 @@
 ﻿using DucksNet.Domain.Model;
 using DucksNet.SharedKernel.Utils;
 using DucksNet.WebUI.Pages.Models;
-using System.Diagnostics.Tracing;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace DucksNet.WebUI.Pages.Services;
 
