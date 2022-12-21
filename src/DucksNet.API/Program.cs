@@ -7,6 +7,8 @@ using DucksNet.API.Validators;
 using FluentValidation;
 using DucksNet.API.Mappers;
 using DucksNet.Infrastructure.SqliteAsync;
+using DucksNet.Infrastructure;
+using DucksNet.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -14,27 +16,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
-builder.Services.AddScoped<IRepositoryAsync<Cage>, RepositoryAsync<Cage>>();
-builder.Services.AddScoped<IRepositoryAsync<CageTimeBlock>, RepositoryAsync<CageTimeBlock>>();
-builder.Services.AddScoped<IRepositoryAsync<Appointment>, RepositoryAsync<Appointment>>();
-builder.Services.AddScoped<IRepositoryAsync<Pet>, RepositoryAsync<Pet>>();
-builder.Services.AddScoped<IRepositoryAsync<User>, RepositoryAsync<User>>();
-builder.Services.AddScoped<IRepositoryAsync<Treatment>, RepositoryAsync<Treatment>>();
-builder.Services.AddScoped<IRepositoryAsync<Medicine>, RepositoryAsync<Medicine>>();
-builder.Services.AddScoped<IRepositoryAsync<MedicalRecord>, RepositoryAsync<MedicalRecord>>();
-builder.Services.AddScoped<IRepositoryAsync<Employee>, RepositoryAsync<Employee>>();
-builder.Services.AddScoped<IRepositoryAsync<Business>, RepositoryAsync<Business>>();
-builder.Services.AddScoped<IRepositoryAsync<Office>, RepositoryAsync<Office>>();
-
-
-builder.Services.AddValidatorsFromAssemblyContaining<EmployeeValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<PetValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<MedicineValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<UserValidator>();
-
-
-builder.Services.AddAutoMapper(typeof(CageMappingProfile).Assembly);
+builder.Services.AddAplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {
@@ -43,6 +26,8 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
     });
 });
+builder.Services.AddAutoMapper(typeof(CageMappingProfile).Assembly);
+
 
 var app = builder.Build();
 
