@@ -254,6 +254,9 @@ public class EnumerationTests
         var one = TestEnumeration.One;
         var two = TestEnumeration.Two;
         var three = TestEnumeration.Three;
+        var one2 = TestEnumeration.One;
+        var two2 = TestEnumeration.Two;
+        var three2 = TestEnumeration.Three;
 
         (one >= two).Should().BeFalse();
         (one >= three).Should().BeFalse();
@@ -263,9 +266,9 @@ public class EnumerationTests
         (three >= one).Should().BeTrue();
         (three >= two).Should().BeTrue();
 
-        (one >= one).Should().BeTrue();
-        (two >= two).Should().BeTrue();
-        (three >= three).Should().BeTrue();
+        (one >= one2).Should().BeTrue();
+        (two >= two2).Should().BeTrue();
+        (three >= three2).Should().BeTrue();
     }
 
     [Fact]
@@ -274,6 +277,9 @@ public class EnumerationTests
         var one = TestEnumeration.One;
         var two = TestEnumeration.Two;
         var three = TestEnumeration.Three;
+        var one2 = TestEnumeration.One;
+        var two2 = TestEnumeration.Two;
+        var three2 = TestEnumeration.Three;
 
         (one <= two).Should().BeTrue();
         (one <= three).Should().BeTrue();
@@ -283,8 +289,8 @@ public class EnumerationTests
         (three <= one).Should().BeFalse();
         (three <= two).Should().BeFalse();
 
-        (one <= one).Should().BeTrue();
-        (two <= two).Should().BeTrue();
-        (three <= three).Should().BeTrue();
+        (one <= one2).Should().BeTrue();
+        (two <= two2).Should().BeTrue();
+        (three <= three2).Should().BeTrue();
     }
 }
