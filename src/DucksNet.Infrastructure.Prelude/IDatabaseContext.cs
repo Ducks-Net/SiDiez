@@ -20,6 +20,5 @@ public interface IDatabaseContext
     DbSet<Medicine> Medicines { get; }
     DbSet<Employee> Employees { get; }
 
-    void SaveChanges();
     Task SaveChangesAsync();
 }
