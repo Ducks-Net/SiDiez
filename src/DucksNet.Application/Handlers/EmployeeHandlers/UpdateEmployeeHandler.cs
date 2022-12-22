@@ -8,12 +8,10 @@ namespace DucksNet.Application.Handlers.EmployeeHandlers;
 public class UpdateEmployeeHandler : IRequestHandler<UpdateEmployeeRequest, EmployeeResultResponse>
 {
     private readonly IRepositoryAsync<Employee> _employeesRepository;
-    private readonly IRepositoryAsync<Office> _officeRepository;
 
-    public UpdateEmployeeHandler(IRepositoryAsync<Employee> _employeesRepository, IRepositoryAsync<Office> _officeRepository)
+    public UpdateEmployeeHandler(IRepositoryAsync<Employee> _employeesRepository)
     {
         this._employeesRepository = _employeesRepository;
-        this._officeRepository = _officeRepository;
     }
     public async Task<EmployeeResultResponse> Handle(UpdateEmployeeRequest request, CancellationToken cancellationToken)
     {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 
 namespace DucksNet.Application.Mappers;
-public class EmployeeMapper
+public static class EmployeeMapper
 {
     private static Lazy<IMapper> Lazy =
             new Lazy<IMapper>(() =>
@@ -9,7 +9,7 @@ public class EmployeeMapper
                 var config = new MapperConfiguration(cfg =>
                 {
                     cfg.ShouldMapProperty = p =>
-                    p.GetMethod.IsPublic ||
+                    p.GetMethod!.IsPublic ||
                     p.GetMethod.IsAssembly;
                     cfg.AddProfile<EmployeeMappingProfile>();
                 });

@@ -11,7 +11,5 @@ public class EmployeeMappingProfile : Profile
         CreateMap<Employee, EmployeeResponse>().ReverseMap();
         CreateMap<Employee, EmployeeResultResponse>().ReverseMap();
         CreateMap<Employee, EmployeeDto>().ReverseMap();
-
     }
-
 }

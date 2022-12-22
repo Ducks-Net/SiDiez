@@ -15,7 +15,7 @@ public static class ConfigureServices
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        //services.AddValidatorsFromAssemblyContaining<CreateEmployeeCommandValidator>();
+     
         services.AddValidatorsFromAssemblyContaining<EmployeeValidator>();
         services.AddValidatorsFromAssemblyContaining<PetValidator>();
         services.AddValidatorsFromAssemblyContaining<MedicineValidator>();

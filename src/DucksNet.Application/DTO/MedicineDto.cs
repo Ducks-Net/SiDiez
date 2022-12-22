@@ -1,6 +1,4 @@
-﻿
-
-namespace DucksNet.API.DTO;
+﻿namespace DucksNet.API.DTO;
 
 public class MedicineDto
 {
