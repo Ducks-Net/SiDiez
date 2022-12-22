@@ -48,12 +48,15 @@ public class CagesController : ControllerBase
     [HttpGet("byLocation/{locationId}")]
     public async Task<IActionResult> GetByLocationID(Guid locationId)
     {
+        // Check if location exists
+        var location = await _officeRepository.GetAsync(locationId);
+
+        if (location.IsFailure)
+            return NotFound();
+
+        // Get cages for location
         var cages = await _cagesRepository.GetAllAsync();
         var cagesAtLocation = cages.Where(c => c.LocationId == locationId);
-        if (cagesAtLocation is null || !cagesAtLocation.Any())
-        {
-            return NotFound();
-        }
         return Ok(cagesAtLocation);
     }
 

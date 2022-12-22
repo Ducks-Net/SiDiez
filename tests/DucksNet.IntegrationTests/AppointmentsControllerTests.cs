@@ -7,6 +7,7 @@ using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
 using DucksNet.Domain.Model;
 using DucksNet.Domain.Model.Enums;
+using DucksNet.SharedKernel.Utils;
 
 namespace DucksNet.IntegrationTests;
 
@@ -107,7 +108,6 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         result.EnsureSuccessStatusCode();
 
         var appointments = await result.Content.ReadFromJsonAsync<List<Appointment>>();
-        Assert.NotNull(appointments);
         appointments!.Count.Should().Be(1);
     }
 
@@ -137,6 +137,65 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         appointments!.Count.Should().Be(1);
     }
 
+    [Fact]
+    public async Task When_ScheduleAppointment_WithInvalidOffice_Should_ReturnBadRequest()
+    {
+        var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
+
+        var appointment = new ScheduleAppointmentDto
+        {
+            TypeString = AppointmentType.Consultation.Name,
+            PetID = petId,
+            LocationID = Guid.NewGuid(),
+            StartTime = DateTime.Now.AddDays(1),
+            EndTime = DateTime.Now.AddDays(1).AddHours(1)
+        };
+
+        var response = await TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task When_ScheduleAppointment_WithIvalidDate_Should_ReturnBadRequest()
+    {
+        var officeId = await SetupOffice();
+        var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
+
+        var appointment = new ScheduleAppointmentDto
+        {
+            TypeString = AppointmentType.Consultation.Name,
+            PetID = petId,
+            LocationID = officeId,
+            StartTime = DateTime.Now.AddDays(1),
+            EndTime = DateTime.Now.AddDays(1).AddHours(-1)
+        };
+
+        var response = await TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task When_ScheduleAppoitnment_WithOverlappingAppointment_Should_ReturnBadRequest()
+    {
+        var officeId = await SetupOffice();
+        var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
+
+        var appointment = new ScheduleAppointmentDto
+        {
+            TypeString = AppointmentType.Consultation.Name,
+            PetID = petId,
+            LocationID = officeId,
+            StartTime = DateTime.Now.AddDays(1),
+            EndTime = DateTime.Now.AddDays(1).AddHours(1)
+        };
+
+        var response = await TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment);
+        response.EnsureSuccessStatusCode();
+
+        var response2 = await TestingClient.PostAsJsonAsync(AppointmentsUrl, appointment);
+        response2.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
     private async Task<Guid> SetupPet(Guid ownerId ,string petSizeString)
     {
         var petDto = new PetDto
@@ -153,22 +212,6 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         petResponse.EnsureSuccessStatusCode();
         var pet = await petResponse.Content.ReadFromJsonAsync<Pet>();
         return pet!.Id;
-    }
-
-    private async Task<Guid> SetupCage(Guid officeId, string size)
-    {        
-        var sut = new CreateCageDto {
-            LocationId = officeId,
-            SizeString = size
-        };
-
-        //Act
-        var cageResponse = await TestingClient.PostAsJsonAsync(CagesUrl, sut);
-
-        //Assert
-        cageResponse.EnsureSuccessStatusCode();
-        var cage = await cageResponse.Content.ReadFromJsonAsync<Cage>();
-        return cage!.ID;
     }
 
     private async Task<Guid> SetupOffice()
