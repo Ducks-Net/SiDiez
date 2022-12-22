@@ -155,22 +155,6 @@ public class AppointmentsControllerTests : BaseIntegrationTests<AppointmentsCont
         return pet!.Id;
     }
 
-    private async Task<Guid> SetupCage(Guid officeId, string size)
-    {        
-        var sut = new CreateCageDto {
-            LocationId = officeId,
-            SizeString = size
-        };
-
-        //Act
-        var cageResponse = await TestingClient.PostAsJsonAsync(CagesUrl, sut);
-
-        //Assert
-        cageResponse.EnsureSuccessStatusCode();
-        var cage = await cageResponse.Content.ReadFromJsonAsync<Cage>();
-        return cage!.ID;
-    }
-
     private async Task<Guid> SetupOffice()
     {
         var officeDto = new OfficeDto
