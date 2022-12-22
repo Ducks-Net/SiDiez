@@ -59,7 +59,7 @@ public class Pet
         }
         if (ownerId == Guid.Empty)
         {
-            return Result<Pet>.Error("The onwer id can not be null.");
+            return Result<Pet>.Error("The owner id can not be null.");
         }
 
         Result<Size> sizeResult = Size.CreateFromString(size);

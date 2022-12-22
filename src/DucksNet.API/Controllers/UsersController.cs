@@ -12,14 +12,12 @@ namespace DucksNet.API.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IRepositoryAsync<User> _usersRepository;
-    private readonly IRepositoryAsync<Pet> _petsRepository;
     private readonly IValidator<UserDto> _userValidator;
 
     public UsersController(IValidator<UserDto> userValidator, IRepositoryAsync<User> users, IRepositoryAsync<Pet> pets)
     {
         _userValidator = userValidator;
         _usersRepository = users;
-        _petsRepository = pets;
     }
 
     [HttpGet]
@@ -68,38 +66,34 @@ public class UsersController : ControllerBase
     {
         // Check if user exists
         var user = await _usersRepository.GetAsync(id);
-        if(user.IsFailure || user.Value is null)
+        if (user.IsFailure)
         {
             return NotFound(user.Errors);
         }
-
         // Update user
-        user.Value.UpdateFields(dto.FirstName, dto.LastName, dto.Address, dto.PhoneNumber!, dto.Email!, dto.Password);
+        user.Value!.UpdateFields(dto.FirstName, dto.LastName, dto.Address, dto.PhoneNumber!, dto.Email!, dto.Password);
 
-        var result = await _usersRepository.UpdateAsync(user.Value);
-        if(result.IsFailure)
+        var result = await _usersRepository.UpdateAsync(user.Value!);
+        if (result.IsFailure)
         {
             return BadRequest(result.Errors);
         }
-        return Ok(user);
+        return Ok("The information has been updated.");
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        // Check if user exists
         var user = await _usersRepository.GetAsync(id);
-        if(user.IsFailure || user.Value is null)
+        if (user.IsFailure)
         {
             return NotFound(user.Errors);
         }
-
-        // Delete user
-        var result = await _usersRepository.DeleteAsync(user.Value);
-        if(result.IsFailure)
+        var result = await _usersRepository.DeleteAsync(user.Value!);
+        if (result.IsFailure)
         {
             return BadRequest(result.Errors);
         }
-        return Ok(user);
+        return Ok();
     }
 }
