@@ -57,10 +57,6 @@ public class EmployeesController : ControllerBase
             return BadRequest(errorsList);
         }
         var result = await _mediator.Send(dto);
-        if (result.TypeRequest == ETypeRequests.NOT_FOUND)
-        {
-            return NotFound(result.Errors);
-        }
         if (result.TypeRequest == ETypeRequests.BAD_REQUEST)
         {
             return BadRequest(result.Errors);
@@ -82,10 +78,6 @@ public class EmployeesController : ControllerBase
             return BadRequest(errorsList);
         }
         var result = await _mediator.Send(new UpdateEmployeeRequest { EmployeeId = employeeId, Value = dto });
-        if (result.TypeRequest == ETypeRequests.NOT_FOUND)
-        {
-            return NotFound(result.Errors);
-        }
         if (result.TypeRequest == ETypeRequests.BAD_REQUEST)
         {
             return BadRequest(result.Errors);

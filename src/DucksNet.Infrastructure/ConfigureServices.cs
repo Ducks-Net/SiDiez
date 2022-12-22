@@ -25,10 +25,8 @@ public static class ConfigureServices
         services.AddScoped<IRepositoryAsync<Business>, RepositoryAsync<Business>>();
         services.AddScoped<IRepositoryAsync<Office>, RepositoryAsync<Office>>();
         services.AddScoped<IDatabaseContext, DatabaseContext>();
-        services.
-            AddDbContext<DatabaseContext>
-            (m => m.UseSqlite(configuration.GetConnectionString("DucksNetDb")),
-            ServiceLifetime.Singleton);
+        services.AddDbContext<DatabaseContext>();
+
 
         return services;
     }

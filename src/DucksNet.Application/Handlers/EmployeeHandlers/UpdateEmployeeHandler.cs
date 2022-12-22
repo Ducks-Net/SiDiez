@@ -24,7 +24,7 @@ public class UpdateEmployeeHandler : IRequestHandler<UpdateEmployeeRequest, Empl
         var employees = await _employeesRepository.GetAllAsync();
         foreach (var employee in employees)
         {
-            if (employee.OwnerEmail == request.Value.OwnerEmail)
+            if (employee.OwnerEmail == request.Value!.OwnerEmail)
             {
                 return new EmployeeResultResponse(null, new List<string> { "The updated email already exists" }, ETypeRequests.BAD_REQUEST);
             }

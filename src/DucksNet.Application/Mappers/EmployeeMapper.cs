@@ -8,9 +8,6 @@ public static class EmployeeMapper
             {
                 var config = new MapperConfiguration(cfg =>
                 {
-                    cfg.ShouldMapProperty = p =>
-                    p.GetMethod!.IsPublic ||
-                    p.GetMethod.IsAssembly;
                     cfg.AddProfile<EmployeeMappingProfile>();
                 });
                 var mapper = config.CreateMapper();
