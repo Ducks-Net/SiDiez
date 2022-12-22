@@ -1,0 +1,26 @@
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: unit tests
+        uses: zyborg/dotnet-tests-report@v1
+        with:
+          project_path: tests/DucksNet.UnitTests
+          report_name: DucksNet.UnitTests
+          report_title: DucksNet Unit Tests
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gist_name: ducksnet_unit_tests.md
+          gist_badge_label: 'UnitTests : %Counters_passed%/%Counters_total%'
+          gist_token: ${{ secrets.GIST_TOKEN }}
+
+      - name: integration tests
+        uses: zyborg/dotnet-tests-report@v1
+        with:
+          project_path: tests/DucksNet.IntegrationTests
+          report_name: ducksnet_integration_tests
+          report_title: DucksNet Integration Tests
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gist_name: ducksnet_integration_tests.md
+          gist_badge_label: 'IntegrationTests : %Counters_passed%/%Counters_total%'
+          gist_token: ${{ secrets.GIST_TOKEN }}
