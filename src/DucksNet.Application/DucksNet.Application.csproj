@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DucksNet.Domain\DucksNet.Domain.csproj" />
+    <ProjectReference Include="..\DucksNet.Infrastructure.Prelude\DucksNet.Infrastructure.Prelude.csproj" />
     <ProjectReference Include="..\DucksNet.SharedKernel\DucksNet.SharedKernel.csproj" />
   </ItemGroup>
 

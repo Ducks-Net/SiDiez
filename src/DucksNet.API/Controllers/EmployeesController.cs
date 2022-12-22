@@ -1,10 +1,13 @@
 ﻿using DucksNet.API.DTO;
 using DucksNet.API.Validators;
+using DucksNet.Application.Handlers.EmployeeHandlers;
+using DucksNet.Application.Requests.EmployeeRequests;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 using DucksNet.SharedKernel.Utils;
 using FluentValidation;
 using FluentValidation.Results;
+using MediatR;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,25 +19,29 @@ public class EmployeesController : ControllerBase
 {
     private readonly IRepositoryAsync<Employee> _employeesRepository;
     private readonly IRepositoryAsync<Office> _officeRepository;
+    private readonly IMediator _mediator;
     private readonly IValidator<EmployeeDto> _createValidator;
 
-    public EmployeesController(IValidator<EmployeeDto> validator, IRepositoryAsync<Employee> employeeRepository, IRepositoryAsync<Office> officeRepository)
+    public EmployeesController(IValidator<EmployeeDto> validator, IRepositoryAsync<Employee> employeeRepository, 
+        IRepositoryAsync<Office> officeRepository, IMediator mediator)
     {
         _createValidator = validator;
         _employeesRepository = employeeRepository;
         _officeRepository = officeRepository;
+        _mediator = mediator;
     }
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         var employees = await _employeesRepository.GetAllAsync();
+        // var employees = await _mediator.Send(new GetAllEmployeesRequest());
         return Ok(employees);
     }
     [HttpGet("{employeeId:guid}")]
     public async Task<IActionResult> GetByEmployeeID(Guid employeeId)
     {
-        var employee = await _employeesRepository.GetAsync(employeeId);
-        if (employee.IsFailure)
+        var employee = await _mediator.Send(new GetEmployeeRequest { EmployeeId = employeeId});
+        if (!employee.IsSuccess)
         {
             return NotFound(employee.Errors);
         }
