@@ -35,7 +35,7 @@ public class AppointmentsController : ControllerBase
     [HttpGet("byOffice/{locationId:guid}")]
     public async Task<IActionResult> GetByLocationId(Guid locationId)
     {
-        var result = await _appointmentScheduleService.GetLocationSchedule(locationId); 
+        var result = await _appointmentScheduleService.GetLocationSchedule(locationId);
         return Ok(result.Value);
     }
 
