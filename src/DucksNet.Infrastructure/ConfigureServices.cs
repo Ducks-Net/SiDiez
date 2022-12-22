@@ -26,8 +26,6 @@ public static class ConfigureServices
         services.AddScoped<IRepositoryAsync<Office>, RepositoryAsync<Office>>();
         services.AddScoped<IDatabaseContext, DatabaseContext>();
         services.AddDbContext<DatabaseContext>();
-
-
         return services;
     }
 }
