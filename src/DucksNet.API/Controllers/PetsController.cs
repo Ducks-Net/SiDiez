@@ -4,6 +4,8 @@ using DucksNet.Infrastructure.Prelude;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DucksNet.API.Controllers;
 
@@ -57,10 +59,6 @@ public class PetsController : ControllerBase
         {
             return BadRequest(pet.Errors);
         }
-        if (dto.OwnerId == Guid.Empty)
-        {
-            return BadRequest("Owner ID is required.");
-        }
 
         var result = await _petsRepository.AddAsync(pet.Value!);
         if (result.IsFailure)
@@ -87,7 +85,7 @@ public class PetsController : ControllerBase
         {
             return BadRequest(result.Errors);
         }
-        return Ok(pet.Value);
+        return Ok("The information has been updated.");
     }
 
     [HttpDelete("{id}")]

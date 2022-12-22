@@ -65,7 +65,7 @@ public class PetTests
     {
         var result = Pet.Create("Cleo", new DateTime(2021, 06, 04), "Cat", "European", Guid.Empty, "Small");
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().Contain("The onwer id can not be null.");
+        result.Errors.Should().Contain("The owner id can not be null.");
     }
 
     [Fact]

@@ -134,6 +134,24 @@ public class UsersControllerTests : BaseIntegrationTests<UsersController>
         errors.Should().Contain("Password is required.");
     }
 
+    [Fact]
+    public async Task When_CreatedUserAndDeleteOtherGuid_Then_ShouldFail()
+    {   
+        ///Arrange
+        var sut = CreateSut();
+
+        //Act 
+        var userResponse = await TestingClient.PostAsJsonAsync(UserUrl, sut);
+        var getUserResult = await TestingClient.DeleteAsync(UserUrl + $"/{Guid.NewGuid()}");
+
+        //Assert
+        userResponse.EnsureSuccessStatusCode();
+        getUserResult.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        var errors = await getUserResult.Content.ReadAsStringAsync();
+        errors.Should().NotBeEmpty();
+        errors.Should().Contain("Entity of type User was not found.");
+    }
+
     private static UserDto CreateSut()
     {
         return new UserDto
@@ -145,7 +163,21 @@ public class UsersControllerTests : BaseIntegrationTests<UsersController>
             Email = "les_aristocats@yahoo.com",
             Password = "CatsAreTheBest"
         };
+    }    
+    private static UserDto CreateNewSut()
+    {
+        return new UserDto
+        {
+            FirstName = "Les Aristo",
+            LastName = "Cats",
+            Address = "Fracce, Paris, Bonfamille's Residence",
+            PhoneNumber = "0700000001",
+            Email = "les_jolies_aristocats@yahoo.com",
+            Password = "CatsAreTheBest2001"
+        };
     }
+
+
 
     private static UserDto CreateInvalidSut(string firstName, string lastName, string address, string phoneNumber, string email, string password)
     {

@@ -115,7 +115,7 @@ public class PetsControllerTests : BaseIntegrationTests<PetsController>
         petResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var errors = await petResponse.Content.ReadFromJsonAsync<List<string>>();
         errors.Should().NotBeEmpty();
-        errors.Should().Contain("The onwer id can not be null.");
+        errors.Should().Contain("The owner id can not be null.");
     }
 
     [Fact]
@@ -134,6 +134,84 @@ public class PetsControllerTests : BaseIntegrationTests<PetsController>
         errors.Should().Contain("Failed to parse pet size.");
     }
 
+    [Fact]
+    public async Task When_CreatedPet_Then_ShouldReturnPetByIdInTheGetRequest()
+    {
+        //Arrange
+        var sut = CreateSut();
+
+        //Act 
+        var petResponse = await TestingClient.PostAsJsonAsync(PetUrl, sut);
+        var pet = await petResponse.Content.ReadFromJsonAsync<Pet>();
+        var getPetResult = await TestingClient.GetAsync(PetUrl + $"/{pet!.Id}");
+
+        //Assert
+        petResponse.EnsureSuccessStatusCode();
+        var petPost = await getPetResult.Content.ReadFromJsonAsync<Pet>();
+        petPost!.Name.Should().Be(sut.Name);
+        petPost!.DateOfBirth.Should().Be(sut.DateOfBirth);
+        petPost!.Species.Should().Be(sut.Species);
+        petPost!.Breed.Should().Be(sut.Breed);
+        petPost!.OwnerId.Should().Be(sut.OwnerId);
+        petPost!.Size.Name.Should().Be(sut.Size);
+    }
+
+    [Fact]
+    public async Task When_CreatedPetAndUpdateInformation_Then_ShouldReturnUpdatedPet()
+    {
+        //Arrange
+        var sut = CreateSut();
+        var petResponse = await TestingClient.PostAsJsonAsync(PetUrl, sut);
+        var pet = await petResponse.Content.ReadFromJsonAsync<Pet>();
+        petResponse.EnsureSuccessStatusCode();
+
+        //Act
+        var newSut = CreateNewSut();
+        var newPetResponse = await TestingClient.PutAsJsonAsync(PetUrl + $"/{pet!.Id}", newSut);
+        var updates = await newPetResponse.Content.ReadAsStringAsync();
+        Console.WriteLine(updates);
+
+        //Assert
+        newPetResponse.EnsureSuccessStatusCode();
+        updates.Should().Contain("The information has been updated.");
+    }
+
+    [Fact]
+    public async Task When_CreatedPetAndDeleteIt_Then_ShouldReturnSuccess()
+    {
+        //Arrange
+        var sut = CreateSut();
+
+        //Act 
+        var petResponse = await TestingClient.PostAsJsonAsync(PetUrl, sut);
+        var pet = await petResponse.Content.ReadFromJsonAsync<Pet>();
+        var getPetResult = await TestingClient.DeleteAsync(PetUrl + $"/{pet!.Id}");
+
+        //Assert
+        petResponse.EnsureSuccessStatusCode();
+        getPetResult.Content.Headers.ContentLength.Should().Be(0);
+        var petsResponse = await TestingClient.GetAsync(PetUrl);
+        var pets = await petsResponse.Content.ReadFromJsonAsync<List<Pet>>();
+        pets.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task When_CreatedPetAndDeleteOtherGuid_Then_ShouldFail()
+    {
+        ///Arrange
+        var sut = CreateSut();
+
+        //Act 
+        var petResponse = await TestingClient.PostAsJsonAsync(PetUrl, sut);
+        var getPetResult = await TestingClient.DeleteAsync(PetUrl + $"/{Guid.NewGuid()}");
+        //Assert
+        petResponse.EnsureSuccessStatusCode();
+        getPetResult.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        var errors = await getPetResult.Content.ReadAsStringAsync();
+        errors.Should().NotBeEmpty();
+        errors.Should().Contain("Entity of type Pet was not found.");
+    }
+
     private static PetDto CreateSut()
     {
         return new PetDto
@@ -144,6 +222,19 @@ public class PetsControllerTests : BaseIntegrationTests<PetsController>
             Breed = "European",
             OwnerId = Guid.NewGuid(),
             Size = "Small"
+        };
+    }
+
+    private static PetDto CreateNewSut()
+    {
+        return new PetDto
+        {
+            Name = "CleoTheCat",
+            DateOfBirth = new DateTime(2022, 06, 04),
+            Species = "Fluffy Cat",
+            Breed = "Romanian",
+            OwnerId = Guid.NewGuid(),
+            Size = "Medium"
         };
     }
 
