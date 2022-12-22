@@ -1,3 +1,8 @@
+name: TestReports
+on:
+  push:
+    branches:
+      - dev
 jobs:
   test:
     runs-on: ubuntu-latest
