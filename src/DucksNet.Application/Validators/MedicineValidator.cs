@@ -1,8 +1,5 @@
 ﻿using System.Xml.Linq;
 using DucksNet.API.DTO;
-using DucksNet.Domain.Model.Enums;
-using DucksNet.Domain.Model;
-using DucksNet.SharedKernel.Utils;
 using FluentValidation;
 
 namespace DucksNet.API.Validators;
