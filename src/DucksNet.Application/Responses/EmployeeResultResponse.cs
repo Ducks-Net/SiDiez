@@ -5,13 +5,13 @@ namespace DucksNet.Application.Responses;
 public class EmployeeResultResponse
 {
     public Employee? Value { get; set; }
-    public bool IsSuccess { get; set; }
     public List<string>? Errors { get; set; } = new List<string>();
+    public ETypeRequests TypeRequest { get; set; }
 
-    public EmployeeResultResponse(Employee? value, bool isSuccess, List<string>? errors)
+    public EmployeeResultResponse(Employee? value, List<string>? errors, ETypeRequests typeRequest)
     {
         Value = value;
-        IsSuccess = isSuccess;
         Errors = errors ?? new List<string>();
+        TypeRequest = typeRequest;
     }
 }

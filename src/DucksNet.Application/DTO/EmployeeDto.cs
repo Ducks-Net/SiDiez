@@ -3,7 +3,7 @@ using MediatR;
 
 namespace DucksNet.API.DTO;
 
-public class EmployeeDto : IRequest<EmployeeResponse>
+public class EmployeeDto : IRequest<EmployeeResultResponse>
 {
     public EmployeeDto(Guid idOffice, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {

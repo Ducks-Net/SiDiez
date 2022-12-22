@@ -2,6 +2,7 @@
 using DucksNet.API.Validators;
 using DucksNet.Application.Handlers.EmployeeHandlers;
 using DucksNet.Application.Requests.EmployeeRequests;
+using DucksNet.Application.Responses;
 using DucksNet.Domain.Model;
 using DucksNet.Infrastructure.Prelude;
 using DucksNet.SharedKernel.Utils;
@@ -41,7 +42,7 @@ public class EmployeesController : ControllerBase
     public async Task<IActionResult> GetByEmployeeID(Guid employeeId)
     {
         var employee = await _mediator.Send(new GetEmployeeRequest { EmployeeId = employeeId});
-        if (!employee.IsSuccess)
+        if (employee.TypeRequest == ETypeRequests.NOT_FOUND)
         {
             return NotFound(employee.Errors);
         }
@@ -50,11 +51,6 @@ public class EmployeesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] EmployeeDto dto)
     {
-        var office = await _officeRepository.GetAsync(dto.IdOffice);
-        if (office.IsFailure)
-        {
-            return BadRequest(office.Errors);
-        }
         ValidationResult resultValidate = await _createValidator.ValidateAsync(dto, 
             options => options.IncludeRuleSets("CreateEmployee"));
         if (!resultValidate.IsValid)
@@ -66,22 +62,16 @@ public class EmployeesController : ControllerBase
             }
             return BadRequest(errorsList);
         }
-        var employeePost = Employee.Create(dto.Surname, dto.FirstName, dto.Address, dto.OwnerPhone, dto.OwnerEmail);
-        employeePost.Value!.AssignToOffice(office.Value!.ID);
-        var employees = await _employeesRepository.GetAllAsync();
-        foreach (var employee in employees)
+        var result = await _mediator.Send(dto);
+        if (result.TypeRequest == ETypeRequests.NOT_FOUND)
         {
-            if (employee.OwnerEmail == dto.OwnerEmail)
-            {
-                return BadRequest(new List<string> { "The email already exists" });
-            }
-            if (employee.OwnerPhone == dto.OwnerPhone)
-            {
-                return BadRequest(new List<string> { "The telephone number already exists" });
-            }
+            return NotFound(result.Errors);
         }
-        await _employeesRepository.AddAsync(employeePost.Value);
-        return Ok(employeePost.Value);
+        if (result.TypeRequest == ETypeRequests.BAD_REQUEST)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok(result.Value);
     }
     [HttpPut("{employeeId:guid}")]
     public async Task<IActionResult> UpdatePersonalInformationEmployee(Guid employeeId, [FromBody] EmployeeDto dto)

@@ -20,11 +20,10 @@ public class GetEmployeeHandler : IRequestHandler<GetEmployeeRequest, EmployeeRe
         EmployeeResultResponse response;
         if (employee.IsFailure)
         {
-            response = new EmployeeResultResponse(employee.Value, false, employee.Errors);
-            int c = 1;
+            response = new EmployeeResultResponse(employee.Value, employee.Errors, ETypeRequests.NOT_FOUND);
             return response;
         }
-        response = new EmployeeResultResponse(employee.Value, true, null);
+        response = new EmployeeResultResponse(employee.Value, null, ETypeRequests.OK);
         return response;
     }
 }
