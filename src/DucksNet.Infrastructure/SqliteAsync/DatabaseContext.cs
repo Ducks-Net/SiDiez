@@ -7,7 +7,7 @@ namespace DucksNet.Infrastructure.SqliteAsync;
 
 public class DatabaseContext : DbContext, IDatabaseContext
 {
-    public DatabaseContext()
+    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {
         // NOTE (Al): Make sure the database is created. 
         Database.EnsureCreated();
@@ -53,11 +53,6 @@ public class DatabaseContext : DbContext, IDatabaseContext
             .HasConversion(
                 value => value.Id,
                 id => DrugAdministration.createMedicineByInt(id).Value!);
-    }
-
-    void IDatabaseContext.SaveChanges()
-    {
-        SaveChanges();
     }
 
     Task IDatabaseContext.SaveChangesAsync()

@@ -1,6 +1,4 @@
-﻿using DucksNet.Domain.Model.Enums;
-
-namespace DucksNet.API.DTO;
+﻿namespace DucksNet.API.DTO;
 
 public class MedicineDto
 {

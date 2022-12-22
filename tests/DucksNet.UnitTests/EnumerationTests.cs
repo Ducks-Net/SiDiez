@@ -188,4 +188,109 @@ public class EnumerationTests
 
         one.CompareTo(null).Should().Be(1);
     }
+
+    [Fact]
+    public void When_NotEqualsOperator_With_ITself_ShouldReturnFalse()
+    {
+        var one = TestEnumeration.One;
+        var one2 = TestEnumeration.One;
+        var two = TestEnumeration.Two;
+        var two2 = TestEnumeration.Two;
+        var three = TestEnumeration.Three;
+        var three2 = TestEnumeration.Three;
+
+        (one != one2).Should().BeFalse();
+        (two != two2).Should().BeFalse();
+        (three != three2).Should().BeFalse();
+    }
+
+    [Fact]
+    public void When_NotEqualsOperator_WithOther_ShouldReturnTrue()
+    {
+        var one = TestEnumeration.One;
+        var two = TestEnumeration.Two;
+        var three = TestEnumeration.Three;
+
+        (one != two).Should().BeTrue();
+        (one != three).Should().BeTrue();
+        (two != three).Should().BeTrue();
+    }
+
+    [Fact]
+    public void When_GreaterThanOperator_WithOther_ShouldReturnCorrectValue()
+    {
+        var one = TestEnumeration.One;
+        var two = TestEnumeration.Two;
+        var three = TestEnumeration.Three;
+
+        (one > two).Should().BeFalse();
+        (one > three).Should().BeFalse();
+        (two > three).Should().BeFalse();
+
+        (two > one).Should().BeTrue();
+        (three > one).Should().BeTrue();
+        (three > two).Should().BeTrue();
+    }
+
+    [Fact]
+    public void When_LessThanOperator_WithOther_ShouldReturnCorrectValue()
+    {
+        var one = TestEnumeration.One;
+        var two = TestEnumeration.Two;
+        var three = TestEnumeration.Three;
+
+        (one < two).Should().BeTrue();
+        (one < three).Should().BeTrue();
+        (two < three).Should().BeTrue();
+
+        (two < one).Should().BeFalse();
+        (three < one).Should().BeFalse();
+        (three < two).Should().BeFalse();
+    }
+
+    [Fact]
+    public void When_GreaterThanOrEqualOperator_WithOther_ShouldReturnCorrectValue()
+    {
+        var one = TestEnumeration.One;
+        var two = TestEnumeration.Two;
+        var three = TestEnumeration.Three;
+        var one2 = TestEnumeration.One;
+        var two2 = TestEnumeration.Two;
+        var three2 = TestEnumeration.Three;
+
+        (one >= two).Should().BeFalse();
+        (one >= three).Should().BeFalse();
+        (two >= three).Should().BeFalse();
+
+        (two >= one).Should().BeTrue();
+        (three >= one).Should().BeTrue();
+        (three >= two).Should().BeTrue();
+
+        (one >= one2).Should().BeTrue();
+        (two >= two2).Should().BeTrue();
+        (three >= three2).Should().BeTrue();
+    }
+
+    [Fact]
+    public void When_LessThanOrEqualOperator_WithOther_ShouldReturnCorrectValue()
+    {
+        var one = TestEnumeration.One;
+        var two = TestEnumeration.Two;
+        var three = TestEnumeration.Three;
+        var one2 = TestEnumeration.One;
+        var two2 = TestEnumeration.Two;
+        var three2 = TestEnumeration.Three;
+
+        (one <= two).Should().BeTrue();
+        (one <= three).Should().BeTrue();
+        (two <= three).Should().BeTrue();
+
+        (two <= one).Should().BeFalse();
+        (three <= one).Should().BeFalse();
+        (three <= two).Should().BeFalse();
+
+        (one <= one2).Should().BeTrue();
+        (two <= two2).Should().BeTrue();
+        (three <= three2).Should().BeTrue();
+    }
 }

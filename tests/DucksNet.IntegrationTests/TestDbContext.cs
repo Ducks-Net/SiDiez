@@ -58,11 +58,6 @@ public class TestDbContext : DbContext, IDatabaseContext
                 value => value.Id,
                 id => DrugAdministration.createMedicineByInt(id).Value!);
     }
-    
-    void IDatabaseContext.SaveChanges()
-    {
-        SaveChanges();
-    }
 
     public Task SaveChangesAsync()
     {

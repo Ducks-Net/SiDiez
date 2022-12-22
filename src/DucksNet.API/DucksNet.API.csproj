@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DucksNet.Application\DucksNet.Application.csproj" />
     <ProjectReference Include="..\DucksNet.Infrastructure\DucksNet.Infrastructure.csproj" />
     <ProjectReference Include="..\DucksNet.Infrastructure.Prelude\DucksNet.Infrastructure.Prelude.csproj" />
     <ProjectReference Include="..\DucksNet.Domain\DucksNet.Domain.csproj" />

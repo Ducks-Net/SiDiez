@@ -1,6 +1,9 @@
-﻿namespace DucksNet.API.DTO;
+﻿using DucksNet.Application.Responses;
+using MediatR;
 
-public class EmployeeDto
+namespace DucksNet.API.DTO;
+
+public class EmployeeDto : IRequest<EmployeeResultResponse>
 {
     public EmployeeDto(Guid idOffice, string surname, string firstName, string address, string ownerPhone, string ownerEmail)
     {
