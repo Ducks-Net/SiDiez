@@ -18,24 +18,18 @@ namespace DucksNet.API.Controllers;
 [ApiController]
 public class EmployeesController : ControllerBase
 {
-    private readonly IRepositoryAsync<Employee> _employeesRepository;
-    private readonly IRepositoryAsync<Office> _officeRepository;
     private readonly IMediator _mediator;
     private readonly IValidator<EmployeeDto> _createValidator;
 
-    public EmployeesController(IValidator<EmployeeDto> validator, IRepositoryAsync<Employee> employeeRepository, 
-        IRepositoryAsync<Office> officeRepository, IMediator mediator)
+    public EmployeesController(IValidator<EmployeeDto> validator, IMediator mediator)
     {
         _createValidator = validator;
-        _employeesRepository = employeeRepository;
-        _officeRepository = officeRepository;
         _mediator = mediator;
     }
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var employees = await _employeesRepository.GetAllAsync();
-        // var employees = await _mediator.Send(new GetAllEmployeesRequest());
+        var employees = await _mediator.Send(new GetAllEmployeesRequest());
         return Ok(employees);
     }
     [HttpGet("{employeeId:guid}")]
@@ -76,24 +70,6 @@ public class EmployeesController : ControllerBase
     [HttpPut("{employeeId:guid}")]
     public async Task<IActionResult> UpdatePersonalInformationEmployee(Guid employeeId, [FromBody] EmployeeDto dto)
     {
-        var oldEmployee = await _employeesRepository.GetAsync(employeeId);
- 
-        if (oldEmployee.IsFailure)
-        {
-            return BadRequest(oldEmployee.Errors);
-        }
-        var employees = await _employeesRepository.GetAllAsync();
-        foreach (var employee in employees)
-        {
-            if (employee.OwnerEmail == dto.OwnerEmail)
-            {
-                return BadRequest(new List<string> { "The updated email already exists" });
-            }
-            if (employee.OwnerPhone == dto.OwnerPhone)
-            {
-                return BadRequest(new List<string> { "The updated telephone number already exists" });
-            }
-        }
         ValidationResult resultValidate = await _createValidator.ValidateAsync(dto,
             options => options.IncludeRuleSets("UpdateEmployee"));
         if (!resultValidate.IsValid)
@@ -105,35 +81,35 @@ public class EmployeesController : ControllerBase
             }
             return BadRequest(errorsList);
         }
-        await _employeesRepository.UpdateAsync(oldEmployee.Value!);
-        return Ok("The information has been updated");
+        var result = await _mediator.Send(new UpdateEmployeeRequest { EmployeeId = employeeId, Value = dto });
+        if (result.TypeRequest == ETypeRequests.NOT_FOUND)
+        {
+            return NotFound(result.Errors);
+        }
+        if (result.TypeRequest == ETypeRequests.BAD_REQUEST)
+        {
+            return BadRequest(result.Errors);
+        }
+        return Ok(result.Errors);
     }
     [HttpPut("{employeeId:guid}/{newOfficeId:guid}")]
     public async Task<IActionResult> UpdateOfficeEmployee(Guid employeeId, Guid newOfficeId)
     {
-        var oldEmployee = await _employeesRepository.GetAsync(employeeId);
-        if (oldEmployee.IsFailure)
+        var result = await _mediator.Send(new UpdateEmployeeOfficeRequest { EmployeeId = employeeId, OfficeId = newOfficeId });
+        if (result.TypeRequest == ETypeRequests.BAD_REQUEST)
         {
-            return BadRequest(oldEmployee.Errors);
+            return BadRequest(result.Errors);
         }
-        var newOffice = await _officeRepository.GetAsync(newOfficeId);
-        if (newOffice.IsFailure)
-        {
-            return BadRequest(newOffice.Errors);
-        }
-        oldEmployee.Value!.AssignToOffice(newOfficeId);
-        await _employeesRepository.UpdateAsync(oldEmployee.Value);
-        return Ok(oldEmployee.Value);
+        return Ok(result.Value);
     }
     [HttpDelete("{employeeId:guid}")]
     public async Task<IActionResult> Delete(Guid employeeId)
     {
-        var employee = await _employeesRepository.GetAsync(employeeId);
-        if (employee.IsFailure)
+        var result = await _mediator.Send(new DeleteEmployeeRequest { EmployeeId = employeeId});
+        if (result.TypeRequest == ETypeRequests.BAD_REQUEST)
         {
-            return BadRequest(employee.Errors);
+            return BadRequest(result.Errors);
         }
-        await _employeesRepository.DeleteAsync(employee.Value!);
         return Ok();
     }
 }
