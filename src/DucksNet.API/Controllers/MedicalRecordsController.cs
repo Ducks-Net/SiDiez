@@ -86,7 +86,7 @@ public class MedicalRecordsController : ControllerBase
         {
             return BadRequest(newAppointment.Errors);
         }
-        oldMedicalRecord.Value.AssignToClient(newIdClient);
+        oldMedicalRecord.Value!.AssignToClient(newIdClient);
         await _medicalRecordRepository.UpdateAsync(oldMedicalRecord.Value);
         return Ok(oldMedicalRecord.Value);
     }
