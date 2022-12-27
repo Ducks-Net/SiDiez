@@ -69,8 +69,7 @@ public class Employee
     }
     public Result UpdateFields(string? surname, string? firstName, string? address, string? ownerPhone, string? ownerEmail)
     {
-        bool hasNewInfo = false;
-        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(surname);
+        bool hasNewInfo = !string.IsNullOrWhiteSpace(surname);
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(firstName);
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(address);
         if (!string.IsNullOrWhiteSpace(ownerPhone) && !Validation.IsTelephoneNumberValid(ownerPhone!))
