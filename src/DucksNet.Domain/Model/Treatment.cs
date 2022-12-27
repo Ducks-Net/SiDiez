@@ -23,7 +23,7 @@ public class Treatment
         this.ClinicID = ClinicID;
     }
 
-    public static Result<Treatment> CreateTreatment(Guid? OwnerID, Guid? ClientID, Guid? ClinicID)
+    public static Result<Treatment> CreateTreatment(Guid OwnerID, Guid ClientID, Guid ClinicID)
     {
         if (OwnerID == Guid.Empty)
             return Result<Treatment>.Error("Owner ID can not be empty");
