@@ -56,8 +56,8 @@ public class MedicalRecordsController : ControllerBase
         await _medicalRecordRepository.AddAsync(medicalRecord.Value!);
         return Ok(medicalRecord.Value);
     }
-    [HttpPut("{medicalRecordId:guid}/{newIdAppointment:guid}")]
-    public async Task<IActionResult> UpdateAppointmentMedicalRecord(Guid medicalRecordId, Guid newIdAppointment)
+    [HttpPut("{medicalRecordId:guid}")]
+    public async Task<IActionResult> UpdateAppointmentMedicalRecord(Guid medicalRecordId, [FromBody] Guid newIdAppointment)
     {
         var oldMedicalRecord = await _medicalRecordRepository.GetAsync(medicalRecordId);
         if (oldMedicalRecord.IsFailure)
@@ -69,13 +69,12 @@ public class MedicalRecordsController : ControllerBase
         {
             return BadRequest(newAppointment.Errors);
         }
-        if (oldMedicalRecord.Value!.IdAppointment != newIdAppointment)
-            oldMedicalRecord.Value.AssignToAppointment(newIdAppointment);
+        oldMedicalRecord.Value!.AssignToAppointment(newIdAppointment);
         await _medicalRecordRepository.UpdateAsync(oldMedicalRecord.Value);
         return Ok(oldMedicalRecord.Value);
     }
     [HttpPut("{medicalRecordId:guid}/{newIdClient:guid}")]
-    public async Task<IActionResult> UpdateClientMedicalRecord(Guid medicalRecordId, Guid newIdClient)
+    public async Task<IActionResult> UpdateClientMedicalRecord(Guid medicalRecordId, [FromBody] Guid newIdClient)
     {
         var oldMedicalRecord = await _medicalRecordRepository.GetAsync(medicalRecordId);
         if (oldMedicalRecord.IsFailure)
@@ -87,8 +86,7 @@ public class MedicalRecordsController : ControllerBase
         {
             return BadRequest(newAppointment.Errors);
         }
-        if (oldMedicalRecord.Value!.IdClient != newIdClient)
-            oldMedicalRecord.Value.AssignToClient(newIdClient);
+        oldMedicalRecord.Value.AssignToClient(newIdClient);
         await _medicalRecordRepository.UpdateAsync(oldMedicalRecord.Value);
         return Ok(oldMedicalRecord.Value);
     }
