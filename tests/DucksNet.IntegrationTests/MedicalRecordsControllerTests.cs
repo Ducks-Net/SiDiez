@@ -5,7 +5,6 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using DucksNet.API.Controllers;
 using DucksNet.API.DTO;
-using DucksNet.Application.Responses;
 using DucksNet.Domain.Model;
 using DucksNet.Domain.Model.Enums;
 
@@ -205,6 +204,65 @@ public class MedicalRecordsControllerTests : BaseIntegrationTests<MedicalRecords
         var errors = await updateMedicalRecordResponse.Content.ReadAsStringAsync();
         errors.Should().NotBeEmpty();
         errors.Should().Contain("Entity of type Appointment was not found.");
+    }
+    [Fact]
+    public async Task When_UpdateMedicalRecordWithValidClient_Then_ShouldSuccess()
+    {
+        //Arrange
+        var petId1 = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
+        var officeId1 = await SetupOffice();
+        var idAppointment1 = await SetupAppointment(petId1, officeId1);
+        MedicalRecordDto medicalRecordDto = new MedicalRecordDto(idAppointment1, petId1);
+
+        var petId2 = await SetupPet(Guid.NewGuid(), Size.Medium.Name, 1);
+
+        //Act
+        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordUrl, medicalRecordDto);
+        var oldMedicalRecord = await medicalRecordResponse.Content.ReadFromJsonAsync<MedicalRecord>();
+        medicalRecordResponse.EnsureSuccessStatusCode();
+        var updateMedicalRecordResponse = await TestingClient.PutAsJsonAsync(MedicalRecordUrl + $"/{oldMedicalRecord!.Id}/{petId2}", petId2);
+
+        //Assert
+        updateMedicalRecordResponse.EnsureSuccessStatusCode();
+        var updatedMedicalRecord = await updateMedicalRecordResponse.Content.ReadFromJsonAsync<MedicalRecord>();
+        updatedMedicalRecord!.Id.Should().Be(oldMedicalRecord.Id);
+        updatedMedicalRecord.IdClient.Should().Be(petId2);
+    }
+    [Fact]
+    public async Task When_UpdateClientMedicalRecordWithInvalidMedicalRecordId_Then_ShouldFail()
+    {
+        //Arrange
+        var idMedicalRecord = Guid.NewGuid();
+        var idClient = Guid.NewGuid();
+        //Act
+        var updateMedicalRecordResponse = await TestingClient.PutAsJsonAsync(MedicalRecordUrl + $"/{idMedicalRecord}/{idClient}", idClient);
+        //Assert
+        updateMedicalRecordResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var errors = await updateMedicalRecordResponse.Content.ReadAsStringAsync();
+        errors.Should().NotBeEmpty();
+        errors.Should().Contain("Entity of type MedicalRecord was not found.");
+    }
+    [Fact]
+    public async Task When_UpdateClientMedicalRecordWithInvalidClientId_Then_ShouldFail()
+    {
+        //Arrange
+        var petId = await SetupPet(Guid.NewGuid(), Size.Medium.Name);
+        var officeId = await SetupOffice();
+        var idAppointment = await SetupAppointment(petId, officeId);
+        MedicalRecordDto medicalRecordDto = new MedicalRecordDto(idAppointment, petId);
+        var petId1 = Guid.NewGuid();
+
+        //Act
+        var medicalRecordResponse = await TestingClient.PostAsJsonAsync(MedicalRecordUrl, medicalRecordDto);
+        var oldMedicalRecord = await medicalRecordResponse.Content.ReadFromJsonAsync<MedicalRecord>();
+        medicalRecordResponse.EnsureSuccessStatusCode();
+        var updateMedicalRecordResponse = await TestingClient.PutAsJsonAsync(MedicalRecordUrl + $"/{oldMedicalRecord!.Id}/{petId1}", petId1);
+
+        //Assert
+        updateMedicalRecordResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var errors = await updateMedicalRecordResponse.Content.ReadAsStringAsync();
+        errors.Should().NotBeEmpty();
+        errors.Should().Contain("Entity of type Pet was not found.");
     }
     private async Task<Guid> SetupAppointment(Guid petId, Guid officeId)
     {

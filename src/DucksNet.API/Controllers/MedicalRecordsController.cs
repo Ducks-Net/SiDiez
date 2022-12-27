@@ -74,7 +74,7 @@ public class MedicalRecordsController : ControllerBase
         return Ok(oldMedicalRecord.Value);
     }
     [HttpPut("{medicalRecordId:guid}/{newIdClient:guid}")]
-    public async Task<IActionResult> UpdateClientMedicalRecord(Guid medicalRecordId, [FromBody] Guid newIdClient)
+    public async Task<IActionResult> UpdateClientMedicalRecord(Guid medicalRecordId, Guid newIdClient)
     {
         var oldMedicalRecord = await _medicalRecordRepository.GetAsync(medicalRecordId);
         if (oldMedicalRecord.IsFailure)
