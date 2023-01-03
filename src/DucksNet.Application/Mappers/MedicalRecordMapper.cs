@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 
 namespace DucksNet.Application.Mappers;
-public class MedicalRecordMapper
+public static class MedicalRecordMapper
 {
     private static Lazy<IMapper> Lazy =
             new Lazy<IMapper>(() =>
