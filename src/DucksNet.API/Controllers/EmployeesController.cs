@@ -1,11 +1,6 @@
 ﻿using DucksNet.API.DTO;
-using DucksNet.API.Validators;
-using DucksNet.Application.Handlers.EmployeeHandlers;
 using DucksNet.Application.Requests.EmployeeRequests;
 using DucksNet.Application.Responses;
-using DucksNet.Domain.Model;
-using DucksNet.Infrastructure.Prelude;
-using DucksNet.SharedKernel.Utils;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;

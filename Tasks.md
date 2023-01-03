@@ -26,7 +26,7 @@ Forth week
 - [x] daca proiectul de FE este facut cu Angular/React - trebuie adaugat in SQ
 - [x] code coverage 15% pe FE 🙂
 - [x] smart using of FluentValidation (atentie in ce layer se fac validarile)
-- [ ] 2 controllere trebuie sa foloseasca IMediatr (vezi curs)
+- [x] 2 controllere trebuie sa foloseasca IMediatr (vezi curs)
 - [x] 0 Code Smells
 - [x] refactorizati mecanismul de DI (vezi curs)
 - [x] versionare pe APIs
@@ -34,6 +34,6 @@ Forth week
 Fifth week
 - [ ] UI/UX done
 - [x] Unit testing pe BE => minim 50%
-- [ ] verificati toate detaliile cerute in requirementurile initiale si asigurati-va ca sunt indeplinite
+- [x] verificati toate detaliile cerute in requirementurile initiale si asigurati-va ca sunt indeplinite
 - [x] voi cere la review anumite portiuni de FE si BE(code quality, best practices)
 - [ ] pregatiti cea mai dificila parte din aplicatie pentru a fi prezentata
