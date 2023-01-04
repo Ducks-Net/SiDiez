@@ -23,13 +23,13 @@ public class Treatment
         this.ClinicID = ClinicID;
     }
 
-    public static Result<Treatment> CreateTreatment(Guid? OwnerID, Guid? ClientID, Guid? ClinicID)
+    public static Result<Treatment> CreateTreatment(Guid OwnerID, Guid ClientID, Guid ClinicID)
     {
-        if (OwnerID == null || OwnerID == Guid.Empty)
+        if (OwnerID == Guid.Empty)
             return Result<Treatment>.Error("Owner ID can not be empty");
-        if (ClientID == null || ClientID == Guid.Empty)
+        if (ClientID == Guid.Empty)
             return Result<Treatment>.Error("Client ID can not be empty");
-        if (ClinicID == null || ClinicID == Guid.Empty)
+        if (ClinicID == Guid.Empty)
             return Result<Treatment>.Error("Clinic ID can not be empty");
         return Result<Treatment>.Ok(new Treatment(OwnerID, ClientID, ClinicID));
     }

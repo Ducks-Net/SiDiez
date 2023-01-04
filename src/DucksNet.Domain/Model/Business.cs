@@ -51,7 +51,7 @@ public class Business
         if(ownerPhone.Length != 10)
             return Result<Business>.Error("Phone number must be 10 digits");
 
-        if(ownerEmail == null || ownerEmail == string.Empty)  
+        if(string.IsNullOrEmpty(ownerEmail))  
             return Result<Business>.Error("Owner email is required");
         if(!Validation.IsEmailValid(ownerEmail))
             return Result<Business>.Error("Owner email is invalid");

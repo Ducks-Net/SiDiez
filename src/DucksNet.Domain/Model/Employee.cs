@@ -30,25 +30,25 @@ public class Employee
     public string OwnerPhone { get; private set; }
     public string OwnerEmail { get; private set; }
 
-    public static Result<Employee> Create(string surname, string firstName, string address, string ownerPhone, string ownerEmail)
+    public static Result<Employee> Create(string? surname, string? firstName, string? address, string? ownerPhone, string? ownerEmail)
     {
-        if (firstName == null || firstName!.Length == 0)
+        if (string.IsNullOrWhiteSpace(firstName))
         {
             return Result<Employee>.Error("First name can not be empty");
         }
-        if (surname == null || surname!.Length == 0)
+        if (string.IsNullOrWhiteSpace(surname))
         {
             return Result<Employee>.Error("Surname can not be empty");
         }
-        if (address == null || address!.Length == 0)
+        if (string.IsNullOrWhiteSpace(address))
         {
             return Result<Employee>.Error("Address can not be empty");
         }
-        if (ownerEmail == null || ownerEmail!.Length == 0)
+        if (string.IsNullOrWhiteSpace(ownerEmail))
         {
             return Result<Employee>.Error("Email can not be empty");
         }
-        if (ownerPhone == null || ownerPhone!.Length == 0)
+        if (string.IsNullOrWhiteSpace(ownerPhone))
         {
             return Result<Employee>.Error("Telephone can not be empty");
         }
@@ -69,8 +69,7 @@ public class Employee
     }
     public Result UpdateFields(string? surname, string? firstName, string? address, string? ownerPhone, string? ownerEmail)
     {
-        bool hasNewInfo = false;
-        hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(surname);
+        bool hasNewInfo = !string.IsNullOrWhiteSpace(surname);
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(firstName);
         hasNewInfo = hasNewInfo || !string.IsNullOrWhiteSpace(address);
         if (!string.IsNullOrWhiteSpace(ownerPhone) && !Validation.IsTelephoneNumberValid(ownerPhone!))

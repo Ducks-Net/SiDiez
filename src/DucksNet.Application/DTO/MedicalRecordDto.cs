@@ -1,6 +1,9 @@
-﻿namespace DucksNet.API.DTO;
+﻿using DucksNet.Application.Responses;
+using MediatR;
 
-public class MedicalRecordDto
+namespace DucksNet.API.DTO;
+
+public class MedicalRecordDto : IRequest<MedicalRecordResultResponse>
 {
     public MedicalRecordDto(Guid idAppointment, Guid idClient)
     {

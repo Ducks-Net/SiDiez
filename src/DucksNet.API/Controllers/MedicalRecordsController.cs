@@ -1,8 +1,7 @@
 ﻿using DucksNet.API.DTO;
-using DucksNet.Domain.Model;
-using DucksNet.Infrastructure.Prelude;
-using DucksNet.Infrastructure.Sqlite;
-using Microsoft.AspNetCore.Http;
+using DucksNet.Application.Requests.MedicalRecordRequests;
+using DucksNet.Application.Responses;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DucksNet.API.Controllers;
@@ -11,27 +10,23 @@ namespace DucksNet.API.Controllers;
 [ApiController]
 public class MedicalRecordsController : ControllerBase
 {
-    private readonly IRepositoryAsync<MedicalRecord> _medicalRecordRepository;
-    private readonly IRepositoryAsync<Pet> _clientRepository;
-    private readonly IRepositoryAsync<Appointment> _appointmentRepository;
+    private readonly IMediator _mediator;
 
-    public MedicalRecordsController(IRepositoryAsync<MedicalRecord> medicalRepository, IRepositoryAsync<Pet> clientRepository, IRepositoryAsync<Appointment> appointmentRepository)
+    public MedicalRecordsController(IMediator mediator)
     {
-        _medicalRecordRepository = medicalRepository;
-        _clientRepository = clientRepository;
-        _appointmentRepository = appointmentRepository;
+        _mediator = mediator;
     }
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var cages = await _medicalRecordRepository.GetAllAsync();
-        return Ok(cages);
+        var medicalRecords = await _mediator.Send(new GetAllMedicalRecordRequest());
+        return Ok(medicalRecords);
     }
     [HttpGet("{medicalRecordId:guid}")]
     public async Task<IActionResult> GetByLocationID(Guid medicalRecordId)
     {
-        var medicalRecord = await _medicalRecordRepository.GetAsync(medicalRecordId);
-        if (medicalRecord.IsFailure)
+        var medicalRecord = await _mediator.Send(new GetMedicalRecordRequest { MedicalRecordId = medicalRecordId });
+        if (medicalRecord.TypeRequest == ETypeRequests.NOT_FOUND)
         {
             return NotFound(medicalRecord.Errors);
         }
@@ -40,67 +35,41 @@ public class MedicalRecordsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] MedicalRecordDto dto)
     {
-
-        var appointment = await _appointmentRepository.GetAsync(dto.IdAppointment);
-        if (appointment.IsFailure)
+        var result = await _mediator.Send(dto);
+        if (result.TypeRequest == ETypeRequests.BAD_REQUEST)
         {
-            return BadRequest(appointment.Errors);
+            return BadRequest(result.Errors);
         }
-        var client = await _clientRepository.GetAsync(dto.IdClient);
-        if (client.IsFailure)
-        {
-            return BadRequest(client.Errors);
-        }
-        
-        var medicalRecord = MedicalRecord.Create(dto.IdAppointment, dto.IdClient); //do not need, the checks are done above
-        await _medicalRecordRepository.AddAsync(medicalRecord.Value!);
-        return Ok(medicalRecord.Value);
+        return Ok(result.Value);
     }
-    [HttpPut("{medicalRecordId:guid}/{newIdAppointment:guid}")]
-    public async Task<IActionResult> UpdateAppointmentMedicalRecord(Guid medicalRecordId, Guid newIdAppointment)
+    [HttpPut("{medicalRecordId:guid}")]
+    public async Task<IActionResult> UpdateAppointmentMedicalRecord(Guid medicalRecordId, [FromBody] Guid newIdAppointment)
     {
-        var oldMedicalRecord = await _medicalRecordRepository.GetAsync(medicalRecordId);
-        if (oldMedicalRecord.IsFailure)
+        var result = await _mediator.Send(new UpdateMedicalRecordAppointmentRequest { MedicalRecordId = medicalRecordId, NewAppointmentId = newIdAppointment });
+        if (result.TypeRequest == ETypeRequests.BAD_REQUEST)
         {
-            return BadRequest(oldMedicalRecord.Errors);
+            return BadRequest(result.Errors);
         }
-        var newAppointment = await _appointmentRepository.GetAsync(newIdAppointment);
-        if (newAppointment.IsFailure)
-        {
-            return BadRequest(newAppointment.Errors);
-        }
-        if (oldMedicalRecord.Value!.IdAppointment != newIdAppointment)
-            oldMedicalRecord.Value.AssignToAppointment(newIdAppointment);
-        await _medicalRecordRepository.UpdateAsync(oldMedicalRecord.Value);
-        return Ok(oldMedicalRecord.Value);
+        return Ok(result.Value);
     }
     [HttpPut("{medicalRecordId:guid}/{newIdClient:guid}")]
     public async Task<IActionResult> UpdateClientMedicalRecord(Guid medicalRecordId, Guid newIdClient)
     {
-        var oldMedicalRecord = await _medicalRecordRepository.GetAsync(medicalRecordId);
-        if (oldMedicalRecord.IsFailure)
+        var result = await _mediator.Send(new UpdateMedicalRecordClientRequest { MedicalRecordId = medicalRecordId, NewClientId = newIdClient });
+        if (result.TypeRequest == ETypeRequests.BAD_REQUEST)
         {
-            return BadRequest(oldMedicalRecord.Errors);
+            return BadRequest(result.Errors);
         }
-        var newAppointment = await _clientRepository.GetAsync(newIdClient);
-        if (newAppointment.IsFailure)
-        {
-            return BadRequest(newAppointment.Errors);
-        }
-        if (oldMedicalRecord.Value!.IdClient != newIdClient)
-            oldMedicalRecord.Value.AssignToClient(newIdClient);
-        await _medicalRecordRepository.UpdateAsync(oldMedicalRecord.Value);
-        return Ok(oldMedicalRecord.Value);
+        return Ok(result.Value);
     }
     [HttpDelete("{medicalRecordId:guid}")]
     public async Task<IActionResult> Delete(Guid medicalRecordId)
     {
-        var medicalRecord = await _medicalRecordRepository.GetAsync(medicalRecordId);
-        if (medicalRecord.IsFailure)
+        var result = await _mediator.Send(new DeleteMedicalRecordRequest { MedicalRecordId = medicalRecordId });
+        if (result.TypeRequest == ETypeRequests.BAD_REQUEST)
         {
-            return BadRequest(medicalRecord.Errors);
+            return BadRequest(result.Errors);
         }
-        await _medicalRecordRepository.DeleteAsync(medicalRecord.Value!);
         return Ok();
     }
 }

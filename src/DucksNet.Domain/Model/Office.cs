@@ -28,7 +28,7 @@ public class Office
     {
         if(businessId == Guid.Empty)
             return Result<Office>.Error("Business ID is required");
-        if(address == null || address == string.Empty)
+        if(string.IsNullOrEmpty(address))
             return Result<Office>.Error("Address is required");
         if(animalCapacity <= 0)
             return Result<Office>.Error("Animal capacity is required");
