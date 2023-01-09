@@ -40,6 +40,14 @@ public class PetsController : ControllerBase
         return Ok(pet.Value);
     }
 
+    [HttpGet("byOwner/{id}")]
+    public async Task<IActionResult> GetByOwner(Guid id)
+    {
+        var pets = await _petsRepository.GetAllAsync();
+        pets = pets.Where(p => p.OwnerId == id);
+        return Ok(pets);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] PetDto dto)
     {

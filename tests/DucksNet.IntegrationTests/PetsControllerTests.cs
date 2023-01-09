@@ -212,6 +212,32 @@ public class PetsControllerTests : BaseIntegrationTests<PetsController>
         errors.Should().Contain("Entity of type Pet was not found.");
     }
 
+    [Fact]
+    public async Task When_GetPetsByOwner_ShouldReturnOwnerPets()
+    {
+        //Arrange
+        var sut = CreateSut();
+        var petResponse = await TestingClient.PostAsJsonAsync(PetUrl, sut);
+        petResponse.EnsureSuccessStatusCode();
+        var pet = await petResponse.Content.ReadFromJsonAsync<Pet>();
+
+        //Act
+        var getPetResult = await TestingClient.GetAsync(PetUrl + $"/byOwner/{pet!.OwnerId}");
+
+        //Assert
+        getPetResult.EnsureSuccessStatusCode();
+        var pets = await getPetResult.Content.ReadFromJsonAsync<List<Pet>>();
+        pets.Should().NotBeEmpty();
+        pets.Should().HaveCount(1);
+        var petFromList = pets![0];
+        petFromList.Name.Should().Be(sut.Name);
+        petFromList.DateOfBirth.Should().Be(sut.DateOfBirth);
+        petFromList.Species.Should().Be(sut.Species);
+        petFromList.Breed.Should().Be(sut.Breed);
+        petFromList.OwnerId.Should().Be(sut.OwnerId);
+        petFromList.Size.Name.Should().Be(sut.Size);
+    }
+
     private static PetDto CreateSut()
     {
         return new PetDto
